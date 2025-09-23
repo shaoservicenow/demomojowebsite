@@ -634,7 +634,33 @@ body {
     
     .pricing .plans {
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .plan {
+      flex: none;
+      width: 100%;
+      max-width: 300px;
+      transform: none !important;
+      margin: 0 !important;
+      height: auto;
+      min-height: 280px;
+    }
+    
+    .plan:nth-child(1),
+    .plan:nth-child(3) {
+      transform: none !important;
+      margin: 0 !important;
+    }
+    
+    .plan:hover {
+      transform: translateY(-5px) !important;
+    }
+    
+    .plan:nth-child(1):hover,
+    .plan:nth-child(3):hover {
+      transform: translateY(-5px) !important;
     }
     
     .features, .pricing, .install {
@@ -650,6 +676,19 @@ body {
     
     .btn {
       padding: 10px 20px;
+      font-size: 0.9em;
+    }
+    
+    .plan {
+      max-width: 280px;
+      padding: 1.2em 1em;
+    }
+    
+    .plan h3 {
+      font-size: 1.2em;
+    }
+    
+    .plan p {
       font-size: 0.9em;
     }
   }
