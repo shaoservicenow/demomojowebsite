@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    color: #222;
+    background: #fafafa;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2em;
+    background: #5e2ca5;
+    color: white;
+  }
+  
+  header .logo {
+    height: 40px;
+  }
+  
+  header nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 4em 2em;
+    background: linear-gradient(135deg, #6d28d9, #9333ea);
+    color: white;
+  }
+  
+  .hero .highlight {
+    color: #fcd34d;
+  }
+  
+  .btn {
+    display: inline-block;
+    margin-top: 1em;
+    padding: 12px 24px;
+    background: #fcd34d;
+    color: #222;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .features, .pricing, .install {
+    padding: 3em 2em;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .pricing .plans {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .plan {
+    flex: 1;
+    background: white;
+    padding: 1.5em;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .plan h3 {
+    margin-top: 0;
+  }
+  
+  .plan .price {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-top: 1em;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 2em;
+    background: #5e2ca5;
+    color: white;
+  }
+  
