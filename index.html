@@ -46,8 +46,139 @@
     }
   }
   </script>
+  
+  <!-- Magic Dust Effect -->
+  <script>
+    // Magic Dust Particle System
+    class MagicDust {
+      constructor() {
+        this.canvas = document.getElementById('magic-dust');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
+        
+        this.resize();
+        this.init();
+        this.bindEvents();
+        this.animate();
+      }
+      
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+      
+      init() {
+        // Create initial particles
+        for (let i = 0; i < 50; i++) {
+          this.createParticle();
+        }
+      }
+      
+      createParticle(x = null, y = null) {
+        const particle = {
+          x: x || Math.random() * this.canvas.width,
+          y: y || Math.random() * this.canvas.height,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          size: Math.random() * 4 + 2,
+          opacity: Math.random() * 0.8 + 0.2,
+          life: 1,
+          decay: Math.random() * 0.02 + 0.005,
+          color: this.getRandomColor()
+        };
+        
+        this.particles.push(particle);
+      }
+      
+      getRandomColor() {
+        const colors = [
+          'rgba(177,255,252,0.8)',  // Cyan
+          'rgba(202,76,255,0.6)',   // Purple
+          'rgba(102,219,214,0.6)',  // Teal
+          'rgba(255,255,255,0.4)'   // White
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      bindEvents() {
+        window.addEventListener('resize', () => this.resize());
+        
+        document.addEventListener('mousemove', (e) => {
+          this.mouseX = e.clientX;
+          this.mouseY = e.clientY;
+          
+          // Create particles at mouse position
+          if (Math.random() < 0.3) {
+            this.createParticle(this.mouseX, this.mouseY);
+          }
+        });
+        
+        document.addEventListener('click', (e) => {
+          // Create burst of particles on click
+          for (let i = 0; i < 10; i++) {
+            this.createParticle(e.clientX, e.clientY);
+          }
+        });
+      }
+      
+      updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const particle = this.particles[i];
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Update life
+          particle.life -= particle.decay;
+          
+          // Remove dead particles
+          if (particle.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+          
+          // Wrap around screen
+          if (particle.x < 0) particle.x = this.canvas.width;
+          if (particle.x > this.canvas.width) particle.x = 0;
+          if (particle.y < 0) particle.y = this.canvas.height;
+          if (particle.y > this.canvas.height) particle.y = 0;
+        }
+      }
+      
+      drawParticles() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach(particle => {
+          this.ctx.save();
+          this.ctx.globalAlpha = particle.opacity * particle.life;
+          this.ctx.fillStyle = particle.color;
+          this.ctx.beginPath();
+          this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          this.ctx.fill();
+          this.ctx.restore();
+        });
+      }
+      
+      animate() {
+        this.updateParticles();
+        this.drawParticles();
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+    
+    // Initialize magic dust when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new MagicDust();
+    });
+  </script>
 </head>
 <body>
+
+  <!-- Magic Dust Canvas -->
+  <canvas id="magic-dust" class="magic-dust-canvas"></canvas>
 
   <!-- Header -->
   <header>
