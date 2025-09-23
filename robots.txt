@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://shaoservicenow.github.io/demomojowebsite/sitemap.xml
+
+# Disallow certain paths
+Disallow: /.github/
+Disallow: /README.md
+Disallow: /LICENSE

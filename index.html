@@ -4,14 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DemoMojo – Bring the Magic to Your Demos</title>
+  <meta name="description" content="DemoMojo is a browser extension that brings magic to your demos with persona overlays, chapter cues, and value drivers. Perfect for sales presentations and product demos.">
+  <meta name="keywords" content="demo, presentation, browser extension, sales demo, product demo, persona, overlay, chrome extension">
+  <meta name="author" content="DemoMojo">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shaoservicenow.github.io/demomojowebsite/">
+  <meta property="og:title" content="DemoMojo – Bring the Magic to Your Demos">
+  <meta property="og:description" content="Overlay personas, chapters, and value drivers directly into your live browser demos. No-code setup, perfect for sales presentations.">
+  <meta property="og:image" content="https://shaoservicenow.github.io/demomojowebsite/assets/logo.svg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://shaoservicenow.github.io/demomojowebsite/">
+  <meta property="twitter:title" content="DemoMojo – Bring the Magic to Your Demos">
+  <meta property="twitter:description" content="Overlay personas, chapters, and value drivers directly into your live browser demos. No-code setup, perfect for sales presentations.">
+  <meta property="twitter:image" content="https://shaoservicenow.github.io/demomojowebsite/assets/logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" href="assets/favicon.svg">
+  
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DemoMojo",
+    "description": "Browser extension that brings magic to your demos with persona overlays, chapter cues, and value drivers",
+    "url": "https://shaoservicenow.github.io/demomojowebsite/",
+    "applicationCategory": "BrowserExtension",
+    "operatingSystem": "Chrome",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
 </head>
 <body>
 
   <!-- Header -->
   <header>
-    <img src="assets/logo.png" alt="DemoMojo Logo" class="logo">
-    <nav>
+    <a href="index.html" aria-label="DemoMojo Home">
+      <img src="assets/logo.svg" alt="DemoMojo Logo" class="logo">
+    </a>
+    <nav role="navigation" aria-label="Main navigation">
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
       <a href="#install">Install</a>
@@ -19,14 +62,14 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" role="banner">
     <h1>Bring the <span class="highlight">Mojo</span> to Your Demos</h1>
     <p>Overlay personas, chapters, and value drivers directly into your live browser demos.</p>
-    <a href="#install" class="btn">Install the Beta</a>
+    <a href="#install" class="btn" role="button">Install the Beta</a>
   </section>
 
   <!-- Features -->
-  <section id="features" class="features">
+  <section id="features" class="features" role="main">
     <h2>✨ Features</h2>
     <ul>
       <li><strong>Persona Overlays</strong> – keep the story tied to your audience</li>
@@ -63,7 +106,7 @@
     <h2>🚀 Install DemoMojo</h2>
     <p>Get started in seconds. Install the extension from the Chrome Web Store:</p>
     <a href="https://chrome.google.com/webstore/detail/demomojo/YOUR_EXTENSION_ID"
-       target="_blank" class="btn">Install on Chrome</a>
+       target="_blank" class="btn" rel="noopener noreferrer" role="button">Install on Chrome</a>
   </section>
 
   <!-- Footer -->
