@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DemoMojo Documentation – How to Use Guide</title>
+  <meta name="description" content="Complete guide to using DemoMojo Chrome extension for demo storytelling with personas, chapters, and value drivers.">
+  <meta name="keywords" content="DemoMojo documentation, Chrome extension guide, demo storytelling, persona overlays, chapter navigation">
+  <meta name="author" content="DemoMojo">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shaoservicenow.github.io/demomojowebsite/docs.html">
+  <meta property="og:title" content="DemoMojo Documentation – How to Use Guide">
+  <meta property="og:description" content="Complete guide to using DemoMojo Chrome extension for demo storytelling with personas, chapters, and value drivers.">
+  <meta property="og:image" content="https://shaoservicenow.github.io/demomojowebsite/assets/logo.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://shaoservicenow.github.io/demomojowebsite/docs.html">
+  <meta property="twitter:title" content="DemoMojo Documentation – How to Use Guide">
+  <meta property="twitter:description" content="Complete guide to using DemoMojo Chrome extension for demo storytelling with personas, chapters, and value drivers.">
+  <meta property="twitter:image" content="https://shaoservicenow.github.io/demomojowebsite/assets/logo.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "DemoMojo Documentation",
+    "description": "Complete guide to using DemoMojo Chrome extension for demo storytelling",
+    "url": "https://shaoservicenow.github.io/demomojowebsite/docs.html",
+    "author": {
+      "@type": "Person",
+      "name": "Shao"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DemoMojo"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .docs-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2em;
+    }
+    
+    .docs-header {
+      text-align: center;
+      margin-bottom: 3em;
+    }
+    
+    .docs-header p {
+      color: white;
+      font-size: 1.2em;
+      margin-top: 0.5em;
+    }
+    
+    .docs-header h1 {
+      font-size: 3em;
+      margin-bottom: 0.5em;
+      background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Override any conflicting header styles for docs page */
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    header .logo:hover {
+      transform: translateY(-2px);
+    }
+    
+    header .logo img {
+      height: 40px;
+      width: auto;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      transition: all 0.3s ease;
+    }
+    
+    header .logo:hover img {
+      transform: scale(1.05) rotate(3deg);
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+    }
+    
+    header .logo-text h1 {
+      font-size: 1.5em;
+      margin: 0;
+      color: white;
+    }
+    
+    header .logo-text p {
+      font-size: 0.8em;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .docs-nav {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2em;
+      margin-bottom: 3em;
+    }
+    
+    .docs-nav-desktop {
+      display: block;
+    }
+    
+    .docs-nav-mobile {
+      display: none;
+    }
+    
+    .docs-nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+      justify-content: center;
+    }
+    
+    .docs-nav a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .docs-nav a:hover {
+      background: rgba(99, 223, 78, 0.3);
+      border-color: rgba(99, 223, 78, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    .docs-nav-mobile select {
+      width: 100%;
+      padding: 1em;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1em;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    
+    .docs-nav-mobile select:focus {
+      outline: none;
+      border-color: rgba(99, 223, 78, 0.5);
+      box-shadow: 0 0 10px rgba(99, 223, 78, 0.2);
+    }
+    
+    .docs-nav-mobile select option {
+      background: rgba(0, 0, 0, 0.8);
+      color: rgba(255, 255, 255, 0.9);
+      padding: 0.5em;
+    }
+    
+    .docs-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2em;
+      margin-bottom: 2em;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .docs-section h2 {
+      color: #63DF4E;
+      font-size: 2em;
+      margin-bottom: 1em;
+    }
+    
+    .docs-section h3 {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.5em;
+      margin: 1.5em 0 1em 0;
+    }
+    
+    .docs-section p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.8;
+      margin-bottom: 1em;
+    }
+    
+    .docs-section ul, .docs-section ol {
+      color: rgba(255, 255, 255, 0.8);
+      margin: 1em 0;
+      padding-left: 2em;
+    }
+    
+    .docs-section li {
+      margin-bottom: 0.5em;
+      line-height: 1.6;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2em;
+      margin: 2em 0;
+    }
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5em;
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(99, 223, 78, 0.3);
+      box-shadow: 0 8px 25px rgba(99, 223, 78, 0.1);
+    }
+    
+    .feature-card h4 {
+      color: #63DF4E;
+      font-size: 1.3em;
+      margin-bottom: 0.5em;
+    }
+    
+    .screenshot-placeholder {
+      width: 100%;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-style: italic;
+      margin: 1em 0;
+    }
+    
+    .keyboard-shortcuts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1em;
+      margin: 1em 0;
+    }
+    
+    .shortcut-item {
+      background: rgba(99, 223, 78, 0.1);
+      border: 1px solid rgba(99, 223, 78, 0.3);
+      border-radius: 10px;
+      padding: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .shortcut-key {
+      background: rgba(99, 223, 78, 0.2);
+      color: #63DF4E;
+      padding: 0.3em 0.8em;
+      border-radius: 5px;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+    
+    .shortcut-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9em;
+    }
+    
+    .back-to-home {
+      text-align: center;
+      margin-top: 3em;
+    }
+    
+    .back-to-home a {
+      display: inline-block;
+      padding: 1em 2em;
+      background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 15px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(99, 223, 78, 0.2);
+    }
+    
+    .back-to-home a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(99, 223, 78, 0.3);
+    }
+    
+    /* Fix flickering issues */
+    .magic-dust-canvas {
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    
+    /* Optimize scrolling performance */
+    .docs-container {
+      will-change: auto;
+    }
+    
+    .docs-section {
+      will-change: auto;
+    }
+    
+    @media (max-width: 768px) {
+      .docs-container {
+        padding: 1em;
+      }
+      
+      .docs-header h1 {
+        font-size: 2em;
+      }
+      
+      .docs-nav {
+        padding: 1em;
+      }
+      
+      .docs-nav-desktop {
+        display: none;
+      }
+      
+      .docs-nav-mobile {
+        display: block;
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .keyboard-shortcuts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Magic Dust Canvas -->
+  <canvas id="magic-dust" class="magic-dust-canvas"></canvas>
+
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">
+      <img src="assets/logo.png" alt="DemoMojo Logo">
+      <div class="logo-text">
+        <h1 class="brand-title">DemoMojo</h1>
+        <p class="brand-attribution">created by shao</p>
+      </div>
+    </a>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="index.html#install">Install</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <div class="docs-header">
+      <h1>DemoMojo Documentation</h1>
+      <p>Complete guide to mastering demo storytelling with DemoMojo</p>
+    </div>
+
+    <nav class="docs-nav">
+      <div class="docs-nav-desktop">
+        <ul>
+          <li><a href="#getting-started">Getting Started</a></li>
+          <li><a href="#installation">Installation</a></li>
+          <li><a href="#creating-stories">Creating Stories</a></li>
+          <li><a href="#using-overlays">Using Overlays</a></li>
+          <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+          <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ul>
+      </div>
+      
+      <div class="docs-nav-mobile">
+        <select id="docs-dropdown" onchange="scrollToSection(this.value)">
+          <option value="">Select a section...</option>
+          <option value="getting-started">Getting Started</option>
+          <option value="installation">Installation</option>
+          <option value="creating-stories">Creating Stories</option>
+          <option value="using-overlays">Using Overlays</option>
+          <option value="keyboard-shortcuts">Keyboard Shortcuts</option>
+          <option value="troubleshooting">Troubleshooting</option>
+        </select>
+      </div>
+    </nav>
+
+    <section id="getting-started" class="docs-section">
+      <h2>Getting Started</h2>
+      <p>DemoMojo is a Chrome extension designed to enhance your demo presentations with intelligent overlays that display personas, chapters, and value drivers. This guide will walk you through everything you need to know to get the most out of DemoMojo.</p>
+      
+      <h3>What is DemoMojo?</h3>
+      <p>DemoMojo transforms your browser into a powerful demo storytelling platform by overlaying contextual information directly onto your web pages. Whether you're presenting software demos, sales pitches, or training sessions, DemoMojo helps you maintain focus while providing your audience with relevant context.</p>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: DemoMojo overlay in action on a demo page
+      </div>
+    </section>
+
+    <section id="installation" class="docs-section">
+      <h2>Installation</h2>
+      <p>Follow these steps to install DemoMojo on your Chrome browser:</p>
+      
+      <ol>
+        <li><strong>Download the Extension</strong>
+          <p>Download the DemoMojo extension files or clone the repository from GitHub.</p>
+        </li>
+        <li><strong>Open Chrome Extensions</strong>
+          <p>Navigate to <code>chrome://extensions/</code> in your Chrome browser.</p>
+        </li>
+        <li><strong>Enable Developer Mode</strong>
+          <p>Toggle the "Developer mode" switch in the top-right corner of the extensions page.</p>
+        </li>
+        <li><strong>Load the Extension</strong>
+          <p>Click "Load unpacked" and select the DemoMojo extension folder.</p>
+        </li>
+        <li><strong>Verify Installation</strong>
+          <p>The DemoMojo icon should appear in your Chrome toolbar.</p>
+        </li>
+      </ol>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: Chrome extensions page with DemoMojo loaded
+      </div>
+    </section>
+
+    <section id="creating-stories" class="docs-section">
+      <h2>Creating Stories</h2>
+      <p>Before you can use DemoMojo overlays, you need to create and configure your demo stories. Each story contains personas, chapters, and value drivers that will be displayed during your presentations.</p>
+      
+      <h3>Accessing Story Management</h3>
+      <p>Click the DemoMojo extension icon in your toolbar, then click "Manage Stories" to open the story setup page.</p>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: DemoMojo popup with "Manage Stories" button
+      </div>
+      
+      <h3>Creating a New Story</h3>
+      <ol>
+        <li><strong>Story Information</strong>
+          <p>Enter a name and description for your story. This helps you identify different demo scenarios.</p>
+        </li>
+        <li><strong>Add Personas</strong>
+          <p>Create personas with names, titles, and headshot images. These represent your target audience members.</p>
+        </li>
+        <li><strong>Define Chapters</strong>
+          <p>Break your demo into logical chapters with titles and descriptions. Each chapter represents a section of your presentation.</p>
+        </li>
+        <li><strong>Set Value Drivers</strong>
+          <p>Add value drivers for each chapter that highlight the business benefits and outcomes.</p>
+        </li>
+        <li><strong>Save Your Story</strong>
+          <p>Click "Save Story" to store your configuration for future use.</p>
+        </li>
+      </ol>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: Story creation form with persona, chapter, and value driver fields
+      </div>
+      
+      <h3>Managing Existing Stories</h3>
+      <p>You can edit, duplicate, or delete existing stories from the story management page. This allows you to maintain multiple demo scenarios for different audiences or use cases.</p>
+    </section>
+
+    <section id="using-overlays" class="docs-section">
+      <h2>Using Overlays</h2>
+      <p>Once you've created your stories, you can apply overlays to any webpage to enhance your demo presentations.</p>
+      
+      <h3>Applying an Overlay</h3>
+      <ol>
+        <li><strong>Select Your Story</strong>
+          <p>Open the DemoMojo popup and choose the story you want to use from the dropdown menu.</p>
+        </li>
+        <li><strong>Choose a Persona</strong>
+          <p>Select the persona that best represents your current audience.</p>
+        </li>
+        <li><strong>Pick a Chapter</strong>
+          <p>Select the chapter you want to display for the current section of your demo.</p>
+        </li>
+        <li><strong>Apply the Overlay</strong>
+          <p>Click "Apply Overlay" to display the overlay on your current page.</p>
+        </li>
+      </ol>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: DemoMojo popup with story, persona, and chapter selections
+      </div>
+      
+      <h3>Overlay Display Modes</h3>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>Small Overlay</h4>
+          <p>Compact floating overlay that provides quick reference without obstructing your main content. Perfect for subtle guidance during demos.</p>
+          <div class="screenshot-placeholder">
+            📸 Small overlay mode
+          </div>
+        </div>
+        <div class="feature-card">
+          <h4>Large Overlay</h4>
+          <p>Full-screen side panel that provides complete story overview with all chapters and value drivers visible. Ideal for comprehensive presentations.</p>
+          <div class="screenshot-placeholder">
+            📸 Large overlay mode
+          </div>
+        </div>
+        <div class="feature-card">
+          <h4>Content Shifting</h4>
+          <p>Automatically adjusts page content to accommodate the overlay, ensuring optimal viewing experience for both presenter and audience.</p>
+          <div class="screenshot-placeholder">
+            📸 Content shifting in action
+          </div>
+        </div>
+      </div>
+      
+      <h3>Overlay Positioning</h3>
+      <p>DemoMojo offers flexible positioning options to suit your presentation style:</p>
+      <ul>
+        <li><strong>Top Left</strong> - Overlay appears in the top-left corner</li>
+        <li><strong>Top Right</strong> - Overlay appears in the top-right corner</li>
+        <li><strong>Bottom Left</strong> - Overlay appears in the bottom-left corner</li>
+        <li><strong>Bottom Right</strong> - Overlay appears in the bottom-right corner (default)</li>
+      </ul>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: Overlay positioning options in settings
+      </div>
+    </section>
+
+    <section id="keyboard-shortcuts" class="docs-section">
+      <h2>Keyboard Shortcuts</h2>
+      <p>DemoMojo provides powerful keyboard shortcuts for quick navigation and control during your presentations. These shortcuts can be enabled or disabled in the extension popup.</p>
+      
+      <h3>Navigation Shortcuts</h3>
+      <div class="keyboard-shortcuts">
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + ←</span>
+          <span class="shortcut-desc">Previous chapter</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + →</span>
+          <span class="shortcut-desc">Next chapter</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + ↑</span>
+          <span class="shortcut-desc">Previous persona</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + ↓</span>
+          <span class="shortcut-desc">Next persona</span>
+        </div>
+      </div>
+      
+      <h3>Display Control Shortcuts</h3>
+      <div class="keyboard-shortcuts">
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + H</span>
+          <span class="shortcut-desc">Hide/Show overlay</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + O</span>
+          <span class="shortcut-desc">Toggle fullscreen mode</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Shift + P</span>
+          <span class="shortcut-desc">Pin persona pane</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Escape</span>
+          <span class="shortcut-desc">Close overlay</span>
+        </div>
+      </div>
+      
+      <h3>Enabling/Disabling Shortcuts</h3>
+      <p>You can toggle keyboard shortcuts on or off using the switch in the DemoMojo popup. When disabled, you can still use the overlay buttons for navigation.</p>
+      
+      <div class="screenshot-placeholder">
+        📸 Screenshot: Keyboard shortcuts toggle in popup
+      </div>
+    </section>
+
+    <section id="troubleshooting" class="docs-section">
+      <h2>Troubleshooting</h2>
+      <p>Here are solutions to common issues you might encounter while using DemoMojo:</p>
+      
+      <h3>Overlay Not Appearing</h3>
+      <ul>
+        <li>Ensure you've selected a story, persona, and chapter before clicking "Apply Overlay"</li>
+        <li>Check that the overlay isn't hidden using Shift + H</li>
+        <li>Try refreshing the page and reapplying the overlay</li>
+        <li>Verify that the extension is enabled in Chrome's extension settings</li>
+      </ul>
+      
+      <h3>Keyboard Shortcuts Not Working</h3>
+      <ul>
+        <li>Make sure keyboard shortcuts are enabled in the DemoMojo popup</li>
+        <li>Ensure the webpage has focus (click on the page content)</li>
+        <li>Check that no other extensions are conflicting with DemoMojo shortcuts</li>
+        <li>Try refreshing the page and reapplying the overlay</li>
+      </ul>
+      
+      <h3>Images Not Loading</h3>
+      <ul>
+        <li>Verify that persona headshot images are properly uploaded</li>
+        <li>Check that image files are in supported formats (PNG, JPG, GIF)</li>
+        <li>Ensure image files are not corrupted or too large</li>
+        <li>Try re-uploading the images in the story management page</li>
+      </ul>
+      
+      <h3>Performance Issues</h3>
+      <ul>
+        <li>Close unnecessary browser tabs to free up memory</li>
+        <li>Disable other extensions that might be conflicting</li>
+        <li>Try using the small overlay mode instead of large overlay</li>
+        <li>Restart Chrome if the extension becomes unresponsive</li>
+      </ul>
+      
+      <h3>Getting Help</h3>
+      <p>If you continue to experience issues:</p>
+      <ul>
+        <li>Check the Chrome extension console for error messages</li>
+        <li>Try reinstalling the extension</li>
+        <li>Contact support with specific details about your issue</li>
+        <li>Check for updates to the DemoMojo extension</li>
+      </ul>
+    </section>
+
+    <div class="back-to-home">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    // Magic Dust Particle System
+    class MagicDust {
+      constructor() {
+        this.canvas = document.getElementById('magic-dust');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
+        
+        this.resize();
+        this.init();
+        this.bindEvents();
+        this.animate();
+      }
+      
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+      
+      init() {
+        // Create initial particles
+        for (let i = 0; i < 50; i++) {
+          this.createParticle();
+        }
+      }
+      
+      createParticle(x = null, y = null) {
+        const particle = {
+          x: x || Math.random() * this.canvas.width,
+          y: y || Math.random() * this.canvas.height,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          size: Math.random() * 4 + 2,
+          opacity: Math.random() * 0.8 + 0.2,
+          life: 1,
+          decay: Math.random() * 0.02 + 0.005,
+          color: this.getRandomColor()
+        };
+        
+        this.particles.push(particle);
+      }
+      
+      getRandomColor() {
+        const colors = [
+          'rgba(177,255,252,0.8)',  // Cyan
+          'rgba(202,76,255,0.6)',   // Purple
+          'rgba(102,219,214,0.6)',  // Teal
+          'rgba(255,255,255,0.4)'   // White
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      bindEvents() {
+        window.addEventListener('resize', () => this.resize());
+        
+        document.addEventListener('mousemove', (e) => {
+          this.mouseX = e.clientX;
+          this.mouseY = e.clientY;
+          
+          // Create particles at mouse position
+          if (Math.random() < 0.3) {
+            this.createParticle(this.mouseX, this.mouseY);
+          }
+        });
+        
+        document.addEventListener('click', (e) => {
+          // Create burst of particles on click
+          for (let i = 0; i < 10; i++) {
+            this.createParticle(e.clientX, e.clientY);
+          }
+        });
+      }
+      
+      updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const particle = this.particles[i];
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Update life
+          particle.life -= particle.decay;
+          
+          // Remove dead particles
+          if (particle.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+          
+          // Wrap around screen
+          if (particle.x < 0) particle.x = this.canvas.width;
+          if (particle.x > this.canvas.width) particle.x = 0;
+          if (particle.y < 0) particle.y = this.canvas.height;
+          if (particle.y > this.canvas.height) particle.y = 0;
+        }
+      }
+      
+      drawParticles() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach(particle => {
+          this.ctx.save();
+          this.ctx.globalAlpha = particle.opacity * particle.life;
+          this.ctx.fillStyle = particle.color;
+          this.ctx.beginPath();
+          this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          this.ctx.fill();
+          this.ctx.restore();
+        });
+      }
+      
+      animate() {
+        this.updateParticles();
+        this.drawParticles();
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+    
+        // Initialize magic dust when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+          new MagicDust();
+        });
+        
+        // Function to scroll to section when dropdown option is selected
+        function scrollToSection(sectionId) {
+          if (sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        }
+  </script>
+</body>
+</html>

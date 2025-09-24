@@ -768,6 +768,21 @@ body {
     
     header nav {
       margin-top: 1em;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 1em;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    
+    header nav a {
+      font-size: 0.85em;
+      padding: 0.5em 0.6em;
+      white-space: nowrap;
+      margin: 0;
+      flex-shrink: 0;
+      min-width: fit-content;
     }
     
     .hero {
