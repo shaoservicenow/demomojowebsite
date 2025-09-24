@@ -288,6 +288,23 @@
       border-color: rgba(99, 223, 78, 0.4);
     }
     
+    .download-section {
+      margin: 1em 0;
+      text-align: center;
+    }
+    
+    .download-section .btn {
+      display: inline-block;
+      margin-bottom: 0.5em;
+    }
+    
+    .download-note {
+      font-size: 0.9em;
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+      margin: 0;
+    }
+    
     .keyboard-shortcuts {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -461,7 +478,11 @@
       
       <ol>
         <li><strong>Download the Extension</strong>
-          <p>Download the DemoMojo extension files or clone the repository from GitHub.</p>
+          <p>Download the DemoMojo extension files:</p>
+          <div class="download-section">
+            <a href="demomojov1.zip" download="demomojov1.zip" class="btn">Download DemoMojo v1.0</a>
+            <p class="download-note">Extract the zip file to a folder on your computer</p>
+          </div>
         </li>
         <li><strong>Open Chrome Extensions</strong>
           <p>Navigate to <code>chrome://extensions/</code> in your Chrome browser.</p>
