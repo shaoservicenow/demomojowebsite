@@ -851,10 +851,34 @@ body {
     text-align: center;
   }
   
-  .install p {
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  }
+.install p {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.install-buttons {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1.5em;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
   
   footer {
     text-align: center;
@@ -953,6 +977,16 @@ body {
     .features, .pricing, .install {
       padding: 2em 1em;
       margin: 1em;
+    }
+    
+    .install-buttons {
+      flex-direction: column;
+      gap: 0.8em;
+    }
+    
+    .install-buttons .btn {
+      width: 100%;
+      max-width: 280px;
     }
     
     .features {
