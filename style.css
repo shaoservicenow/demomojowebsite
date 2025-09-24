@@ -746,6 +746,10 @@ body {
   
   /* Responsive Design */
   @media (max-width: 768px) {
+    body {
+      background-attachment: scroll; /* Fix for mobile devices */
+    }
+    
     header {
       flex-direction: column;
       padding: 1em;
