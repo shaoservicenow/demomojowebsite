@@ -6,7 +6,7 @@ body {
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
-    cursor: pointer;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), auto;
   }
   
   .magic-dust-canvas {
@@ -129,6 +129,7 @@ body {
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     position: relative;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), pointer;
   }
   
   header nav a:hover {
@@ -138,7 +139,7 @@ body {
   
   .hero {
     text-align: center;
-    padding: 6em 2em 7em 2em;
+    padding: 2em 2em 7em 2em;
     background: transparent;
     color: white;
     position: relative;
@@ -246,6 +247,7 @@ body {
     animation: slideInUp 1s ease-out;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     overflow: hidden;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), pointer;
   }
   
   .btn::before {
@@ -274,9 +276,33 @@ body {
     box-shadow: 0 2px 15px rgba(255, 215, 0, 0.3);
   }
   
+  .hero-screenshot {
+    margin: 2em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .screenshot-image {
+    max-width: 50%;
+    height: auto;
+    border-radius: 20px;
+    opacity: 0.85;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .screenshot-image:hover {
+    opacity: 1;
+    transform: translateY(-5px);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  }
+  
   
   .features, .pricing, .install {
-    padding: 3em 2em;
+    padding: 2em 2em;
     max-width: 800px;
     margin: 2em auto;
     position: relative;
@@ -292,6 +318,7 @@ body {
     position: relative;
     transform: translateY(0);
     transition: all 0.3s ease;
+    padding: 2em 2em 4em 2em;
   }
   
   .features:hover {
@@ -316,29 +343,124 @@ body {
     font-weight: 600;
     margin-bottom: 1.5em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
-  .features ul {
+  .features .carousel {
+    width: min(100%, 1000px);
+    height: 250px;
+    padding: 0 0 60px 0;
     list-style: none;
-    padding: 0;
+    border: 1px solid rgba(99, 223, 78, 0.3);
+    border-radius: 10px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    position: relative;
+    anchor-name: --carousel;
+    scroll-marker-group: after;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
   }
   
-  .features li {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 16px 20px;
-    margin: 12px 0;
-    border-radius: 12px;
-    border-left: 4px solid #FFD700;
+  .features .carousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .features .carousel::scroll-marker-group {
+    position: absolute;
+    inline-size: 100%;
+    max-inline-size: min(90cqi, 200px);
+    position-anchor: --carousel;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    gap: 0.25rem;
+    padding-block-start: 1rem;
+    top: anchor(bottom);
+    left: calc(anchor(left) - 10%);
+    right: calc(anchor(right) - 10%);
+  }
+  
+  .features .carousel > li {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    grid-template-areas: 
+      "--title --title" 
+      "--img --content";
+    gap: 1rem;
+    padding: 2rem;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    color: white;
+    height: 100%;
+    align-items: start;
   }
   
-  .features li:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateX(4px);
-    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
+  .features .carousel > li:hover {
+    transform: translateY(-2px);
   }
+  
+  .features .carousel > li h3 {
+    grid-area: --title;
+    margin: 0;
+    font-size: 1.3rem;
+    color: white;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .features .carousel > li img {
+    grid-area: --img;
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .features .carousel > li p {
+    grid-area: --content;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .features .carousel > li::scroll-marker {
+    content: ' ';
+    height: 20px;
+    aspect-ratio: 1;
+    background-color: rgba(99, 223, 78, 0.6);
+    border-radius: 999px;
+    transition: 150ms ease-in-out;
+    cursor: pointer;
+  }
+  
+  .features .carousel > li::scroll-marker:target-current {
+    background-color: rgba(99, 223, 78, 1);
+    aspect-ratio: 2/1.25;
+  }
+  
+  .features .carousel > li::scroll-marker:hover {
+    background-color: rgba(99, 223, 78, 0.8);
+    transform: scale(1.1);
+  }
+  
+  .features .carousel > li::scroll-marker:focus-visible {
+    outline: 2px dashed rgba(99, 223, 78, 0.8);
+    outline-offset: 4px;
+  }
+  
+  
   
   .pricing {
     background: rgba(255, 255, 255, 0.1);
@@ -374,61 +496,168 @@ body {
     font-weight: 600;
     margin-bottom: 1.5em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
   .pricing .plans {
     display: flex;
-    gap: 20px;
+    gap: -20px;
     justify-content: center;
     position: relative;
     z-index: 1;
+    align-items: flex-start;
   }
   
   .plan {
-    flex: 1;
+    flex: 0 0 220px;
     background: rgba(255, 255, 255, 0.9);
-    padding: 2em;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 1.5em 1.2em;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(99, 223, 78, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     transition: all 0.3s ease;
     position: relative;
+    transform: scale(0.9);
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
   }
   
-  .plan:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-    border-color: rgba(99, 223, 78, 0.4);
+  .plan::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background-image: url('assets/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .plan:nth-child(1) {
+    transform: scale(0.8) rotate(-8deg);
+    z-index: 1;
+    margin-right: -30px;
   }
   
   .plan:nth-child(2) {
-    border: 2px solid rgba(99, 223, 78, 0.5);
-    background: linear-gradient(135deg, rgba(99, 223, 78, 0.05) 0%, rgba(118, 97, 255, 0.05) 100%);
+    border: 3px solid rgba(99, 223, 78, 0.9);
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 0 20px rgba(99, 223, 78, 0.4), 0 8px 32px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+    color: #2d3748;
+    opacity: 1;
+    z-index: 5;
   }
   
+  
+  .plan:nth-child(3) {
+    transform: scale(0.8) rotate(8deg);
+    z-index: 1;
+    margin-left: -30px;
+  }
+  
+  .plan:hover {
+    transform: scale(0.95) translateY(-8px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    border-color: rgba(99, 223, 78, 0.4);
+    z-index: 10;
+  }
+  
+  .plan:nth-child(1):hover {
+    transform: scale(0.85) rotate(-8deg) translateY(-8px);
+    z-index: 10;
+  }
+  
+  .plan:nth-child(3):hover {
+    transform: scale(0.85) rotate(8deg) translateY(-8px);
+    z-index: 10;
+  }
+  
+  .plan:nth-child(2):hover {
+    transform: scale(1.05) translateY(-4px);
+    box-shadow: 0 20px 60px rgba(99, 223, 78, 0.3);
+  }
+  
+  
   .plan:nth-child(2)::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background-image: url('assets/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .plan:nth-child(2)::after {
     content: 'Most Popular';
     position: absolute;
-    top: -12px;
+    top: 8px;
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #63DF4E 0%, #7661ff 100%);
     color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 10px;
+    font-size: 9px;
     font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1;
   }
   
   .plan h3 {
-    margin-top: 0;
+    margin-top: 25px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .plan:hover h3 {
+    animation: enchantedMojo 3s ease-in-out infinite;
+  }
+  
+  .plan p {
+    text-align: center;
+    line-height: 2;
+    margin: 0.5em 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .plan p:not(.price) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
   }
   
   .plan .price {
     font-size: 1.25em;
     font-weight: bold;
     margin-top: 1em;
+    text-align: center;
   }
   
   .install {
@@ -441,6 +670,7 @@ body {
     position: relative;
     transform: translateY(0);
     transition: all 0.3s ease;
+    text-align: center;
   }
   
   .install:hover {
@@ -465,6 +695,7 @@ body {
     font-weight: 600;
     margin-bottom: 1.5em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
   .install p {
@@ -513,12 +744,75 @@ body {
     
     .pricing .plans {
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .plan {
+      flex: none;
+      width: 100%;
+      max-width: 300px;
+      transform: none !important;
+      margin: 0 !important;
+      height: auto;
+      min-height: 280px;
+    }
+    
+    .plan:nth-child(1),
+    .plan:nth-child(3) {
+      transform: none !important;
+      margin: 0 !important;
+    }
+    
+    .plan:hover {
+      transform: translateY(-5px) !important;
+    }
+    
+    .plan:nth-child(1):hover,
+    .plan:nth-child(3):hover {
+      transform: translateY(-5px) !important;
     }
     
     .features, .pricing, .install {
       padding: 2em 1em;
       margin: 1em;
+    }
+    
+    .features {
+      padding: 2em 1em 4em 1em;
+      overflow: visible;
+    }
+    
+    .features .carousel {
+      width: 100%;
+      margin: 0;
+      height: 220px;
+      padding: 0 0 50px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    
+    .features .carousel > li {
+      grid-template-columns: 1fr;
+      grid-template-areas: 
+        "--title" 
+        "--img"
+        "--content";
+      padding: 1.5rem;
+      margin: 0.5rem;
+      gap: 1rem;
+      height: auto;
+      min-height: 200px;
+    }
+    
+    .features .carousel > li img {
+      height: 120px;
+      width: 100%;
+    }
+    
+    .screenshot-image {
+      max-width: 80%;
+      min-width: 280px;
     }
   }
   
@@ -530,6 +824,52 @@ body {
     .btn {
       padding: 10px 20px;
       font-size: 0.9em;
+    }
+    
+    .plan {
+      max-width: 280px;
+      padding: 1.2em 1em;
+    }
+    
+    .plan h3 {
+      font-size: 1.2em;
+    }
+    
+    .plan p {
+      font-size: 0.9em;
+    }
+    
+    .features {
+      padding: 2em 1em 4em 1em;
+      overflow: visible;
+    }
+    
+    .features .carousel {
+      height: 200px;
+      padding: 0 0 45px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    
+    .features .carousel > li {
+      grid-template-columns: 1fr;
+      grid-template-areas: 
+        "--title" 
+        "--img"
+        "--content";
+      gap: 0.8rem;
+      height: auto;
+      min-height: 180px;
+    }
+    
+    .features .carousel > li img {
+      height: 100px;
+      width: 100%;
+    }
+    
+    .screenshot-image {
+      max-width: 90%;
+      min-width: 250px;
     }
   }
   

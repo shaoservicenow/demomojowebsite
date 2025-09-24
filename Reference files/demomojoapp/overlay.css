@@ -1,0 +1,390 @@
+  #demoOverlay {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: linear-gradient(135deg, rgba(3, 45, 66, 0.75) 0%, rgba(118, 97, 255, 0.75) 100%);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 14px;
+    z-index: 999999;
+    pointer-events: none;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 223, 78, 0.3);
+    max-width: 320px;
+    animation: slideInUp 0.3s ease-out;
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  #demoOverlay .persona-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  #demoOverlay .persona-headshot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  #demoOverlay .persona-details {
+    flex: 1;
+  }
+  
+  #demoOverlay .persona-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+  
+  #demoOverlay .persona-title {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-style: italic;
+  }
+  
+  #demoOverlay .chapter {
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+  }
+
+  
+  #demoOverlay .drivers {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #demoOverlay .drivers li {
+    background: rgba(99, 223, 78, 0.2);
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.95);
+    border-left: 3px solid rgba(99, 223, 78, 0.6);
+  }
+  
+  #demoOverlay .drivers li:first-child {
+    margin-top: 0;
+  }
+  
+  #demoOverlay .drivers li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Persona highlighting styles for fullscreen mode */
+  #demoOverlay.fullscreen .persona-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  #demoOverlay.fullscreen .persona-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  #demoOverlay.fullscreen .persona-card.highlighted {
+    background: linear-gradient(135deg, rgba(99, 223, 78, 0.3) 0%, rgba(118, 97, 255, 0.3) 100%);
+    border: 2px solid #63DF4E;
+    box-shadow: 0 0 20px rgba(99, 223, 78, 0.4);
+    transform: translateY(-2px);
+  }
+
+  #demoOverlay.fullscreen .persona-card.greyed-out {
+    opacity: 0.3;
+    filter: grayscale(0.8);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  #demoOverlay.fullscreen .persona-card.greyed-out:hover {
+    opacity: 0.5;
+    filter: grayscale(0.6);
+  }
+
+  /* Fullscreen overlay header */
+  #demoOverlay.fullscreen .story-summary {
+    position: relative;
+  }
+
+  #demoOverlay.fullscreen .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    height: 40px;
+    position: relative;
+    line-height: 1;
+  }
+
+  #demoOverlay.fullscreen .button-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  #demoOverlay.fullscreen .header-row .control-btn:not(:last-child) {
+    margin-right: 0;
+  }
+
+  #demoOverlay.fullscreen .header-row > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  #demoOverlay.fullscreen .story-title {
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  #demoOverlay.fullscreen .header-logo {
+    height: 36px;
+    width: auto;
+    opacity: 0.9;
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+
+  #demoOverlay.fullscreen .control-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+
+  #demoOverlay.fullscreen .control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+  }
+
+  #demoOverlay.fullscreen .control-btn.active {
+    background: rgba(99, 223, 78, 0.3);
+    border-color: #63DF4E;
+    color: #63DF4E;
+  }
+
+  #demoOverlay.fullscreen .control-btn.active:hover {
+    background: rgba(99, 223, 78, 0.4);
+  }
+
+  /* URL button styling */
+  #demoOverlay.fullscreen .url-button {
+    background: rgba(99, 223, 78, 0.2);
+    border: 1px solid rgba(99, 223, 78, 0.5);
+    color: #63DF4E;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+
+  #demoOverlay.fullscreen .url-button:hover {
+    background: rgba(99, 223, 78, 0.3);
+    border-color: #63DF4E;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(99, 223, 78, 0.3);
+  }
+
+  #demoOverlay.fullscreen .url-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(99, 223, 78, 0.2);
+  }
+
+  /* Selected chapter styling for Shift+S functionality - yellow like current chapter */
+  #demoOverlay.fullscreen .chapter-item.selected {
+    background: rgba(255, 193, 7, 0.3) !important;
+    border-color: rgba(255, 193, 7, 0.8) !important;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.4) !important;
+  }
+
+  #demoOverlay.fullscreen .chapter-item.selected .chapter-title {
+    color: #FFC107 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Override hover state when selected */
+  #demoOverlay.fullscreen .chapter-item.selected:hover {
+    background: rgba(255, 193, 7, 0.4) !important;
+    border-color: rgba(255, 193, 7, 0.9) !important;
+  }
+
+  #demoOverlay.fullscreen .chapter-item.selected:hover .chapter-title {
+    color: #FFC107 !important;
+  }
+
+  /* Current chapter highlighting from small overlay */
+  #demoOverlay.fullscreen .chapter-item.current-chapter-highlight {
+    background: rgba(255, 193, 7, 0.3) !important;
+    border-color: rgba(255, 193, 7, 0.8) !important;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.4) !important;
+    animation: currentChapterPulse 2s ease-in-out;
+  }
+
+  #demoOverlay.fullscreen .chapter-item.current-chapter-highlight .chapter-title {
+    color: #FFC107 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Current persona highlighting from small overlay - same as manual selection */
+  #demoOverlay.fullscreen .persona-card.current-persona-highlight {
+    background: linear-gradient(135deg, rgba(99, 223, 78, 0.3) 0%, rgba(118, 97, 255, 0.3) 100%) !important;
+    border: 2px solid #63DF4E !important;
+    box-shadow: 0 0 20px rgba(99, 223, 78, 0.4) !important;
+    transform: translateY(-2px) !important;
+    animation: currentPersonaPulse 2s ease-in-out;
+  }
+
+  #demoOverlay.fullscreen .persona-card.current-persona-highlight .persona-name {
+    color: #63DF4E !important;
+    font-weight: 700 !important;
+  }
+
+  /* Override any conflicting styles for current persona highlight */
+  #demoOverlay.fullscreen .persona-card.current-persona-highlight.highlighted {
+    background: linear-gradient(135deg, rgba(99, 223, 78, 0.3) 0%, rgba(118, 97, 255, 0.3) 100%) !important;
+    border: 2px solid #63DF4E !important;
+    box-shadow: 0 0 20px rgba(99, 223, 78, 0.4) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  @keyframes currentChapterPulse {
+    0% { 
+      box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.4);
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 0 6px rgba(255, 193, 7, 0.6);
+      transform: scale(1.02);
+    }
+    100% { 
+      box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.4);
+      transform: scale(1);
+    }
+  }
+
+  @keyframes currentPersonaPulse {
+    0% { 
+      box-shadow: 0 0 20px rgba(99, 223, 78, 0.4);
+      transform: translateY(-2px) scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 30px rgba(99, 223, 78, 0.6);
+      transform: translateY(-2px) scale(1.01);
+    }
+    100% { 
+      box-shadow: 0 0 20px rgba(99, 223, 78, 0.4);
+      transform: translateY(-2px) scale(1);
+    }
+  }
+
+  /* Persona highlighting and greying out non-selected personas */
+  #demoOverlay.fullscreen .persona-card {
+    transition: all 0.3s ease;
+  }
+
+  #demoOverlay.fullscreen .persona-card.highlighted {
+    background: rgba(99, 223, 78, 0.2);
+    border-color: rgba(99, 223, 78, 0.6);
+    box-shadow: 0 0 0 2px rgba(99, 223, 78, 0.3);
+  }
+
+  #demoOverlay.fullscreen .persona-card.not-highlighted {
+    opacity: 0.4;
+    filter: grayscale(0.3);
+  }
+
+  #demoOverlay.fullscreen .persona-card.not-highlighted .persona-name {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  #demoOverlay.fullscreen .persona-card.not-highlighted .persona-title {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Persona reorder buttons */
+  .persona-reorder {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px;
+    margin-right: 8px;
+    align-items: center;
+  }
+
+  .persona-reorder .move-persona-up-btn,
+  .persona-reorder .move-persona-down-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    transition: background-color 0.2s ease;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .persona-reorder .move-persona-up-btn:hover,
+  .persona-reorder .move-persona-down-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .persona-reorder .move-persona-up-btn:disabled,
+  .persona-reorder .move-persona-down-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
