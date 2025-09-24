@@ -414,7 +414,7 @@ body {
     scroll-snap-align: center;
     scroll-snap-stop: always;
     display: grid;
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 280px 1fr; /* Much wider image column */
     grid-template-areas: 
       "--title --title" 
       "--img --content";
