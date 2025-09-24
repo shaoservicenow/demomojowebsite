@@ -256,6 +256,38 @@
       margin: 1em 0;
     }
     
+    .screenshot-container {
+      width: 100%;
+      margin: 1em 0;
+      text-align: center;
+    }
+    
+    .docs-screenshot {
+      width: 70%;
+      max-width: 700px;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .docs-screenshot.small {
+      width: 40%;
+      max-width: 400px;
+    }
+    
+    .docs-screenshot.medium {
+      width: 50%;
+      max-width: 500px;
+    }
+    
+    .docs-screenshot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(99, 223, 78, 0.4);
+    }
+    
     .keyboard-shortcuts {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -416,8 +448,10 @@
       <h3>What is DemoMojo?</h3>
       <p>DemoMojo transforms your browser into a powerful demo storytelling platform by overlaying contextual information directly onto your web pages. Whether you're presenting software demos, sales pitches, or training sessions, DemoMojo helps you maintain focus while providing your audience with relevant context.</p>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: DemoMojo overlay in action on a demo page
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-overlay-demo.png" 
+             alt="DemoMojo overlay in action on a demo page" 
+             class="docs-screenshot">
       </div>
     </section>
 
@@ -436,15 +470,17 @@
           <p>Toggle the "Developer mode" switch in the top-right corner of the extensions page.</p>
         </li>
         <li><strong>Load the Extension</strong>
-          <p>Click "Load unpacked" and select the DemoMojo extension folder.</p>
+          <p>Click "Load unpacked" and select the DemoMojo extension folder that you unpacked</p>
         </li>
         <li><strong>Verify Installation</strong>
-          <p>The DemoMojo icon should appear in your Chrome toolbar.</p>
+          <p>The DemoMojo icon should appear in your Chrome extension toolbar.</p>
         </li>
       </ol>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: Chrome extensions page with DemoMojo loaded
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-chrome-extensions.png" 
+             alt="Chrome extensions page with DemoMojo loaded" 
+             class="docs-screenshot">
       </div>
     </section>
 
@@ -455,13 +491,15 @@
       <h3>Accessing Story Management</h3>
       <p>Click the DemoMojo extension icon in your toolbar, then click "Manage Stories" to open the story setup page.</p>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: DemoMojo popup with "Manage Stories" button
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-popup-manage-stories.png" 
+             alt="DemoMojo popup with Manage Stories button" 
+             class="docs-screenshot small">
       </div>
       
       <h3>Creating a New Story</h3>
       <ol>
-        <li><strong>Story Information</strong>
+        <li><strong>Add Story</strong>
           <p>Enter a name and description for your story. This helps you identify different demo scenarios.</p>
         </li>
         <li><strong>Add Personas</strong>
@@ -473,13 +511,12 @@
         <li><strong>Set Value Drivers</strong>
           <p>Add value drivers for each chapter that highlight the business benefits and outcomes.</p>
         </li>
-        <li><strong>Save Your Story</strong>
-          <p>Click "Save Story" to store your configuration for future use.</p>
-        </li>
       </ol>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: Story creation form with persona, chapter, and value driver fields
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-story-creation-form.png" 
+             alt="Story creation form with persona, chapter, and value driver fields" 
+             class="docs-screenshot">
       </div>
       
       <h3>Managing Existing Stories</h3>
@@ -506,8 +543,10 @@
         </li>
       </ol>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: DemoMojo popup with story, persona, and chapter selections
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-popup-selections.png" 
+             alt="DemoMojo popup with story, persona, and chapter selections" 
+             class="docs-screenshot">
       </div>
       
       <h3>Overlay Display Modes</h3>
@@ -515,22 +554,28 @@
         <div class="feature-card">
           <h4>Small Overlay</h4>
           <p>Compact floating overlay that provides quick reference without obstructing your main content. Perfect for subtle guidance during demos.</p>
-          <div class="screenshot-placeholder">
-            📸 Small overlay mode
+          <div class="screenshot-container">
+            <img src="doc-screenshots/docs-small-overlay.png" 
+                 alt="Small overlay mode" 
+                 class="docs-screenshot">
           </div>
         </div>
         <div class="feature-card">
           <h4>Large Overlay</h4>
           <p>Full-screen side panel that provides complete story overview with all chapters and value drivers visible. Ideal for comprehensive presentations.</p>
-          <div class="screenshot-placeholder">
-            📸 Large overlay mode
+          <div class="screenshot-container">
+            <img src="doc-screenshots/docs-large-overlay.png" 
+                 alt="Large overlay mode" 
+                 class="docs-screenshot">
           </div>
         </div>
         <div class="feature-card">
-          <h4>Content Shifting</h4>
-          <p>Automatically adjusts page content to accommodate the overlay, ensuring optimal viewing experience for both presenter and audience.</p>
-          <div class="screenshot-placeholder">
-            📸 Content shifting in action
+          <h4>Pinned Content</h4>
+          <p>Pins the overlay to the left of the page and shifts the page content to the right, ensuring optimal viewing experience for both presenter and audience.</p>
+          <div class="screenshot-container">
+            <img src="doc-screenshots/docs-content-shifting.png" 
+                 alt="Content shifting in action" 
+                 class="docs-screenshot">
           </div>
         </div>
       </div>
@@ -538,14 +583,14 @@
       <h3>Overlay Positioning</h3>
       <p>DemoMojo offers flexible positioning options to suit your presentation style:</p>
       <ul>
-        <li><strong>Top Left</strong> - Overlay appears in the top-left corner</li>
-        <li><strong>Top Right</strong> - Overlay appears in the top-right corner</li>
         <li><strong>Bottom Left</strong> - Overlay appears in the bottom-left corner</li>
         <li><strong>Bottom Right</strong> - Overlay appears in the bottom-right corner (default)</li>
       </ul>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: Overlay positioning options in settings
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-overlay-positioning.png.png" 
+             alt="Overlay positioning options in settings" 
+             class="docs-screenshot">
       </div>
     </section>
 
@@ -596,8 +641,10 @@
       <h3>Enabling/Disabling Shortcuts</h3>
       <p>You can toggle keyboard shortcuts on or off using the switch in the DemoMojo popup. When disabled, you can still use the overlay buttons for navigation.</p>
       
-      <div class="screenshot-placeholder">
-        📸 Screenshot: Keyboard shortcuts toggle in popup
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-keyboard-shortcuts-toggle.png" 
+             alt="Keyboard shortcuts toggle in popup" 
+             class="docs-screenshot small">
       </div>
     </section>
 
