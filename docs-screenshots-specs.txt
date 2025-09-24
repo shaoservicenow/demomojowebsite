@@ -1,0 +1,129 @@
+📸 DEMOMOJO DOCS SCREENSHOT SPECIFICATIONS
+===============================================
+
+📁 FOLDER STRUCTURE:
+docs-screenshots/
+├── Main Screenshots (800-1200px × 200px)
+│   ├── docs-overlay-demo.png
+│   ├── docs-chrome-extensions.png
+│   ├── docs-popup-manage-stories.png
+│   ├── docs-story-creation-form.png
+│   ├── docs-popup-selections.png
+│   ├── docs-overlay-positioning.png
+│   └── docs-keyboard-shortcuts-toggle.png
+│
+└── Feature Card Screenshots (400-600px × 150px)
+    ├── docs-small-overlay.png
+    ├── docs-large-overlay.png
+    └── docs-content-shifting.png
+
+📐 DIMENSIONS BREAKDOWN:
+=======================
+
+MAIN SCREENSHOTS (Full Width):
+┌─────────────────────────────────────────────────────────┐
+│  Width: 800-1200px  │  Height: 200px  │  Aspect: 4:1-6:1 │
+│  Format: PNG/JPG    │  Size: <500KB   │  Quality: High   │
+└─────────────────────────────────────────────────────────┘
+
+FEATURE CARD SCREENSHOTS (Smaller):
+┌─────────────────────────────────────────────────────────┐
+│  Width: 400-600px   │  Height: 150px  │  Aspect: 3:1-4:1 │
+│  Format: PNG/JPG    │  Size: <200KB   │  Quality: High   │
+└─────────────────────────────────────────────────────────┘
+
+🎯 SCREENSHOT DESCRIPTIONS:
+===========================
+
+1. docs-overlay-demo.png
+   └── DemoMojo overlay in action on a demo page
+   └── Show the overlay displaying persona/chapter info
+
+2. docs-chrome-extensions.png
+   └── Chrome extensions page with DemoMojo loaded
+   └── Highlight the DemoMojo extension in the list
+
+3. docs-popup-manage-stories.png
+   └── DemoMojo popup with "Manage Stories" button
+   └── Show the popup interface with navigation
+
+4. docs-story-creation-form.png
+   └── Story creation form with persona, chapter, and value driver fields
+   └── Show the form with sample data filled in
+
+5. docs-popup-selections.png
+   └── DemoMojo popup with story, persona, and chapter selections
+   └── Show dropdown menus and selection interface
+
+6. docs-overlay-positioning.png
+   └── Overlay positioning options in settings
+   └── Show positioning controls/options
+
+7. docs-keyboard-shortcuts-toggle.png
+   └── Keyboard shortcuts toggle in popup
+   └── Show the toggle switch and shortcut list
+
+8. docs-small-overlay.png
+   └── Small overlay mode
+   └── Compact floating overlay example
+
+9. docs-large-overlay.png
+   └── Large overlay mode
+   └── Full-screen side panel example
+
+10. docs-content-shifting.png
+    └── Content shifting in action
+    └── Show how page content adjusts for overlay
+
+🎨 DESIGN GUIDELINES:
+====================
+
+✅ DO:
+- High contrast for readability
+- Clean, professional interface
+- Consistent DemoMojo theme colors
+- Clear annotations/arrows
+- Remove personal/sensitive data
+- Use consistent styling
+
+❌ DON'T:
+- Blurry or low-quality images
+- Cluttered interfaces
+- Personal information visible
+- Inconsistent colors/themes
+- Too much text in screenshots
+- Overly complex annotations
+
+📱 RESPONSIVE CONSIDERATIONS:
+============================
+
+Desktop View:
+┌─────────────────────────────────────────────────────────┐
+│  Screenshots scale to container width (100%)           │
+│  Height remains fixed at 200px                         │
+│  Maintains aspect ratio                                │
+└─────────────────────────────────────────────────────────┘
+
+Mobile View:
+┌─────────────────────────────────────────────────────────┐
+│  Screenshots scale down proportionally                 │
+│  Height adjusts to maintain aspect ratio               │
+│  Touch-friendly sizing                                  │
+└─────────────────────────────────────────────────────────┘
+
+🚀 IMPLEMENTATION:
+=================
+
+Once screenshots are ready:
+1. Place all files in docs-screenshots/ folder
+2. Update docs.html to reference these images
+3. Replace placeholder divs with <img> tags
+4. Test on both desktop and mobile
+5. Deploy to GitHub Pages
+
+Example HTML structure:
+<div class="screenshot-container">
+  <img src="docs-screenshots/docs-overlay-demo.png" 
+       alt="DemoMojo overlay in action" 
+       class="docs-screenshot">
+</div>
