@@ -348,7 +348,7 @@ body {
   
   .features .carousel {
     width: min(100%, 1000px);
-    height: 320px; /* Increased height to accommodate text */
+    height: 400px; /* Further increased height to prevent text cutoff */
     padding: 0 0 60px 0;
     list-style: none;
     border: 1px solid rgba(99, 223, 78, 0.3);
@@ -816,7 +816,7 @@ body {
     .features .carousel {
       width: 100%;
       margin: 0;
-      height: 220px;
+      height: 300px; /* Increased mobile height to prevent text cutoff */
       padding: 0 0 50px 0;
       overflow-x: auto;
       overflow-y: hidden;
@@ -875,7 +875,7 @@ body {
     }
     
     .features .carousel {
-      height: 200px;
+      height: 280px; /* Increased small mobile height to prevent text cutoff */
       padding: 0 0 45px 0;
       overflow-x: auto;
       overflow-y: hidden;
