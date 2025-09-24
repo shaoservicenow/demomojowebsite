@@ -2,6 +2,132 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Legal Pages Styling */
+.legal-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2em;
+}
+
+.legal-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 3em;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.legal-content h1 {
+  font-size: 2em;
+  margin-bottom: 0.3em;
+  background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+.legal-content p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+  margin-bottom: 0.8em;
+  font-size: 0.95em;
+}
+
+.legal-content h2 {
+  color: #63DF4E;
+  font-size: 1.3em;
+  margin: 1.5em 0 0.8em 0;
+}
+
+.legal-content ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0.8em;
+}
+
+.legal-content ul li {
+  margin-bottom: 0.5em;
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: 1.2em;
+  position: relative;
+  font-size: 0.9em;
+  line-height: 1.3;
+}
+
+.legal-content ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #63DF4E;
+  font-weight: bold;
+}
+
+.legal-content strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.legal-content a {
+  color: #63DF4E;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.legal-content a:hover {
+  color: #52B8FF;
+  text-decoration: underline;
+}
+
+.back-to-home {
+  text-align: center;
+  margin-top: 3em;
+}
+
+.back-to-home a {
+  display: inline-block;
+  background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+  color: white;
+  padding: 0.8em 1.5em;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(99, 223, 78, 0.2);
+}
+
+.back-to-home a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(99, 223, 78, 0.3);
+}
+
+@media (max-width: 768px) {
+  .legal-container {
+    padding: 1em;
+  }
+
+  .legal-content {
+    padding: 1.5em;
+  }
+
+  .legal-content h1 {
+    font-size: 1.8em;
+  }
+
+  .legal-content h2 {
+    font-size: 1.2em;
+  }
+
+  .legal-content p {
+    font-size: 0.9em;
+  }
+
+  .legal-content ul li {
+    font-size: 0.85em;
+  }
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     margin: 0;

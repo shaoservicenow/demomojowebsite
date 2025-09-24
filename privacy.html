@@ -8,97 +8,251 @@
   <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
+  <!-- Magic Dust Canvas -->
+  <canvas id="magic-dust" class="magic-dust-canvas"></canvas>
 
   <!-- Header -->
   <header>
-    <a href="index.html">
-      <img src="assets/logo.svg" alt="DemoMojo Logo" class="logo">
+    <a href="index.html" aria-label="DemoMojo Home" class="logo-container">
+      <img src="assets/logo.png" alt="DemoMojo Wizard Logo" class="logo">
+      <div class="logo-text">
+        <h1 class="brand-title">DemoMojo</h1>
+        <p class="brand-attribution">created by shao</p>
+      </div>
     </a>
-    <nav>
-      <a href="index.html">Home</a>
+    <nav role="navigation" aria-label="Main navigation">
       <a href="index.html#features">Features</a>
       <a href="index.html#pricing">Pricing</a>
       <a href="index.html#install">Install</a>
+      <a href="docs.html">Docs</a>
     </nav>
   </header>
 
   <!-- Main Content -->
-  <main style="padding: 2em; max-width: 800px; margin: 0 auto;">
-    <h1>Privacy Policy</h1>
-    <p><strong>Last updated:</strong> January 2025</p>
+  <main class="legal-container">
+    <div class="legal-content">
+      <h1>Privacy Policy</h1>
+      <p><strong>Last updated:</strong> September 24th, 2025</p>
 
-    <h2>1. Information We Collect</h2>
-    <p>DemoMojo is designed with privacy in mind. We collect minimal information necessary to provide our service:</p>
-    <ul>
-      <li><strong>Extension Usage Data:</strong> Basic analytics about feature usage to improve our product</li>
-      <li><strong>Account Information:</strong> Email address and basic profile information for Pro/Team accounts</li>
-      <li><strong>Demo Content:</strong> Your demo stories, personas, and chapter data (stored locally by default)</li>
-    </ul>
+      <h2>1. Information We Collect</h2>
+      <p>DemoMojo is designed with privacy in mind. We collect minimal information necessary to provide our service:</p>
+      <ul>
+        <li><strong>Extension Usage Data:</strong> Basic analytics about feature usage to improve our product (anonymized)</li>
+        <li><strong>Account Information:</strong> Email address and basic profile information for Pro/Team accounts</li>
+        <li><strong>Demo Content:</strong> Your demo stories, personas, and chapter data (stored locally by default)</li>
+        <li><strong>Technical Data:</strong> Browser type, extension version, and error logs for debugging</li>
+        <li><strong>Payment Information:</strong> Processed securely (we do not store credit card details)</li>
+        <li><strong>Communication Data:</strong> Support requests and feedback you provide to us</li>
+      </ul>
 
-    <h2>2. How We Use Your Information</h2>
-    <p>We use collected information to:</p>
-    <ul>
-      <li>Provide and improve our browser extension service</li>
-      <li>Process payments for Pro and Team subscriptions</li>
-      <li>Send important service updates and notifications</li>
-      <li>Analyze usage patterns to enhance user experience</li>
-    </ul>
+      <h2>2. How We Use Your Information</h2>
+      <p>We use collected information to:</p>
+      <ul>
+        <li>Provide and improve our browser extension service</li>
+        <li>Process payments for Pro and Team subscriptions</li>
+        <li>Send important service updates and notifications</li>
+        <li>Analyze usage patterns to enhance user experience (anonymized data only)</li>
+        <li>Provide customer support and respond to inquiries</li>
+        <li>Debug technical issues and improve extension performance</li>
+        <li>Comply with legal obligations and protect our rights</li>
+        <li>Prevent fraud and ensure service security</li>
+      </ul>
 
-    <h2>3. Data Storage and Security</h2>
-    <p>Your data security is our priority:</p>
-    <ul>
-      <li><strong>Local Storage:</strong> Free tier data is stored locally in your browser</li>
-      <li><strong>Cloud Storage:</strong> Pro/Team data is encrypted and stored securely</li>
-      <li><strong>Encryption:</strong> All data transmission uses industry-standard encryption</li>
-      <li><strong>Access Control:</strong> Limited access to your data by authorized personnel only</li>
-    </ul>
+      <h2>3. Data Storage and Security</h2>
+      <p>Your data security is our priority:</p>
+      <ul>
+        <li><strong>Local Storage:</strong> Free tier data is stored locally in your browser using Chrome's storage API</li>
+        <li><strong>Cloud Storage:</strong> Pro/Team data is encrypted and stored securely</li>
+        <li><strong>Encryption:</strong> All data transmission uses TLS 1.3 encryption</li>
+        <li><strong>Access Control:</strong> Limited access to your data by authorized personnel only</li>
+        <li><strong>Data Retention:</strong> We retain data only as long as necessary for service provision</li>
+        <li><strong>Backup Security:</strong> Regular encrypted backups with secure access controls</li>
+        <li><strong>Incident Response:</strong> Procedures in place for data breach notification and response</li>
+      </ul>
 
-    <h2>4. Third-Party Services</h2>
-    <p>We may use trusted third-party services:</p>
-    <ul>
-      <li><strong>Payment Processing:</strong> Stripe for secure payment handling</li>
-      <li><strong>Analytics:</strong> Anonymous usage analytics to improve our service</li>
-      <li><strong>Hosting:</strong> Secure cloud infrastructure for data storage</li>
-    </ul>
+      <h2>4. Data Sharing</h2>
+      <p>We do not sell, rent, or share your personal information with third parties except with your explicit consent or as required by law.</p>
 
-    <h2>5. Your Rights</h2>
-    <p>You have the right to:</p>
-    <ul>
-      <li>Access your personal data</li>
-      <li>Correct inaccurate information</li>
-      <li>Delete your account and data</li>
-      <li>Export your demo content</li>
-      <li>Opt out of marketing communications</li>
-    </ul>
+      <h2>5. Your Rights</h2>
+      <p>You have the following rights regarding your personal data:</p>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of your personal data</li>
+        <li><strong>Rectification:</strong> Correct inaccurate or incomplete information</li>
+        <li><strong>Erasure:</strong> Request deletion of your personal data</li>
+        <li><strong>Portability:</strong> Export your demo content and data</li>
+        <li><strong>Restriction:</strong> Limit how we process your data</li>
+        <li><strong>Objection:</strong> Opt out of marketing communications</li>
+        <li><strong>Withdrawal:</strong> Withdraw consent for data processing</li>
+      </ul>
+      <p>To exercise these rights, contact us at privacy@demomojo.com. We will respond within 30 days.</p>
 
-    <h2>6. Cookies and Tracking</h2>
-    <p>We use minimal cookies for:</p>
-    <ul>
-      <li>Authentication and session management</li>
-      <li>Remembering your preferences</li>
-      <li>Basic analytics (anonymized)</li>
-    </ul>
+      <h2>6. Cookies and Tracking</h2>
+      <p>We use minimal cookies and tracking technologies:</p>
+      <ul>
+        <li><strong>Essential Cookies:</strong> Authentication and session management</li>
+        <li><strong>Preference Cookies:</strong> Remembering your settings and preferences</li>
+        <li><strong>Analytics Cookies:</strong> Anonymous usage analytics to improve our service</li>
+        <li><strong>Functional Cookies:</strong> Extension functionality and performance</li>
+      </ul>
+      <p>You can control cookie settings through your browser preferences. Disabling certain cookies may affect extension functionality.</p>
 
-    <h2>7. Children's Privacy</h2>
-    <p>DemoMojo is not intended for children under 13. We do not knowingly collect personal information from children under 13.</p>
+      <h2>7. Children's Privacy</h2>
+      <p>DemoMojo is not intended for children under 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information immediately.</p>
 
-    <h2>8. Changes to This Policy</h2>
-    <p>We may update this privacy policy periodically. We'll notify users of significant changes via email or through the extension.</p>
+      <h2>8. International Data Transfers</h2>
+      <p>Your data may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place for such transfers, including standard contractual clauses and adequacy decisions.</p>
 
-    <h2>9. Contact Us</h2>
-    <p>If you have questions about this privacy policy, please contact us at:</p>
-    <p>
-      <strong>Email:</strong> privacy@demomojo.com<br>
-      <strong>Website:</strong> <a href="index.html">DemoMojo.com</a>
-    </p>
+      <h2>9. Legal Basis for Processing</h2>
+      <p>We process your personal data based on:</p>
+      <ul>
+        <li><strong>Consent:</strong> When you provide explicit consent for specific processing activities</li>
+        <li><strong>Contract Performance:</strong> To provide our extension services</li>
+        <li><strong>Legitimate Interests:</strong> To improve our services and prevent fraud</li>
+        <li><strong>Legal Obligations:</strong> To comply with applicable laws and regulations</li>
+      </ul>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>We may update this privacy policy periodically. We'll notify users of significant changes via email or through the extension at least 30 days before the changes take effect.</p>
+
+      <h2>11. Contact Us</h2>
+      <p>If you have questions about this privacy policy or wish to exercise your rights, please contact us at:</p>
+      <p>
+        <strong>Email:</strong> privacy@demomojo.com<br>
+        <strong>Website:</strong> <a href="index.html">DemoMojo.com</a><br>
+        <strong>Data Protection Officer:</strong> privacy@demomojo.com
+      </p>
+
+      <div class="back-to-home">
+        <a href="index.html">← Back to Home</a>
+      </div>
+    </div>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 DemoMojo</p>
-    <a href="privacy.html">Privacy Policy</a> • 
-    <a href="terms.html">Terms of Service</a>
-  </footer>
-
+  <script>
+    // Magic Dust Particle System
+    class MagicDust {
+      constructor() {
+        this.canvas = document.getElementById('magic-dust');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
+        
+        this.resize();
+        this.init();
+        this.bindEvents();
+        this.animate();
+      }
+      
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+      
+      init() {
+        // Create initial particles
+        for (let i = 0; i < 50; i++) {
+          this.createParticle();
+        }
+      }
+      
+      createParticle(x = null, y = null) {
+        const particle = {
+          x: x || Math.random() * this.canvas.width,
+          y: y || Math.random() * this.canvas.height,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          size: Math.random() * 4 + 2,
+          opacity: Math.random() * 0.8 + 0.2,
+          life: 1,
+          decay: Math.random() * 0.02 + 0.005,
+          color: this.getRandomColor()
+        };
+        
+        this.particles.push(particle);
+      }
+      
+      getRandomColor() {
+        const colors = [
+          'rgba(177,255,252,0.8)',  // Cyan
+          'rgba(202,76,255,0.6)',   // Purple
+          'rgba(102,219,214,0.6)',  // Teal
+          'rgba(255,255,255,0.4)'   // White
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      bindEvents() {
+        window.addEventListener('resize', () => this.resize());
+        
+        document.addEventListener('mousemove', (e) => {
+          this.mouseX = e.clientX;
+          this.mouseY = e.clientY;
+          
+          // Create particles at mouse position
+          if (Math.random() < 0.3) {
+            this.createParticle(this.mouseX, this.mouseY);
+          }
+        });
+        
+        document.addEventListener('click', (e) => {
+          // Create burst of particles on click
+          for (let i = 0; i < 10; i++) {
+            this.createParticle(e.clientX, e.clientY);
+          }
+        });
+      }
+      
+      updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const particle = this.particles[i];
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Update life
+          particle.life -= particle.decay;
+          
+          // Remove dead particles
+          if (particle.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+          
+          // Wrap around screen
+          if (particle.x < 0) particle.x = this.canvas.width;
+          if (particle.x > this.canvas.width) particle.x = 0;
+          if (particle.y < 0) particle.y = this.canvas.height;
+          if (particle.y > this.canvas.height) particle.y = 0;
+        }
+      }
+      
+      drawParticles() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach(particle => {
+          this.ctx.save();
+          this.ctx.globalAlpha = particle.opacity * particle.life;
+          this.ctx.fillStyle = particle.color;
+          this.ctx.beginPath();
+          this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          this.ctx.fill();
+          this.ctx.restore();
+        });
+      }
+      
+      animate() {
+        this.updateParticles();
+        this.drawParticles();
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+    
+    // Initialize magic dust when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new MagicDust();
+    });
+  </script>
 </body>
 </html>
