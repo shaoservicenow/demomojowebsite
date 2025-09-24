@@ -417,8 +417,8 @@
 
       updateIndicators() {
         const scrollLeft = this.carousel.scrollLeft;
-        const slideWidth = this.carousel.scrollWidth / this.indicators.length;
-        const currentSlide = Math.round(scrollLeft / slideWidth);
+        const containerWidth = this.carousel.clientWidth;
+        const currentSlide = Math.round(scrollLeft / containerWidth);
         
         this.indicators.forEach((indicator, index) => {
           indicator.classList.toggle('active', index === currentSlide);
@@ -426,9 +426,9 @@
       }
 
       scrollToSlide(index) {
-        const slideWidth = this.carousel.scrollWidth / this.indicators.length;
+        const containerWidth = this.carousel.clientWidth;
         this.carousel.scrollTo({
-          left: index * slideWidth,
+          left: index * containerWidth,
           behavior: 'smooth'
         });
       }
