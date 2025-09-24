@@ -746,8 +746,13 @@ body {
   
   /* Responsive Design */
   @media (max-width: 768px) {
-    body {
-      background-attachment: scroll; /* Fix for mobile devices */
+    html, body {
+      background-color: #667eea !important;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      background-attachment: scroll !important;
+      background-size: cover !important;
+      background-repeat: no-repeat !important;
+      min-height: 100vh !important;
     }
     
     header {
