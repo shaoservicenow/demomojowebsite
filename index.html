@@ -399,7 +399,13 @@
       }
 
       init() {
-        if (!this.carousel || !this.indicators.length) return;
+        console.log('Carousel found:', this.carousel);
+        console.log('Indicators found:', this.indicators.length);
+        
+        if (!this.carousel || !this.indicators.length) {
+          console.log('Missing carousel or indicators, aborting');
+          return;
+        }
         
         this.bindEvents();
         this.updateIndicators();
@@ -407,11 +413,17 @@
 
       bindEvents() {
         // Update indicators on scroll
-        this.carousel.addEventListener('scroll', () => this.updateIndicators());
+        this.carousel.addEventListener('scroll', () => {
+          console.log('Scroll event triggered');
+          this.updateIndicators();
+        });
         
         // Click indicators to scroll to specific slide
         this.indicators.forEach((indicator, index) => {
-          indicator.addEventListener('click', () => this.scrollToSlide(index));
+          indicator.addEventListener('click', () => {
+            console.log('Clicked indicator:', index);
+            this.scrollToSlide(index);
+          });
         });
       }
 
@@ -420,8 +432,12 @@
         const containerWidth = this.carousel.clientWidth;
         const currentSlide = Math.round(scrollLeft / containerWidth);
         
+        console.log('Scroll left:', scrollLeft, 'Container width:', containerWidth, 'Current slide:', currentSlide);
+        
         this.indicators.forEach((indicator, index) => {
-          indicator.classList.toggle('active', index === currentSlide);
+          const isActive = index === currentSlide;
+          indicator.classList.toggle('active', isActive);
+          console.log(`Indicator ${index}: ${isActive ? 'ACTIVE' : 'inactive'}`);
         });
       }
 
