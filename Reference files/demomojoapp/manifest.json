@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "DemoMojo",
+    "description": "Overlay persona, chapter, and value drivers for demo storytelling.",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icons/icon48.png"
+    },
+    "permissions": ["scripting", "activeTab", "storage"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "css": ["overlay.css"]
+      }
+    ],
+    "options_page": "setup.html",
+    "web_accessible_resources": [
+      {
+        "resources": ["headshots/*.png", "icons/logo-solo.png", "icons/long-logo.png"],
+        "matches": ["<all_urls>"]
+      }
+    ]
+  }
+  

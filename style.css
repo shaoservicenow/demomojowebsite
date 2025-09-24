@@ -342,6 +342,7 @@ body {
     font-weight: 600;
     margin-bottom: 1.5em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
   .features ul {
@@ -413,6 +414,7 @@ body {
     font-weight: 600;
     margin-bottom: 1.5em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
   .pricing .plans {
@@ -586,6 +588,7 @@ body {
     position: relative;
     transform: translateY(0);
     transition: all 0.3s ease;
+    text-align: center;
   }
   
   .install:hover {
@@ -610,6 +613,7 @@ body {
     font-weight: 600;
     margin-bottom: 1.5em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
   .install p {
