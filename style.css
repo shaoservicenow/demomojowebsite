@@ -426,7 +426,7 @@ body {
     padding: 2rem;
     transition: all 0.3s ease;
     height: 100%;
-    align-items: start;
+    align-items: center; /* Center align items vertically */
   }
   
   .features .carousel > li:hover {
