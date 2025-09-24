@@ -1,13 +1,17 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     margin: 0;
-    color: #2d3748;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
-    position: relative;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), auto;
-  }
+  color: #2d3748;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), auto;
+}
   
   .magic-dust-canvas {
     position: fixed;
@@ -348,7 +352,7 @@ body {
   
   .features .carousel {
     width: min(100%, 1000px);
-    height: 400px; /* Further increased height to prevent text cutoff */
+    height: 300px; /* Further increased height to prevent text cutoff */
     padding: 0 0 60px 0;
     list-style: none;
     border: 1px solid rgba(99, 223, 78, 0.3);
