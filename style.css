@@ -139,7 +139,7 @@ body {
   
   .hero {
     text-align: center;
-    padding: 6em 2em 7em 2em;
+    padding: 2em 2em 7em 2em;
     background: transparent;
     color: white;
     position: relative;
@@ -274,6 +274,30 @@ body {
   .btn:active {
     transform: translateY(-1px) scale(1.02);
     box-shadow: 0 2px 15px rgba(255, 215, 0, 0.3);
+  }
+  
+  .hero-screenshot {
+    margin: 2em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .screenshot-image {
+    max-width: 50%;
+    height: auto;
+    border-radius: 20px;
+    opacity: 0.85;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .screenshot-image:hover {
+    opacity: 1;
+    transform: translateY(-5px);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
   }
   
   
@@ -667,6 +691,11 @@ body {
       padding: 2em 1em;
       margin: 1em;
     }
+    
+    .screenshot-image {
+      max-width: 80%;
+      min-width: 280px;
+    }
   }
   
   @media (max-width: 480px) {
@@ -690,6 +719,11 @@ body {
     
     .plan p {
       font-size: 0.9em;
+    }
+    
+    .screenshot-image {
+      max-width: 90%;
+      min-width: 250px;
     }
   }
   
