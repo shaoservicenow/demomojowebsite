@@ -478,7 +478,7 @@ body {
   
   .features .carousel {
     width: min(100%, 1000px);
-    height: 300px; /* Further increased height to prevent text cutoff */
+    height: 350px; /* Increased height to accommodate content properly */
     padding: 0 0 60px 0;
     list-style: none;
     border: 1px solid rgba(99, 223, 78, 0.3);
@@ -488,6 +488,7 @@ body {
     grid-auto-columns: 100%;
     gap: 1rem;
     overflow-x: auto;
+    overflow-y: hidden;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
@@ -571,7 +572,7 @@ body {
   .features .carousel > li img {
     grid-area: --img;
     width: 100%;
-    height: 200px; /* Increased image height */
+    height: 180px; /* Slightly reduced to fit better */
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -582,10 +583,12 @@ body {
     grid-area: --content;
     margin: 0;
     color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
+    line-height: 1.5;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center; /* Center text vertically */
+    overflow: hidden;
+    font-size: 0.95rem;
   }
   
   .features .carousel > li::scroll-marker {

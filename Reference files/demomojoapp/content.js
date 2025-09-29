@@ -5,6 +5,9 @@ function createOverlay() {
   overlayDiv.id = "demoOverlay";
   document.body.appendChild(overlayDiv);
   
+  // Reset destroyed flag when overlay is created
+  overlayDestroyed = false;
+  
   // Add resize functionality for fullscreen mode
   addResizeFunctionality();
 }
@@ -67,7 +70,7 @@ function addResizeFunctionality() {
     const constrainedWidth = Math.min(Math.max(newWidth, minWidth), maxWidth);
     overlayDiv.style.width = constrainedWidth + 'px';
     
-    // Update content shift if in responsive mode
+    // Update content pin if in responsive mode
     updateContentShift(constrainedWidth);
   }
   
@@ -89,7 +92,7 @@ function addResizeFunctionality() {
     const currentWidth = overlayDiv.getBoundingClientRect().width;
     localStorage.setItem('demoOverlayWidth', currentWidth);
     
-    // Final update to content shift
+    // Final update to content pin
     updateContentShift(currentWidth);
   }
   
@@ -108,7 +111,7 @@ function addResizeFunctionality() {
   });
 }
 
-// Function to update content shift based on overlay width
+// Function to update content pin based on overlay width
 function updateContentShift(overlayWidth) {
   if (document.body.classList.contains('responsive-mode')) {
     // Update CSS custom property for dynamic width
@@ -137,7 +140,7 @@ function injectStyles() {
   style.textContent = `
     #demoOverlay {
       position: fixed;
-      background: linear-gradient(135deg, rgba(3, 45, 66, 0.75) 0%, rgba(118, 97, 255, 0.75) 100%);
+      background: linear-gradient(135deg, var(--primary-color, rgba(3, 45, 66, ${overlayOpacity})) 0%, var(--secondary-color, rgba(118, 97, 255, ${overlayOpacity})) 100%);
       color: white;
       border-radius: 16px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -396,12 +399,20 @@ function injectStyles() {
       padding: 40px;
       overflow-y: auto;
       z-index: 999999;
-      background: linear-gradient(135deg, rgba(3, 45, 66, 0.85) 0%, rgba(118, 97, 255, 0.85) 100%);
+        background: linear-gradient(135deg, var(--primary-color, rgba(3, 45, 66, ${Math.min(overlayOpacity + 0.1, 1)})) 0%, var(--secondary-color, rgba(118, 97, 255, ${Math.min(overlayOpacity + 0.1, 1)})) 100%);
       backdrop-filter: blur(25px);
       pointer-events: auto;
       resize: horizontal;
       min-width: 300px;
       max-width: 80vw;
+      /* Hide scrollbars */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+    
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    #demoOverlay.fullscreen::-webkit-scrollbar {
+      display: none;
     }
     
     /* Prevent text selection during resize */
@@ -429,14 +440,14 @@ function injectStyles() {
       right: 0;
       width: 8px;
       height: 100%;
-      background: linear-gradient(180deg, transparent 0%, rgba(99, 223, 78, 0.2) 20%, rgba(99, 223, 78, 0.4) 50%, rgba(99, 223, 78, 0.2) 80%, transparent 100%);
+      background: linear-gradient(180deg, transparent 0%, var(--accent-color, rgba(99, 223, 78, 0.2)) 20%, var(--accent-color, rgba(99, 223, 78, 0.4)) 50%, var(--accent-color, rgba(99, 223, 78, 0.2)) 80%, transparent 100%);
       cursor: ew-resize;
       z-index: 1000000;
     }
     
     /* Hover effect for resize handle */
     #demoOverlay.fullscreen:hover::before {
-      background: linear-gradient(180deg, transparent 0%, rgba(99, 223, 78, 0.4) 20%, rgba(99, 223, 78, 0.7) 50%, rgba(99, 223, 78, 0.4) 80%, transparent 100%);
+      background: linear-gradient(180deg, transparent 0%, var(--accent-color, rgba(99, 223, 78, 0.4)) 20%, var(--accent-color, rgba(99, 223, 78, 0.7)) 50%, var(--accent-color, rgba(99, 223, 78, 0.4)) 80%, transparent 100%);
     }
 
     #demoOverlay.fullscreen .story-summary {
@@ -451,6 +462,8 @@ function injectStyles() {
       margin-bottom: 20px;
       text-align: center;
       color: white;
+      position: relative;
+      z-index: 20;
     }
 
     #demoOverlay.fullscreen .return-instruction {
@@ -516,7 +529,7 @@ function injectStyles() {
       left: var(--overlay-width) !important;
     }
     
-    /* Ensure the overlay doesn't interfere with shifted content */
+    /* Ensure the overlay doesn't interfere with pinned content */
     body.responsive-mode #demoOverlay.fullscreen {
       z-index: 999999;
     }
@@ -535,8 +548,8 @@ function injectStyles() {
     #demoOverlay.fullscreen .persona-card.highlighted {
       background: rgba(99, 223, 78, 0.2);
       border-color: rgba(99, 223, 78, 0.6);
-      transform: scale(1.05);
       box-shadow: 0 12px 30px rgba(99, 223, 78, 0.4);
+      z-index: 10;
     }
     
     #demoOverlay.fullscreen .persona-card.greyed-out {
@@ -554,7 +567,7 @@ function injectStyles() {
       color: #52B8FF;
     }
     
-    /* Disable chapter clicks when content is shifted, but allow checkboxes */
+    /* Disable chapter clicks when content is pinned, but allow checkboxes */
     body.responsive-mode #demoOverlay.fullscreen .chapter-item {
       cursor: default;
     }
@@ -601,6 +614,8 @@ function injectStyles() {
       border-radius: 12px;
       padding: 20px;
       backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 1;
     }
 
     #demoOverlay.fullscreen .persona-header {
@@ -652,7 +667,7 @@ function injectStyles() {
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(99, 223, 78, 0.1), transparent);
+      background: linear-gradient(90deg, transparent, var(--accent-color, rgba(99, 223, 78, 0.1)), transparent);
       transition: left 0.5s ease;
     }
 
@@ -775,25 +790,41 @@ let isFullscreenMode = false;
 let isRestoringState = false;
 let selectedChapterIndex = -1; // Track selected chapter in large overlay
 let shortcutsEnabled = true; // Track whether shortcuts are enabled
+let overlayOpacity = 0.75; // Track overlay opacity setting
+let overlayDestroyed = false; // Track if overlay was destroyed (disables shortcuts)
+let colorScheme = 'default'; // Track color scheme setting
+let showProgressIndicators = true; // Track show progress indicators setting
+let autoHighlightChapter = false; // Track auto-highlight chapter setting
+let crossTabChapterSync = true; // Track cross-tab chapter sync setting
+let crossTabHighlightingSync = true; // Track cross-tab highlighting sync setting
+let customShortcuts = {}; // Track custom keyboard shortcuts
 
-// Initialize completed chapters from localStorage on page load
+// Initialize completed chapters from Chrome storage on page load
 function loadCompletedChapters() {
-  const saved = localStorage.getItem('completedChapters');
-  console.log('Loading completed chapters from localStorage:', saved);
-  if (saved) {
-    try {
-      const completedArray = JSON.parse(saved);
-      completedChapters = new Set(completedArray);
-      console.log('Loaded completed chapters:', [...completedChapters]);
-    } catch (e) {
-      console.log('Could not load completed chapters from localStorage:', e);
-      completedChapters = new Set();
-    }
-  } else {
+  if (!crossTabChapterSync) {
+    console.log('Cross-tab chapter sync is disabled, initializing empty completed chapters');
     completedChapters = new Set();
-    console.log('No saved completed chapters found, initializing empty Set');
+    return;
   }
-  console.log('Current completedChapters Set after load:', [...completedChapters]);
+  
+  chrome.storage.local.get(['completedChapters'], (result) => {
+    const saved = result.completedChapters;
+    console.log('Loading completed chapters from Chrome storage:', saved);
+    if (saved) {
+      try {
+        const completedArray = JSON.parse(saved);
+        completedChapters = new Set(completedArray);
+        console.log('Loaded completed chapters:', [...completedChapters]);
+      } catch (e) {
+        console.log('Could not load completed chapters from Chrome storage:', e);
+        completedChapters = new Set();
+      }
+    } else {
+      completedChapters = new Set();
+      console.log('No saved completed chapters found, initializing empty Set');
+    }
+    console.log('Current completedChapters Set after load:', [...completedChapters]);
+  });
 }
 
 // Save overlay state to Chrome storage
@@ -810,15 +841,23 @@ function saveOverlayState() {
     isContentShifted,
     currentOverlaySize,
     currentOverlayPosition,
-    highlightedPersonaIndex,
-    selectedChapterIndex,
     overlayScrollTop: overlayDiv ? overlayDiv.scrollTop : 0,
     timestamp: Date.now() // Add timestamp to ensure we get the most recent state
   };
   
+  // Only include highlighting state if cross-tab highlighting sync is enabled
+  if (crossTabHighlightingSync) {
+    state.highlightedPersonaIndex = highlightedPersonaIndex;
+    state.selectedChapterIndex = selectedChapterIndex;
+  }
+  
   chrome.storage.local.set({ overlayState: state }, () => {
     console.log('Overlay state saved:', state);
-    console.log('Saved selectedChapterIndex:', state.selectedChapterIndex, 'highlightedPersonaIndex:', state.highlightedPersonaIndex);
+    if (crossTabHighlightingSync) {
+      console.log('Saved selectedChapterIndex:', state.selectedChapterIndex, 'highlightedPersonaIndex:', state.highlightedPersonaIndex);
+    } else {
+      console.log('Cross-tab highlighting sync disabled, not saving highlighting state');
+    }
   });
 }
 
@@ -844,8 +883,16 @@ function loadOverlayState() {
       isContentShifted = state.isContentShifted || false;
       currentOverlaySize = state.currentOverlaySize || 'small';
       currentOverlayPosition = state.currentOverlayPosition || 'bottom-right';
-      highlightedPersonaIndex = state.highlightedPersonaIndex !== undefined ? state.highlightedPersonaIndex : -1;
-      selectedChapterIndex = state.selectedChapterIndex !== undefined ? state.selectedChapterIndex : -1;
+      
+      // Only restore highlighting state if cross-tab highlighting sync is enabled
+      if (crossTabHighlightingSync) {
+        highlightedPersonaIndex = state.highlightedPersonaIndex !== undefined ? state.highlightedPersonaIndex : -1;
+        selectedChapterIndex = state.selectedChapterIndex !== undefined ? state.selectedChapterIndex : -1;
+      } else {
+        highlightedPersonaIndex = -1;
+        selectedChapterIndex = -1;
+      }
+      
       const savedScrollTop = state.overlayScrollTop || 0;
       
       console.log('State restored - isOverlayVisible:', isOverlayVisible, 'isFullscreenMode:', isFullscreenMode);
@@ -895,7 +942,7 @@ function restoreOverlay(savedScrollTop = 0) {
     
     if (isContentShifted) {
       document.body.classList.add('responsive-mode');
-      // Update content shift with current overlay width
+      // Update content pin with current overlay width
       const currentWidth = overlayDiv.getBoundingClientRect().width;
       updateContentShift(currentWidth);
     }
@@ -967,11 +1014,18 @@ function restoreOverlay(savedScrollTop = 0) {
   console.log('Overlay restored after page navigation');
 }
 
-// Save completed chapters to localStorage
+// Save completed chapters to Chrome storage
 function saveCompletedChapters() {
+  if (!crossTabChapterSync) {
+    console.log('Cross-tab chapter sync is disabled, not saving to Chrome storage');
+    return;
+  }
+  
   const toSave = [...completedChapters];
-  console.log('Saving completed chapters to localStorage:', toSave);
-  localStorage.setItem('completedChapters', JSON.stringify(toSave));
+  console.log('Saving completed chapters to Chrome storage:', toSave);
+  chrome.storage.local.set({ completedChapters: JSON.stringify(toSave) }, () => {
+    console.log('Completed chapters saved to Chrome storage');
+  });
 }
 
 // Load shortcuts setting from Chrome storage
@@ -984,9 +1038,287 @@ function loadShortcutsSetting() {
   });
 }
 
+function loadOverlayOpacitySetting() {
+  chrome.storage.local.get(['overlayOpacity'], (result) => {
+    if (result.overlayOpacity !== undefined) {
+      overlayOpacity = result.overlayOpacity;
+      console.log('Overlay opacity:', overlayOpacity);
+    }
+  });
+}
+
+function loadColorSchemeSetting() {
+  chrome.storage.local.get(['colorScheme'], (result) => {
+    if (result.colorScheme !== undefined) {
+      colorScheme = result.colorScheme;
+      console.log('Color scheme:', colorScheme);
+      applyColorScheme();
+    }
+  });
+}
+
+function loadShowProgressIndicatorsSetting() {
+  chrome.storage.local.get(['showProgressIndicators'], (result) => {
+    if (result.showProgressIndicators !== undefined) {
+      showProgressIndicators = result.showProgressIndicators;
+      console.log('Show progress indicators:', showProgressIndicators);
+    }
+  });
+}
+
+function loadAutoHighlightChapterSetting() {
+  chrome.storage.local.get(['autoHighlightChapter'], (result) => {
+    if (result.autoHighlightChapter !== undefined) {
+      autoHighlightChapter = result.autoHighlightChapter;
+      console.log('Auto-highlight chapter:', autoHighlightChapter);
+    }
+  });
+}
+
+// Load cross-tab chapter sync setting from Chrome storage
+function loadCrossTabChapterSyncSetting() {
+  chrome.storage.local.get(['crossTabChapterSync'], (result) => {
+    if (result.crossTabChapterSync !== undefined) {
+      crossTabChapterSync = result.crossTabChapterSync;
+      console.log('Cross-tab chapter sync setting loaded:', crossTabChapterSync);
+      
+      // Reload completed chapters if setting changed
+      if (crossTabChapterSync) {
+        loadCompletedChapters();
+      } else {
+        // Clear completed chapters if sync is disabled
+        completedChapters = new Set();
+        console.log('Cross-tab sync disabled, cleared completed chapters');
+      }
+    }
+  });
+}
+
+// Load cross-tab highlighting sync setting from Chrome storage
+function loadCrossTabHighlightingSyncSetting() {
+  chrome.storage.local.get(['crossTabHighlightingSync'], (result) => {
+    if (result.crossTabHighlightingSync !== undefined) {
+      crossTabHighlightingSync = result.crossTabHighlightingSync;
+      console.log('Cross-tab highlighting sync setting loaded:', crossTabHighlightingSync);
+      
+      // Clear highlighting state if sync is disabled
+      if (!crossTabHighlightingSync) {
+        highlightedPersonaIndex = -1;
+        selectedChapterIndex = -1;
+        console.log('Cross-tab highlighting sync disabled, cleared highlighting state');
+      }
+    }
+  });
+}
+
+function loadCustomShortcutsSetting() {
+  chrome.storage.local.get(['customShortcuts'], (result) => {
+    if (result.customShortcuts) {
+      customShortcuts = result.customShortcuts;
+      console.log('Custom shortcuts loaded:', customShortcuts);
+    }
+  });
+}
+
+function checkCurrentPageForChapterMatch() {
+  if (!autoHighlightChapter || !currentPersona || !allChapters || allChapters.length === 0) {
+    return;
+  }
+  
+  const currentUrl = window.location.href;
+  console.log('Checking current page URL for chapter match:', currentUrl);
+  
+  // Find matching chapter within current persona
+  const matchingChapterIndex = allChapters.findIndex(chapter => {
+    if (!chapter.url || chapter.url.trim() === '') return false;
+    
+    // Check for exact match or if current URL contains chapter URL
+    return currentUrl === chapter.url || currentUrl.includes(chapter.url);
+  });
+  
+  if (matchingChapterIndex !== -1 && matchingChapterIndex !== currentChapterIndex) {
+    console.log('Found matching chapter:', allChapters[matchingChapterIndex].title, 'at index:', matchingChapterIndex);
+    
+    // Update current chapter index
+    currentChapterIndex = matchingChapterIndex;
+    
+    // Update overlay content based on mode
+    if (overlayDiv && isOverlayVisible) {
+      if (isFullscreenMode) {
+        // In fullscreen mode, highlight the chapter in the large overlay
+        highlightCurrentChapterFromSmallOverlay();
+      } else {
+        // In small overlay mode, update the content
+        updateOverlayContent();
+      }
+    }
+    
+    // Save overlay state
+    saveOverlayState();
+  } else if (matchingChapterIndex === -1) {
+    console.log('No matching chapter found for current URL');
+  }
+}
+
+function setupAutoHighlightNavigation() {
+  // Check for URL match when the page loads
+  window.addEventListener('load', () => {
+    console.log('Page loaded, checking for auto-highlight match');
+    setTimeout(() => {
+      checkCurrentPageForChapterMatch();
+    }, 1000); // Small delay to ensure overlay is ready
+  });
+  
+  // Check for URL match when navigating (for SPAs and regular navigation)
+  let currentUrl = window.location.href;
+  
+  // Listen for popstate events (back/forward navigation)
+  window.addEventListener('popstate', () => {
+    console.log('Popstate event, checking for auto-highlight match');
+    setTimeout(() => {
+      checkCurrentPageForChapterMatch();
+    }, 500);
+  });
+  
+  // Use MutationObserver to detect URL changes in SPAs
+  const observer = new MutationObserver(() => {
+    if (window.location.href !== currentUrl) {
+      currentUrl = window.location.href;
+      console.log('URL changed via MutationObserver, checking for auto-highlight match');
+      setTimeout(() => {
+        checkCurrentPageForChapterMatch();
+      }, 500);
+    }
+  });
+  
+  // Start observing
+  observer.observe(document, { subtree: true, childList: true });
+  
+  console.log('Auto-highlight navigation listeners set up');
+}
+
+function applyColorScheme() {
+  console.log('Applying color scheme:', colorScheme, 'overlayOpacity:', overlayOpacity);
+  
+  // Define color schemes
+  const schemes = {
+    default: {
+      primary: 'rgba(3, 45, 66, ' + overlayOpacity + ')',
+      secondary: 'rgba(118, 97, 255, ' + overlayOpacity + ')',
+      accent: 'rgba(99, 223, 78, 0.3)',
+      text: '#ffffff'
+    },
+    purple: {
+      primary: 'rgba(75, 0, 130, ' + overlayOpacity + ')',
+      secondary: 'rgba(138, 43, 226, ' + overlayOpacity + ')',
+      accent: 'rgba(186, 85, 211, 0.3)',
+      text: '#ffffff'
+    },
+    orange: {
+      primary: 'rgba(255, 140, 0, ' + overlayOpacity + ')',
+      secondary: 'rgba(255, 69, 0, ' + overlayOpacity + ')',
+      accent: 'rgba(255, 165, 0, 0.3)',
+      text: '#ffffff'
+    },
+    dark: {
+      primary: 'rgba(20, 20, 20, ' + overlayOpacity + ')',
+      secondary: 'rgba(40, 40, 40, ' + overlayOpacity + ')',
+      accent: 'rgba(60, 60, 60, 0.3)',
+      text: '#ffffff'
+    }
+  };
+
+  const scheme = schemes[colorScheme] || schemes.default;
+  console.log('Selected scheme:', scheme);
+  
+  // Apply color scheme to overlay if it exists
+  if (overlayDiv) {
+    console.log('Applying color scheme directly to overlay styles');
+    
+    // Apply background gradient directly
+    overlayDiv.style.background = `linear-gradient(135deg, ${scheme.primary} 0%, ${scheme.secondary} 100%)`;
+    
+    // If it's fullscreen, also update the fullscreen background
+    if (overlayDiv.classList.contains('fullscreen')) {
+      const fullscreenOpacity = Math.min(overlayOpacity + 0.1, 1);
+      const fullscreenPrimary = scheme.primary.replace(overlayOpacity, fullscreenOpacity);
+      const fullscreenSecondary = scheme.secondary.replace(overlayOpacity, fullscreenOpacity);
+      overlayDiv.style.background = `linear-gradient(135deg, ${fullscreenPrimary} 0%, ${fullscreenSecondary} 100%)`;
+    }
+    
+    console.log('Color scheme applied successfully');
+  } else {
+    console.log('No overlay exists to apply color scheme to');
+  }
+}
+
 // Load completed chapters when the script runs
 loadCompletedChapters();
 loadShortcutsSetting();
+loadOverlayOpacitySetting();
+loadColorSchemeSetting();
+loadShowProgressIndicatorsSetting();
+loadAutoHighlightChapterSetting();
+loadCrossTabChapterSyncSetting();
+loadCrossTabHighlightingSyncSetting();
+loadCustomShortcutsSetting();
+
+// Listen for storage changes to sync completed chapters and highlighting across tabs
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace === 'local') {
+    // Handle completed chapters sync
+    if (changes.completedChapters && crossTabChapterSync) {
+      console.log('Completed chapters changed in another tab, updating local state');
+      const newCompletedChapters = changes.completedChapters.newValue;
+      if (newCompletedChapters) {
+        try {
+          const completedArray = JSON.parse(newCompletedChapters);
+          completedChapters = new Set(completedArray);
+          console.log('Updated completed chapters from storage change:', [...completedChapters]);
+          
+          // Update visual state if overlay is visible
+          if (overlayDiv && isOverlayVisible) {
+            updateChapterCompletionVisuals();
+          }
+        } catch (e) {
+          console.log('Could not parse completed chapters from storage change:', e);
+        }
+      } else {
+        completedChapters = new Set();
+        console.log('Cleared completed chapters from storage change');
+        
+        // Update visual state if overlay is visible
+        if (overlayDiv && isOverlayVisible) {
+          updateChapterCompletionVisuals();
+        }
+      }
+    }
+    
+    // Handle highlighting sync
+    if (changes.overlayState && crossTabHighlightingSync) {
+      console.log('Overlay state changed in another tab, updating highlighting');
+      const newState = changes.overlayState.newValue;
+      if (newState && newState.highlightedPersonaIndex !== undefined && newState.selectedChapterIndex !== undefined) {
+        // Only update if the highlighting state is different
+        if (highlightedPersonaIndex !== newState.highlightedPersonaIndex || selectedChapterIndex !== newState.selectedChapterIndex) {
+          highlightedPersonaIndex = newState.highlightedPersonaIndex;
+          selectedChapterIndex = newState.selectedChapterIndex;
+          console.log('Updated highlighting from storage change:', highlightedPersonaIndex, selectedChapterIndex);
+          
+          // Update visual state if overlay is visible and in fullscreen mode
+          if (overlayDiv && isOverlayVisible && isFullscreenMode) {
+            clearChapterSelection();
+            updateChapterSelection();
+            updatePersonaHighlighting();
+          }
+        }
+      }
+    }
+  }
+});
+
+// Set up automatic URL checking for auto-highlight
+setupAutoHighlightNavigation();
 
 // Migrate existing personas to have consistent fallback headshots
 function migratePersonaFallbackHeadshots() {
@@ -1017,11 +1349,104 @@ migratePersonaFallbackHeadshots();
 // Listen for shortcuts toggle events
 document.addEventListener('shortcutsToggle', (e) => {
   shortcutsEnabled = e.detail.enabled;
-  console.log('Shortcuts toggled:', shortcutsEnabled ? 'enabled' : 'disabled');
   
   // Refresh overlay content to show/hide buttons based on new state
+  // Only update if overlay is visible and not in fullscreen mode
   if (isOverlayVisible && !isFullscreenMode) {
     updateOverlayContent();
+  }
+});
+
+// Listen for settings updates
+document.addEventListener('settingsUpdated', (e) => {
+  const settings = e.detail;
+  if (settings.overlayOpacity !== undefined) {
+    overlayOpacity = settings.overlayOpacity;
+    console.log('Overlay opacity updated:', overlayOpacity);
+    
+    // Re-inject styles with new opacity if overlay exists
+    if (overlayDiv) {
+      injectStyles();
+    }
+  }
+  
+  if (settings.colorScheme !== undefined) {
+    colorScheme = settings.colorScheme;
+    console.log('Color scheme updated via settingsUpdated event:', colorScheme);
+    
+    // Apply new color scheme if overlay exists
+    if (overlayDiv) {
+      console.log('Overlay exists, applying color scheme');
+      applyColorScheme();
+    } else {
+      console.log('No overlay exists when color scheme updated');
+    }
+  }
+  
+  if (settings.showProgressIndicators !== undefined) {
+    showProgressIndicators = settings.showProgressIndicators;
+    console.log('Show progress indicators updated:', showProgressIndicators);
+    
+    // Refresh overlay content if it exists to apply the setting
+    if (overlayDiv && isOverlayVisible && !isFullscreenMode) {
+      updateOverlayContent();
+    }
+  }
+  
+  if (settings.autoHighlightChapter !== undefined) {
+    autoHighlightChapter = settings.autoHighlightChapter;
+    console.log('Auto-highlight chapter updated:', autoHighlightChapter);
+    
+    // If enabled, check current page URL for matches
+    if (autoHighlightChapter) {
+      checkCurrentPageForChapterMatch();
+    }
+  }
+  
+  if (settings.crossTabChapterSync !== undefined) {
+    crossTabChapterSync = settings.crossTabChapterSync;
+    console.log('Cross-tab chapter sync updated:', crossTabChapterSync);
+    
+    // Reload completed chapters if setting changed
+    if (crossTabChapterSync) {
+      loadCompletedChapters();
+    } else {
+      // Clear completed chapters if sync is disabled
+      completedChapters = new Set();
+      console.log('Cross-tab sync disabled, cleared completed chapters');
+      
+      // Update visual state if overlay is visible
+      if (overlayDiv && isOverlayVisible) {
+        updateChapterCompletionVisuals();
+      }
+    }
+  }
+  
+  if (settings.crossTabHighlightingSync !== undefined) {
+    crossTabHighlightingSync = settings.crossTabHighlightingSync;
+    console.log('Cross-tab highlighting sync updated:', crossTabHighlightingSync);
+    
+    // Clear highlighting state if sync is disabled
+    if (!crossTabHighlightingSync) {
+      highlightedPersonaIndex = -1;
+      selectedChapterIndex = -1;
+      console.log('Cross-tab highlighting sync disabled, cleared highlighting state');
+      
+      // Update visual state if overlay is visible
+      if (overlayDiv && isOverlayVisible) {
+        clearChapterSelection();
+        updatePersonaHighlighting();
+      }
+    }
+  }
+});
+
+// Listen for shortcuts updates
+document.addEventListener('shortcutsUpdated', (e) => {
+  const shortcuts = e.detail;
+  if (shortcuts.customShortcuts) {
+    customShortcuts = shortcuts.customShortcuts;
+    console.log('Custom shortcuts updated:', customShortcuts);
   }
 });
 
@@ -1029,6 +1454,7 @@ document.addEventListener("overlayUpdate", (e) => {
   if (!overlayDiv) {
     injectStyles();
     createOverlay();
+    applyColorScheme(); // Apply color scheme to new overlay
   }
   
   // Don't update state if we're in the middle of restoring
@@ -1054,10 +1480,34 @@ document.addEventListener("overlayUpdate", (e) => {
   // Use provided headshot, fallback headshot, or consistent headshot based on persona name
   const headshotSrc = headshot || getConsistentHeadshot(persona);
   
-  const progressText = allChapters.length > 1 ? `${currentChapterIndex + 1}/${allChapters.length}` : '';
+  const progressText = showProgressIndicators && allChapters.length > 1 ? `${currentChapterIndex + 1}/${allChapters.length}` : '';
   
   // Apply size and position classes
-  overlayDiv.className = `size-${size || 'small'} position-${position || 'bottom-right'}`;
+  const overlayPosition = position || 'bottom-right';
+  overlayDiv.className = `size-${size || 'small'} position-${overlayPosition}`;
+  
+  // Handle special position modes
+  if (overlayPosition === 'fullscreen') {
+    // Use the same logic as toggleFullscreen() for proper fullscreen mode
+    overlayDiv.classList.add('fullscreen');
+    isFullscreenMode = true;
+    // Clear any size/position classes when entering fullscreen
+    overlayDiv.className = 'fullscreen';
+    // Show the complete story summary
+    showFullscreenSummary();
+    return; // Exit early since showFullscreenSummary handles the content
+  } else if (overlayPosition === 'pinned-content') {
+    // Enter fullscreen mode first, then shift content
+    overlayDiv.classList.add('fullscreen');
+    isFullscreenMode = true;
+    // Clear any size/position classes when entering fullscreen
+    overlayDiv.className = 'fullscreen';
+    // Shift the content to make room for the overlay
+    toggleContentShift();
+    // Show the complete story summary
+    showFullscreenSummary();
+    return; // Exit early since showFullscreenSummary handles the content
+  }
   
   // Determine if arrow buttons should be shown (only if there are multiple chapters AND shortcuts are disabled)
   const showArrows = allChapters.length > 1 && !shortcutsEnabled;
@@ -1091,6 +1541,11 @@ document.addEventListener("overlayUpdate", (e) => {
   isOverlayVisible = true;
   isFullscreenMode = false;
   saveOverlayState();
+  
+  // Check for auto-highlight if setting is enabled
+  if (autoHighlightChapter) {
+    checkCurrentPageForChapterMatch();
+  }
 });
 
 // Navigation functions
@@ -1156,13 +1611,9 @@ function updateOverlayContent() {
   const chapter = allChapters[currentChapterIndex];
   const headshotSrc = currentPersona.headshot || currentPersona.fallbackHeadshot || getConsistentHeadshot(currentPersona.name);
   
-  console.log('updateOverlayContent - Current chapter index:', currentChapterIndex);
-  console.log('updateOverlayContent - Total chapters:', allChapters.length);
-  console.log('updateOverlayContent - Current chapter:', chapter);
-  console.log('updateOverlayContent - Is fullscreen:', overlayDiv.classList.contains('fullscreen'));
   
   // Simple progress calculation - show current chapter out of total chapters
-  const progressText = allChapters.length > 1 ? `${currentChapterIndex + 1}/${allChapters.length}` : '';
+  const progressText = showProgressIndicators && allChapters.length > 1 ? `${currentChapterIndex + 1}/${allChapters.length}` : '';
   
   // Only apply size and position classes if not in fullscreen mode
   if (!overlayDiv.classList.contains('fullscreen')) {
@@ -1177,6 +1628,7 @@ function updateOverlayContent() {
   const showArrows = allChapters.length > 1 && !shortcutsEnabled;
   const isFirstChapter = currentChapterIndex === 0;
   const isLastChapter = currentChapterIndex === allChapters.length - 1;
+  
   
   overlayDiv.innerHTML = `
     ${!shortcutsEnabled ? `<button class="expand-button" data-action="expand-overlay" title="Open full-screen view">⛶</button>` : ''}
@@ -1216,15 +1668,87 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Helper function to check if a key combination matches a shortcut
+function matchesShortcut(e, shortcutString) {
+  if (!shortcutString) return false;
+  
+  const keys = shortcutString.split('+');
+  const modifiers = [];
+  let mainKey = '';
+  
+  // Parse the shortcut string
+  keys.forEach(key => {
+    const trimmedKey = key.trim();
+    if (trimmedKey === 'Ctrl') modifiers.push('ctrlKey');
+    else if (trimmedKey === 'Cmd') modifiers.push('metaKey');
+    else if (trimmedKey === 'Alt') modifiers.push('altKey');
+    else if (trimmedKey === 'Shift') modifiers.push('shiftKey');
+    else mainKey = trimmedKey;
+  });
+  
+  // Check modifiers
+  for (let modifier of modifiers) {
+    if (!e[modifier]) return false;
+  }
+  
+  // Check main key
+  if (mainKey) {
+    let expectedKey = mainKey;
+    if (expectedKey === 'Space') expectedKey = ' ';
+    else if (expectedKey === 'Up') expectedKey = 'ArrowUp';
+    else if (expectedKey === 'Down') expectedKey = 'ArrowDown';
+    else if (expectedKey === 'Left') expectedKey = 'ArrowLeft';
+    else if (expectedKey === 'Right') expectedKey = 'ArrowRight';
+    
+    if (e.key.toLowerCase() !== expectedKey.toLowerCase()) return false;
+  }
+  
+  // Ensure no extra modifiers are pressed
+  const allModifiers = ['ctrlKey', 'metaKey', 'altKey', 'shiftKey'];
+  for (let modifier of allModifiers) {
+    if (e[modifier] && !modifiers.includes(modifier)) return false;
+  }
+  
+  return true;
+}
+
+// Helper function to get the shortcut for an action
+function getShortcutForAction(action) {
+  const defaultShortcuts = {
+    'toggle-overlay': 'Shift+H',
+    'toggle-fullscreen': 'Shift+O',
+    'next-chapter': 'Shift+ArrowRight',
+    'prev-chapter': 'Shift+ArrowLeft',
+    'next-persona': 'Shift+ArrowDown',
+    'prev-persona': 'Shift+ArrowUp',
+    'save-url': 'Shift+S',
+    'toggle-shift': 'Shift+P'
+  };
+  
+  return customShortcuts[action] || defaultShortcuts[action];
+}
+
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
+  // Escape key always works regardless of shortcuts toggle state
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    destroyOverlay();
+    return;
+  }
+  
+  // If overlay was destroyed, disable all shortcuts until overlay is applied again
+  if (overlayDestroyed) {
+    return;
+  }
+  
   // Check if shortcuts are enabled
   if (!shortcutsEnabled) {
     return;
   }
   
-  // Check for Shift+H toggle (works even when overlay is hidden)
-  if (e.shiftKey && e.key.toLowerCase() === 'h') {
+  // Check for toggle overlay shortcut (works even when overlay is hidden)
+  if (matchesShortcut(e, getShortcutForAction('toggle-overlay'))) {
     e.preventDefault();
     if (!overlayDiv) {
       // If overlay doesn't exist, create it and show it
@@ -1241,8 +1765,8 @@ document.addEventListener('keydown', (e) => {
     return;
   }
   
-  // Check for Shift+O toggle (works even when overlay is hidden)
-  if (e.shiftKey && e.key.toLowerCase() === 'o') {
+  // Check for toggle fullscreen shortcut (works even when overlay is hidden)
+  if (matchesShortcut(e, getShortcutForAction('toggle-fullscreen'))) {
     e.preventDefault();
     if (!overlayDiv) {
       // If overlay doesn't exist, create it and show it
@@ -1262,59 +1786,49 @@ document.addEventListener('keydown', (e) => {
   // Only process other shortcuts if overlay is visible
   if (!overlayDiv || overlayDiv.style.display === 'none') return;
   
-  // Check for Shift+Arrow combinations (disabled in fullscreen mode)
-  if (e.shiftKey) {
-    // Disable arrow key shortcuts when in fullscreen mode
-    if (overlayDiv && overlayDiv.classList.contains('fullscreen')) {
-      switch(e.key) {
-        case 'ArrowRight':
-        case 'ArrowLeft':
-        case 'ArrowUp':
-        case 'ArrowDown':
-          e.preventDefault();
-          console.log('Arrow key shortcuts disabled in fullscreen mode');
-          return;
-      }
-    }
-    
-    switch(e.key) {
-      case 'ArrowRight':
-        e.preventDefault();
-        nextChapter();
-        break;
-      case 'ArrowLeft':
-        e.preventDefault();
-        previousChapter();
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        previousPersona();
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        nextPersona();
-        break;
-      case 's':
-      case 'S':
-        e.preventDefault();
-        saveCurrentPageUrlToChapter();
-        break;
-      case 'p':
-      case 'P':
-        // Only allow content shift in fullscreen mode
-        if (overlayDiv && overlayDiv.classList.contains('fullscreen')) {
-          e.preventDefault();
-          toggleContentShift();
-        }
-        break;
-    }
+  // Check for next chapter shortcut
+  if (matchesShortcut(e, getShortcutForAction('next-chapter'))) {
+    e.preventDefault();
+    nextChapter();
     return;
   }
   
-  // Escape to close
-  if (e.key === 'Escape') {
+  // Check for previous chapter shortcut
+  if (matchesShortcut(e, getShortcutForAction('prev-chapter'))) {
     e.preventDefault();
-    hideOverlay();
+    previousChapter();
+    return;
+  }
+  
+  // Check for next persona shortcut
+  if (matchesShortcut(e, getShortcutForAction('next-persona'))) {
+    e.preventDefault();
+    nextPersona();
+    return;
+  }
+  
+  // Check for previous persona shortcut
+  if (matchesShortcut(e, getShortcutForAction('prev-persona'))) {
+    e.preventDefault();
+    previousPersona();
+    return;
+  }
+  
+  // Check for save URL shortcut
+  if (matchesShortcut(e, getShortcutForAction('save-url'))) {
+    e.preventDefault();
+    saveCurrentPageUrlToChapter();
+    return;
+  }
+  
+  // Check for toggle content pin shortcut (fullscreen only)
+  if (matchesShortcut(e, getShortcutForAction('toggle-shift'))) {
+    // Only allow content pin in fullscreen mode
+    if (overlayDiv && overlayDiv.classList.contains('fullscreen')) {
+      e.preventDefault();
+      toggleContentShift();
+    }
+    return;
   }
 });
 
@@ -1324,7 +1838,7 @@ function hideOverlay() {
   // Add hiding animation class
   overlayDiv.classList.add('hiding');
   
-  // Reset content shift state and remove responsive mode
+  // Reset content pin state and remove responsive mode
   if (isContentShifted) {
     isContentShifted = false;
     document.body.classList.remove('responsive-mode');
@@ -1345,6 +1859,31 @@ function hideOverlay() {
     overlayDiv.style.display = 'none';
     overlayDiv.classList.remove('hiding');
   }, 300);
+}
+
+function destroyOverlay() {
+  if (!overlayDiv) return;
+  
+  // Reset content pin state and remove responsive mode
+  if (isContentShifted) {
+    isContentShifted = false;
+    document.body.classList.remove('responsive-mode');
+    
+    // Reset all dynamic body styles
+    document.body.style.marginLeft = '';
+    document.body.style.width = '';
+    document.documentElement.style.removeProperty('--overlay-width');
+  }
+  
+  // Remove overlay from DOM
+  overlayDiv.remove();
+  overlayDiv = null;
+  
+  // Update state
+  isOverlayVisible = false;
+  isFullscreenMode = false;
+  overlayDestroyed = true; // Disable shortcuts until overlay is applied again
+  saveOverlayState();
 }
 
 // Restore highlighting in fullscreen mode after content is rendered
@@ -1903,7 +2442,7 @@ function showFullscreenSummary() {
       <div class="header-row">
         <img src="${chrome.runtime.getURL('icons/logo-solo.png')}" alt="Logo" class="header-logo">
         <div class="button-group">
-          <button class="control-btn" id="shiftContentToggle" title="Shift content">⌕</button>
+          <button class="control-btn" id="shiftContentToggle" title="Pin content">⌕</button>
           <button class="control-btn" id="backButton" title="Minimize overlay">−</button>
         </div>
       </div>
@@ -1929,7 +2468,7 @@ function showFullscreenSummary() {
     backButton.addEventListener('click', toggleFullscreen);
   }
   
-  // Add event listener for shift content toggle
+  // Add event listener for pin content toggle
   const shiftContentToggle = overlayDiv.querySelector('#shiftContentToggle');
   if (shiftContentToggle) {
     shiftContentToggle.addEventListener('click', toggleContentShift);
@@ -2078,7 +2617,7 @@ function handleCheckboxChange(e) {
 function handleChapterClick(e) {
   if (!e.target || typeof e.target.classList !== 'object' || typeof e.target.closest !== 'function') return;
   
-  // Allow checkbox clicks even when content is shifted
+  // Allow checkbox clicks even when content is pinned
   if (e.target.classList.contains('chapter-checkbox')) {
     return; // Let the checkbox change handler deal with this
   }
@@ -2088,7 +2627,7 @@ function handleChapterClick(e) {
     const personaIndex = parseInt(chapterItem.getAttribute('data-persona-index'));
     const chapterIndex = parseInt(chapterItem.getAttribute('data-chapter-index'));
     
-    // Track selected chapter for Shift+S (both fullscreen and shifted content modes)
+    // Track selected chapter for Shift+S (both fullscreen and pinned content modes)
     if (isFullscreenMode) {
       // Clear previous chapter highlighting (both manual and current)
       clearChapterSelection();
@@ -2100,7 +2639,7 @@ function handleChapterClick(e) {
       console.log('Selected chapter for Shift+S:', chapterIndex, 'in persona:', personaIndex);
       console.log('isContentShifted:', isContentShifted, 'isFullscreenMode:', isFullscreenMode);
       
-      // If we're in shifted content view, also update the small overlay variables
+      // If we're in pinned content view, also update the small overlay variables
       if (isContentShifted && allPersonas && allPersonas[personaIndex]) {
         const selectedPersona = allPersonas[personaIndex];
         currentPersonaIndex = personaIndex;
@@ -2113,14 +2652,14 @@ function handleChapterClick(e) {
         };
         allChapters = selectedPersona.chapters || [];
         
-        console.log('Updated small overlay variables for shifted content view:', selectedPersona.name, '- Chapter', chapterIndex + 1);
+        console.log('Updated small overlay variables for pinned content view:', selectedPersona.name, '- Chapter', chapterIndex + 1);
       }
       
       updateChapterSelection();
       updatePersonaHighlighting();
       saveOverlayState(); // Save the selection
     } else if (isContentShifted) {
-      // When content is shifted (small overlay), also track selection for persistence
+      // When content is pinned (small overlay), also track selection for persistence
       selectedChapterIndex = chapterIndex;
       highlightedPersonaIndex = personaIndex;
       
@@ -2145,11 +2684,11 @@ function handleChapterClick(e) {
         }, 50);
       }
       
-      console.log('Selected chapter in shifted content mode:', chapterIndex, 'in persona:', personaIndex);
+      console.log('Selected chapter in pinned content mode:', chapterIndex, 'in persona:', personaIndex);
       saveOverlayState(); // Save the selection
     }
     
-    // Don't allow chapter navigation when content is shifted (fixed overlay mode)
+    // Don't allow chapter navigation when content is pinned (fixed overlay mode)
     if (isContentShifted) return;
     
     navigateToChapter(personaIndex, chapterIndex);
@@ -2188,7 +2727,7 @@ function handlePersonaClick(e) {
       return;
     }
     
-    // Only work when content is shifted (fixed overlay mode) for small overlay
+    // Only work when content is pinned (fixed overlay mode) for small overlay
     if (!isContentShifted) return;
     
     // Toggle highlighting
@@ -2244,24 +2783,36 @@ function toggleChapterCompletion(chapterId) {
   
   console.log('Current completed chapters after toggle:', [...completedChapters]);
   
-  // Save to localStorage immediately
+  // Save to Chrome storage immediately
   saveCompletedChapters();
   
   // Update the visual state in the fullscreen view immediately
-  const chapterItem = document.querySelector(`[data-chapter-id="${chapterId}"]`)?.closest('.chapter-item');
-  if (chapterItem) {
-    if (completedChapters.has(chapterId)) {
-      chapterItem.classList.add('completed');
-      console.log('Added completed class to chapter item');
-    } else {
-      chapterItem.classList.remove('completed');
-      console.log('Removed completed class from chapter item');
-    }
-  } else {
-    console.log('Chapter item not found for visual update');
-  }
+  updateChapterCompletionVisuals();
   
   console.log('Chapter completion toggled and saved immediately');
+}
+
+// Update visual state of all chapter checkboxes and completion classes
+function updateChapterCompletionVisuals() {
+  // Update all chapter checkboxes
+  const checkboxes = document.querySelectorAll('.chapter-checkbox');
+  checkboxes.forEach(checkbox => {
+    const chapterId = checkbox.getAttribute('data-chapter-id');
+    const isCompleted = completedChapters.has(chapterId);
+    checkbox.checked = isCompleted;
+    
+    // Update the parent chapter item's completed class
+    const chapterItem = checkbox.closest('.chapter-item');
+    if (chapterItem) {
+      if (isCompleted) {
+        chapterItem.classList.add('completed');
+      } else {
+        chapterItem.classList.remove('completed');
+      }
+    }
+  });
+  
+  console.log('Updated chapter completion visuals for all chapters');
 }
 
 // Content shift functionality
@@ -2279,10 +2830,10 @@ function toggleContentShift() {
   
   if (isContentShifted) {
     document.body.classList.add('responsive-mode');
-    // Update content shift with current overlay width
+    // Update content pin with current overlay width
     const currentWidth = overlayDiv ? overlayDiv.getBoundingClientRect().width : 400;
     updateContentShift(currentWidth);
-    console.log('Content will shift to make room for overlay');
+    console.log('Content will be pinned to make room for overlay');
   } else {
     document.body.classList.remove('responsive-mode');
     // Reset body styles when exiting responsive mode
@@ -2309,7 +2860,7 @@ function updateShiftContentButton() {
   }
 }
 
-// Reset content shift when exiting fullscreen
+// Reset content pin when exiting fullscreen
 function toggleFullscreen() {
   if (!overlayDiv) return;
   
@@ -2321,7 +2872,7 @@ function toggleFullscreen() {
     console.log('Before exit - currentPersona:', currentPersona);
     console.log('Before exit - isContentShifted:', isContentShifted);
     
-    // Check if we were in shifted content view BEFORE resetting flags
+    // Check if we were in pinned content view BEFORE resetting flags
     const wasInShiftedContent = isContentShifted;
     
     overlayDiv.classList.remove('fullscreen');
@@ -2333,10 +2884,11 @@ function toggleFullscreen() {
     document.documentElement.style.removeProperty('--overlay-width');
     
     isFullscreenMode = false;
+    isOverlayVisible = true; // Set overlay as visible when exiting fullscreen
     isContentShifted = false; // Reset the flag
     
     if (wasInShiftedContent) {
-      console.log('Returning to small overlay from shifted content view');
+      console.log('Returning to small overlay from pinned content view');
       console.log('Selected chapter should be:', selectedChapterIndex, 'in persona:', highlightedPersonaIndex);
       
       // Force update the small overlay variables if they weren't updated during chapter selection
@@ -2446,7 +2998,7 @@ function toggleFullscreen() {
               <div class="header-row">
                 <img src="${chrome.runtime.getURL('icons/logo-solo.png')}" alt="Logo" class="header-logo">
                 <div class="button-group">
-                  <button class="control-btn" id="shiftContentToggle" title="Shift content">⌕</button>
+                  <button class="control-btn" id="shiftContentToggle" title="Pin content">⌕</button>
                   <button class="control-btn" id="backButton" title="Minimize overlay">−</button>
                 </div>
               </div>
@@ -2482,7 +3034,8 @@ function toggleFullscreen() {
 }
 
 document.addEventListener("overlayClear", () => {
-  hideOverlay();
+  // Use destroyOverlay instead of hideOverlay to completely remove the overlay
+  destroyOverlay();
   document.body.classList.remove('responsive-mode');
   
   // Reset all dynamic body styles

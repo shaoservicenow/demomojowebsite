@@ -90,6 +90,9 @@ function populateStoryDropdown(stories) {
   
   // Set current selection
   storySelect.value = selectedStoryIndex;
+  
+  // Update export button visibility
+  toggleExportButtonVisibility();
 }
 
 // Render stories based on current selection
@@ -279,6 +282,10 @@ function addStory() {
     
     chrome.storage.local.set({ stories }, () => {
       render();
+      // Show donation popup for new story creation with 2-second delay
+      setTimeout(() => {
+        showDonationPopup();
+      }, 2000);
     });
   });
 }
@@ -591,6 +598,154 @@ function initDarkMode() {
       `;
     }
   });
+
+  // Settings button functionality
+  const settingsBtn = document.getElementById('settingsBtn');
+  settingsBtn.addEventListener('click', () => {
+    window.open('settings.html', '_blank');
+  });
+}
+
+// Export selected story to JSON file
+function exportSelectedStory() {
+  const storySelect = document.getElementById('storySelect');
+  const selectedValue = storySelect.value;
+  
+  console.log('Export attempt - selectedValue:', selectedValue);
+  
+  // Check if a valid story is selected (not "all" or invalid)
+  if (selectedValue === 'all' || selectedValue === '-1' || isNaN(parseInt(selectedValue))) {
+    console.log('Invalid selection:', selectedValue);
+    alert('Please select a story to export.');
+    return;
+  }
+  
+  const selectedStoryIndex = parseInt(selectedValue);
+  
+  // Use chrome storage instead of localStorage
+  chrome.storage.local.get(["stories"], (result) => {
+    const stories = result.stories || [];
+    const story = stories[selectedStoryIndex];
+    
+    console.log('Export attempt - selectedStoryIndex:', selectedStoryIndex);
+    console.log('Export attempt - stories length:', stories.length);
+    console.log('Export attempt - stories array:', stories);
+    console.log('Export attempt - story at index', selectedStoryIndex, ':', story);
+    
+    if (!story) {
+      alert('Selected story not found.');
+      return;
+    }
+    
+    // Continue with export logic inside the chrome storage callback
+    exportStoryData(story);
+  });
+}
+
+// Separate function to handle the actual export after getting the story
+function exportStoryData(story) {
+  
+  // Create export data with metadata
+  const exportData = {
+    version: '1.0',
+    exportDate: new Date().toISOString(),
+    story: story
+  };
+  
+  // Create and download file
+  const dataStr = JSON.stringify(exportData, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(dataBlob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${story.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_story.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  
+  console.log('Story exported:', story.name);
+}
+
+// Import story from JSON file
+function importStoryFromFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const importData = JSON.parse(e.target.result);
+      
+      // Validate import data
+      if (!importData.story || !importData.story.name) {
+        alert('Invalid story file format.');
+        return;
+      }
+      
+      // Use chrome storage instead of localStorage
+      chrome.storage.local.get(["stories"], (result) => {
+        const stories = result.stories || [];
+        const existingStory = stories.find(s => s.name === importData.story.name);
+        
+        if (existingStory) {
+          const overwrite = confirm(`A story named "${importData.story.name}" already exists. Do you want to replace it?`);
+          if (!overwrite) return;
+          
+          // Replace existing story
+          const index = stories.findIndex(s => s.name === importData.story.name);
+          stories[index] = importData.story;
+        } else {
+          // Add new story
+          stories.push(importData.story);
+        }
+        
+        // Save to chrome storage
+        chrome.storage.local.set({ stories }, () => {
+          // Refresh the UI
+          render();
+          populateStoryDropdown(stories);
+          
+          // Show donation popup for new story creation with 2-second delay
+          if (!existingStory) {
+            setTimeout(() => {
+              showDonationPopup();
+            }, 2000);
+          }
+          
+          // Select the imported story
+          const storyIndex = stories.findIndex(s => s.name === importData.story.name);
+          document.getElementById('storySelect').value = storyIndex;
+          
+          alert(`Story "${importData.story.name}" imported successfully!`);
+          console.log('Story imported:', importData.story.name);
+        });
+      });
+      
+    } catch (error) {
+      console.error('Error importing story:', error);
+      alert('Error importing story. Please check the file format.');
+    }
+  };
+  
+  reader.readAsText(file);
+  
+  // Reset file input
+  event.target.value = '';
+}
+
+// Toggle export button visibility based on story selection
+function toggleExportButtonVisibility() {
+  const exportBtn = document.getElementById('exportStory');
+  const storySelect = document.getElementById('storySelect');
+  
+  if (exportBtn && storySelect) {
+    const selectedValue = storySelect.value;
+    const isStorySelected = selectedValue !== 'all' && selectedValue !== '-1' && !isNaN(parseInt(selectedValue));
+    
+    exportBtn.style.display = isStorySelected ? 'inline-flex' : 'none';
+  }
 }
 
 // Add event listeners for all buttons
@@ -601,6 +756,7 @@ function addEventListeners() {
     storySelect.addEventListener('change', (e) => {
       selectedStoryIndex = e.target.value;
       render(); // Re-render with new selection
+      toggleExportButtonVisibility(); // Show/hide export button
     });
   }
   
@@ -614,6 +770,28 @@ function addEventListeners() {
   
   // Add Story button
   document.getElementById('addStory').addEventListener('click', addStory);
+  
+  // Donation popup event handlers
+  document.getElementById('donation-modal-close').addEventListener('click', hideDonationPopup);
+  document.getElementById('donation-modal-later').addEventListener('click', hideDonationPopup);
+  
+  // Close modal when clicking outside
+  document.getElementById('donation-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'donation-modal') {
+      hideDonationPopup();
+    }
+  });
+  
+  // Export Story button
+  document.getElementById('exportStory').addEventListener('click', exportSelectedStory);
+  
+  // Import Story button
+  document.getElementById('importStory').addEventListener('click', () => {
+    document.getElementById('importFileInput').click();
+  });
+  
+  // Import file input
+  document.getElementById('importFileInput').addEventListener('change', importStoryFromFile);
   
   // Story buttons
   document.addEventListener('click', (e) => {
@@ -1138,7 +1316,1110 @@ function moveDriverDown(storyIndex, personaIndex, chapterIndex, driverIndex) {
   });
 }
 
+// GenAI Story Creation Functions
+let selectedFile = null;
+
+function initGenAI() {
+  const genaiModal = document.getElementById('genaiModal');
+  const createWithGenAIBtn = document.getElementById('createWithGenAI');
+  const cancelGenAIBtn = document.getElementById('cancelGenAI');
+  const processWithGenAIBtn = document.getElementById('processWithGenAI');
+  const documentUpload = document.getElementById('documentUpload');
+  const uploadArea = document.getElementById('uploadArea');
+  const fileInfo = document.getElementById('fileInfo');
+  const removeFileBtn = document.querySelector('.remove-file');
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const storyNameInput = document.getElementById('storyName');
+  const demoScriptInput = document.getElementById('demoScript');
+
+  // Open GenAI modal
+  createWithGenAIBtn.addEventListener('click', async () => {
+    genaiModal.style.display = 'block';
+    await resetGenAIModal();
+  });
+
+  // Close GenAI modal
+  cancelGenAIBtn.addEventListener('click', closeGenAIModal);
+  genaiModal.querySelector('.close').addEventListener('click', closeGenAIModal);
+  
+  // Close modal when clicking outside
+  genaiModal.addEventListener('click', (e) => {
+    if (e.target === genaiModal) {
+      closeGenAIModal();
+    }
+  });
+
+  // Tab switching
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      
+      // Update active tab button
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Update active tab content
+      tabContents.forEach(content => content.classList.remove('active'));
+      document.getElementById(tab + 'Tab').classList.add('active');
+      
+      // Reset form when switching tabs
+      resetGenAIModal();
+    });
+  });
+
+  // File upload handling
+  documentUpload.addEventListener('change', handleFileUpload);
+  
+  // Drag and drop handling
+  uploadArea.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent modal close when clicking upload area
+    documentUpload.click();
+  });
+  uploadArea.addEventListener('dragover', (e) => {
+    e.stopPropagation();
+    handleDragOver(e);
+  });
+  uploadArea.addEventListener('dragleave', (e) => {
+    e.stopPropagation();
+    handleDragLeave(e);
+  });
+  uploadArea.addEventListener('drop', (e) => {
+    e.stopPropagation();
+    handleDrop(e);
+  });
+  
+  // Choose file button
+  document.getElementById('chooseFileBtn').addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent modal close when clicking button
+    documentUpload.click();
+  });
+  
+  // Remove file
+  removeFileBtn.addEventListener('click', removeFile);
+  
+  // Form validation
+  storyNameInput.addEventListener('input', validateGenAIForm);
+  demoScriptInput.addEventListener('input', validateGenAIForm);
+  
+  // Toggle switch handlers
+  document.getElementById('autoGeneratePersonas').addEventListener('change', updateToggleState);
+  document.getElementById('autoGenerateChapters').addEventListener('change', updateToggleState);
+  
+  // Process with GenAI
+  processWithGenAIBtn.addEventListener('click', processWithGenAI);
+}
+
+async function resetGenAIModal() {
+  selectedFile = null;
+  document.getElementById('documentUpload').value = '';
+  document.getElementById('storyName').value = '';
+  document.getElementById('demoScript').value = '';
+  document.getElementById('customGuidelines').value = '';
+  document.getElementById('fileInfo').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('uploadProgress').style.display = 'none';
+  document.getElementById('processWithGenAI').disabled = true;
+  document.querySelector('.btn-text').style.display = 'inline';
+  document.querySelector('.btn-loading').style.display = 'none';
+  
+  // Update upload limit text from settings
+  const fileSizeLimit = await getFileSizeLimit();
+  document.getElementById('uploadLimitText').textContent = `Maximum file size: ${fileSizeLimit}KB • PDF files only`;
+  
+  // Initialize toggle states
+  updateToggleState();
+  
+  // Validate form to set initial button state
+  validateGenAIForm();
+}
+
+function updateToggleState() {
+  const personasToggle = document.getElementById('autoGeneratePersonas');
+  const chaptersToggle = document.getElementById('autoGenerateChapters');
+  
+  const personasItem = personasToggle.closest('.toggle-item');
+  const chaptersItem = chaptersToggle.closest('.toggle-item');
+  
+  if (personasItem) {
+    personasItem.classList.toggle('active', personasToggle.checked);
+  }
+  if (chaptersItem) {
+    chaptersItem.classList.toggle('active', chaptersToggle.checked);
+  }
+}
+
+async function closeGenAIModal() {
+  document.getElementById('genaiModal').style.display = 'none';
+  await resetGenAIModal();
+}
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    processSelectedFile(file);
+  }
+}
+
+function handleDragOver(event) {
+  event.preventDefault();
+  event.currentTarget.classList.add('dragover');
+}
+
+function handleDragLeave(event) {
+  event.currentTarget.classList.remove('dragover');
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  event.currentTarget.classList.remove('dragover');
+  
+  const files = event.dataTransfer.files;
+  if (files.length > 0) {
+    const file = files[0];
+    if (file.type === 'application/pdf') {
+      processSelectedFile(file);
+    } else {
+      alert('Please upload a PDF file only. DOCX files are not supported for GPT-4 file attachments.');
+    }
+  }
+}
+
+async function processSelectedFile(file) {
+  // Check file type - only PDF files are supported
+  if (file.type !== 'application/pdf') {
+    alert('Only PDF files are supported for GPT-4 file attachments. Please select a PDF file.');
+    return;
+  }
+  
+  // Check file size limit from settings
+  const maxSizeKB = await getFileSizeLimit();
+  const maxSize = maxSizeKB * 1024;
+  
+  if (file.size > maxSize) {
+    alert(`File size exceeds the ${maxSizeKB}KB limit.\n\nSelected file: ${formatFileSize(file.size)}\nMaximum allowed: ${maxSizeKB}KB\n\nPlease choose a smaller file.`);
+    return;
+  }
+  
+  selectedFile = file;
+  
+  // Hide upload area and show file info
+  document.getElementById('uploadArea').style.display = 'none';
+  document.querySelector('.file-name').textContent = file.name;
+  document.querySelector('.file-size').textContent = formatFileSize(file.size);
+  document.getElementById('fileInfo').style.display = 'block';
+  
+  // Add warning if file is close to size limit (within 10% of limit)
+  const fileSizeElement = document.querySelector('.file-size');
+  const warningThreshold = maxSize * 0.9; // 90% of limit
+  if (file.size > warningThreshold) {
+    fileSizeElement.style.color = 'var(--warning-color)';
+    fileSizeElement.title = `File is close to the ${maxSizeKB}KB limit`;
+  } else {
+    fileSizeElement.style.color = '';
+    fileSizeElement.title = '';
+  }
+  
+  // Don't auto-fill story name from file name - let user enter it explicitly
+  // const storyNameInput = document.getElementById('storyName');
+  // if (!storyNameInput.value) {
+  //   const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+  //   storyNameInput.value = nameWithoutExt;
+  // }
+  
+  validateGenAIForm();
+}
+
+function removeFile() {
+  selectedFile = null;
+  document.getElementById('documentUpload').value = '';
+  document.getElementById('fileInfo').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  validateGenAIForm();
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+async function getFileSizeLimit() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['pdfFileSizeLimit'], (result) => {
+      resolve(result.pdfFileSizeLimit || 500); // Default to 500KB
+    });
+  });
+}
+
+function validateGenAIForm() {
+  const storyName = document.getElementById('storyName').value.trim();
+  const demoScript = document.getElementById('demoScript').value.trim();
+  const processBtn = document.getElementById('processWithGenAI');
+  
+  // For upload tab: only require file upload
+  // For script tab: require story name and script content
+  const uploadTab = document.getElementById('uploadTab');
+  const scriptTab = document.getElementById('scriptTab');
+  
+  let isValid = false;
+  
+  if (uploadTab.classList.contains('active')) {
+    // Upload tab: only need file
+    isValid = !!selectedFile;
+  } else if (scriptTab.classList.contains('active')) {
+    // Script tab: need story name and script
+    isValid = storyName && demoScript;
+  }
+  
+  processBtn.disabled = !isValid;
+  
+  // Debug logging
+  console.log('Form validation:', {
+    activeTab: uploadTab.classList.contains('active') ? 'upload' : 'script',
+    storyName: storyName,
+    hasSelectedFile: !!selectedFile,
+    demoScriptLength: demoScript.length,
+    isValid: isValid,
+    buttonDisabled: processBtn.disabled
+  });
+}
+
+async function processWithGenAI() {
+  const storyName = document.getElementById('storyName').value.trim();
+  const demoScript = document.getElementById('demoScript').value.trim();
+  const customGuidelines = document.getElementById('customGuidelines').value.trim();
+  const autoGeneratePersonas = document.getElementById('autoGeneratePersonas').checked;
+  const autoGenerateChapters = document.getElementById('autoGenerateChapters').checked;
+  
+  // Determine which tab is active
+  const uploadTab = document.getElementById('uploadTab');
+  const scriptTab = document.getElementById('scriptTab');
+  
+  let finalStoryName = storyName;
+  
+  if (uploadTab.classList.contains('active')) {
+    // For upload tab: use file name as default, let OpenAI generate proper name
+    if (selectedFile) {
+      const fileName = selectedFile.name.replace(/\.[^/.]+$/, ""); // Remove extension
+      finalStoryName = fileName || "Generated Story";
+      console.log('Upload tab active - using file name as default:', finalStoryName);
+    }
+  } else if (scriptTab.classList.contains('active')) {
+    // For script tab: use entered story name
+    finalStoryName = storyName;
+    console.log('Script tab active - using entered story name:', finalStoryName);
+  }
+  
+  const processBtn = document.getElementById('processWithGenAI');
+  const btnText = document.querySelector('.btn-text');
+  const btnLoading = document.querySelector('.btn-loading');
+  
+  // Show loading state
+  processBtn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoading.style.display = 'flex';
+  
+  try {
+    let content = '';
+    
+    console.log('Starting MojoAI processing...');
+    console.log('Story name:', finalStoryName);
+    console.log('Auto-generate personas:', autoGeneratePersonas);
+    console.log('Auto-generate chapters:', autoGenerateChapters);
+    
+    if (selectedFile) {
+      console.log('Processing uploaded file with OpenAI:', selectedFile.name, selectedFile.type);
+      // Use OpenAI file upload API
+      const fileId = await uploadFileToOpenAI(selectedFile);
+      console.log('File uploaded to OpenAI with ID:', fileId);
+      
+      // Process with OpenAI using the uploaded file
+      storyData = await processContentWithGenAI(null, {
+        storyName: finalStoryName,
+        autoGeneratePersonas,
+        autoGenerateChapters,
+        customGuidelines,
+        uploadedFileId: fileId
+      });
+    } else {
+      console.log('Processing demo script');
+      content = demoScript;
+      console.log('Script length:', content.length);
+      
+      // Process with OpenAI using text content
+      storyData = await processContentWithGenAI(content, {
+        storyName: finalStoryName,
+        autoGeneratePersonas,
+        autoGenerateChapters,
+        customGuidelines
+      });
+    }
+    
+    console.log('Story data received from OpenAI:', storyData);
+    
+    // Save the story
+    await saveGenAIStory(storyData);
+    
+    // Close modal and refresh
+    closeGenAIModal();
+    render();
+    
+    // Show success message
+    alert(`Story "${storyData.name}" created successfully with MojoAI!\n\nPersonas: ${storyData.personas.length}\nChapters: ${storyData.personas[0]?.chapters?.length || 0}`);
+    
+  } catch (error) {
+    console.error('Error processing with MojoAI:', error);
+    
+    let errorMessage = 'Error processing content with MojoAI. ';
+    
+    if (error.message.includes('API key')) {
+      errorMessage += 'Please configure your OpenAI API key in Settings > AI Integration.';
+    } else if (error.message.includes('No content')) {
+      errorMessage += 'Please upload a file or enter a demo script.';
+    } else if (error.message.includes('extraction failed')) {
+      errorMessage += 'Could not extract text from the uploaded file. Please try the demo script tab instead.';
+    } else {
+      errorMessage += `Details: ${error.message}`;
+    }
+    
+    alert(errorMessage);
+  } finally {
+    // Reset button state
+    processBtn.disabled = false;
+    btnText.style.display = 'inline';
+    btnLoading.style.display = 'none';
+  }
+}
+
+async function uploadFileToOpenAI(file) {
+  const settings = await getOpenAISettings();
+  
+  if (!settings.apiKey) {
+    throw new Error('OpenAI API key not configured. Please set it in Settings.');
+  }
+  
+  console.log('Uploading file to OpenAI:', file.name, file.type, file.size);
+  
+  // Show upload progress
+  showUploadProgress('Uploading file...', 0);
+  
+  // Create FormData for file upload
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('purpose', 'assistants'); // Required for file uploads
+  console.log('File being uploaded:', file.name, file.type, file.size);
+  
+  try {
+    const response = await fetch('https://api.openai.com/v1/files', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${settings.apiKey}`
+      },
+      body: formData
+    });
+    
+    updateUploadProgress('Processing file...', 50);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('OpenAI file upload failed:', response.status, errorData);
+      
+      if (response.status === 429) {
+        throw new Error('OpenAI API quota exceeded. Please check your billing and usage limits.');
+      } else if (response.status === 401) {
+        throw new Error('Invalid OpenAI API key. Please check your API key in Settings.');
+      } else if (response.status === 413) {
+        const fileSizeLimit = await getFileSizeLimit();
+        throw new Error(`File too large. OpenAI has a 512MB limit for file uploads, but this extension limits files to ${fileSizeLimit}KB for better performance.`);
+      } else {
+        throw new Error(`File upload failed: ${errorData.error?.message || 'Unknown error'}`);
+      }
+    }
+    
+    const uploadResult = await response.json();
+    console.log('File uploaded successfully:', uploadResult);
+    console.log('Upload result type:', typeof uploadResult);
+    console.log('File ID from upload:', uploadResult.id);
+    console.log('File ID type:', typeof uploadResult.id);
+    
+    updateUploadProgress('Waiting for processing...', 75);
+    
+    // Wait for file to be processed
+    await waitForFileProcessing(settings.apiKey, uploadResult.id);
+    
+    hideUploadProgress();
+    
+    return uploadResult.id;
+    
+  } catch (error) {
+    hideUploadProgress();
+    console.error('File upload error:', error);
+    if (error.message.includes('quota') || error.message.includes('billing')) {
+      throw error; // Re-throw quota errors as-is
+    } else {
+      throw new Error(`Failed to upload file: ${error.message}`);
+    }
+  }
+}
+
+function showUploadProgress(text, progress) {
+  const progressDiv = document.getElementById('uploadProgress');
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  
+  progressDiv.style.display = 'block';
+  progressFill.style.width = `${progress}%`;
+  progressText.textContent = text;
+}
+
+function updateUploadProgress(text, progress) {
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  
+  progressFill.style.width = `${progress}%`;
+  progressText.textContent = text;
+}
+
+function hideUploadProgress() {
+  const progressDiv = document.getElementById('uploadProgress');
+  progressDiv.style.display = 'none';
+}
+
+async function waitForFileProcessing(apiKey, fileId, maxWaitTime = 60000) {
+  const startTime = Date.now();
+  const pollInterval = 2000; // Poll every 2 seconds
+  
+  console.log('Waiting for file processing...');
+  
+  while (Date.now() - startTime < maxWaitTime) {
+    try {
+      const response = await fetch(`https://api.openai.com/v1/files/${fileId}`, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to check file status: ${response.status}`);
+      }
+      
+      const fileInfo = await response.json();
+      console.log('File status:', fileInfo.status);
+      
+      if (fileInfo.status === 'processed') {
+        console.log('File processing completed');
+        return;
+      } else if (fileInfo.status === 'error') {
+        throw new Error('File processing failed');
+      }
+      
+      // Wait before next poll
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
+      
+    } catch (error) {
+      console.error('Error checking file status:', error);
+      throw new Error(`File processing check failed: ${error.message}`);
+    }
+  }
+  
+  throw new Error('File processing timeout - file took too long to process');
+}
+
+async function extractTextFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = async (e) => {
+      try {
+        let text = '';
+        
+        if (file.type === 'application/pdf') {
+          // For PDF files, we'll extract text using a simple approach
+          // This is a basic implementation - for production, consider using PDF.js or similar
+          text = await extractTextFromPDF(e.target.result);
+        } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+          // For DOCX files, we'll extract text using a simple approach
+          text = await extractTextFromDOCX(e.target.result);
+        } else {
+          // For plain text files
+          text = e.target.result;
+        }
+        
+        if (!text || text.trim().length === 0) {
+          throw new Error('No text content found in the file');
+        }
+        
+        resolve(text);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    
+    // Read as ArrayBuffer for binary files (PDF, DOCX) or as text for plain text
+    if (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+      reader.readAsArrayBuffer(file);
+    } else {
+      reader.readAsText(file);
+    }
+  });
+}
+
+async function extractTextFromPDF(arrayBuffer) {
+  // Basic PDF text extraction using PDF.js approach
+  // This is a simplified implementation - in production, you'd want to use PDF.js library
+  try {
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const text = new TextDecoder('utf-8', { fatal: false }).decode(uint8Array);
+    
+    // Extract text between BT (Begin Text) and ET (End Text) markers
+    const textMatches = text.match(/BT[\s\S]*?ET/g);
+    if (textMatches) {
+      let extractedText = '';
+      textMatches.forEach(match => {
+        // Extract text content from PDF text objects
+        const textContent = match.match(/\([^)]*\)/g);
+        if (textContent) {
+          textContent.forEach(content => {
+            const cleanText = content.replace(/[()]/g, '').trim();
+            if (cleanText) {
+              extractedText += cleanText + ' ';
+            }
+          });
+        }
+      });
+      return extractedText.trim();
+    }
+    
+    // Fallback: try to extract readable text patterns
+    const readableText = text.match(/[a-zA-Z0-9\s.,!?;:'"()-]{10,}/g);
+    if (readableText) {
+      return readableText.join(' ').trim();
+    }
+    
+    throw new Error('Could not extract readable text from PDF');
+  } catch (error) {
+    throw new Error('PDF text extraction failed: ' + error.message);
+  }
+}
+
+async function extractTextFromDOCX(arrayBuffer) {
+  // Basic DOCX text extraction
+  // This is a simplified implementation - in production, you'd want to use a proper DOCX parser
+  try {
+    const uint8Array = new Uint8Array(arrayBuffer);
+    
+    // DOCX files are ZIP archives containing XML files
+    // We'll try to extract text from the main document XML
+    const text = new TextDecoder('utf-8', { fatal: false }).decode(uint8Array);
+    
+    // Look for text content in XML structure
+    const textMatches = text.match(/<w:t[^>]*>([^<]*)<\/w:t>/g);
+    if (textMatches) {
+      let extractedText = '';
+      textMatches.forEach(match => {
+        const content = match.replace(/<[^>]*>/g, '').trim();
+        if (content) {
+          extractedText += content + ' ';
+        }
+      });
+      return extractedText.trim();
+    }
+    
+    // Fallback: try to extract readable text patterns
+    const readableText = text.match(/[a-zA-Z0-9\s.,!?;:'"()-]{10,}/g);
+    if (readableText) {
+      return readableText.join(' ').trim();
+    }
+    
+    throw new Error('Could not extract readable text from DOCX');
+  } catch (error) {
+    throw new Error('DOCX text extraction failed: ' + error.message);
+  }
+}
+
+async function processContentWithGenAI(content, options) {
+  // Get OpenAI settings from storage
+  const settings = await getOpenAISettings();
+  
+  console.log('OpenAI settings:', { 
+    hasApiKey: !!settings.apiKey, 
+    model: settings.model, 
+    maxTokens: settings.maxTokens 
+  });
+  
+  console.log('Model being used for file attachment:', settings.model);
+  
+  if (!settings.apiKey) {
+    throw new Error('OpenAI API key not configured. Please set it in Settings > AI Integration.');
+  }
+  
+  try {
+    // Create the prompt for OpenAI
+    const prompt = createOpenAIPrompt(content, { ...options, defaultGuidelines: settings.defaultGuidelines });
+    console.log('Generated prompt length:', prompt.length);
+    console.log('Prompt preview:', prompt.substring(0, 500) + '...');
+    
+    // Prepare messages array
+    const messages = [
+      {
+        role: 'system',
+        content: 'You are an expert at analyzing demo scripts and creating structured demo stories with personas and chapters. Always respond with valid JSON.'
+      }
+    ];
+    
+    // Add user message with or without file attachment
+    if (options.uploadedFileId) {
+      console.log('File ID type:', typeof options.uploadedFileId);
+      console.log('File ID value:', options.uploadedFileId);
+      
+      messages.push({
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: prompt
+          },
+          {
+            type: 'file',
+            file: {
+              file_id: options.uploadedFileId
+            }
+          }
+        ]
+      });
+      console.log('Using uploaded file ID:', options.uploadedFileId);
+    } else {
+      messages.push({
+        role: 'user',
+        content: prompt
+      });
+    }
+    
+    // Call OpenAI API
+    console.log('Making OpenAI API request...');
+    console.log('Messages being sent:', JSON.stringify(messages, null, 2));
+    
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${settings.apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: settings.model,
+        messages: messages,
+        max_tokens: settings.maxTokens,
+        temperature: 0.7
+      })
+    });
+    
+    console.log('OpenAI API response status:', response.status);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenAI API error response:', errorData);
+      throw new Error(errorData.error?.message || `OpenAI API request failed with status ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('OpenAI API response data:', data);
+    
+    const aiResponse = data.choices[0]?.message?.content;
+    
+    if (!aiResponse) {
+      throw new Error('No response from OpenAI API');
+    }
+    
+    console.log('AI response:', aiResponse);
+    
+    // Extract JSON from markdown code blocks if present
+    let jsonString = aiResponse.trim();
+    
+    // Check if response is wrapped in markdown code blocks
+    if (jsonString.startsWith('```json') && jsonString.endsWith('```')) {
+      // Extract JSON from ```json ... ``` blocks
+      jsonString = jsonString.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+    } else if (jsonString.startsWith('```') && jsonString.endsWith('```')) {
+      // Extract JSON from ``` ... ``` blocks
+      jsonString = jsonString.replace(/^```\s*/, '').replace(/\s*```$/, '');
+    }
+    
+    // Additional cleanup - remove any leading/trailing whitespace and newlines
+    jsonString = jsonString.trim();
+    
+    // Parse the AI response
+    let storyData;
+    try {
+      storyData = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error('Failed to parse AI response as JSON:', parseError);
+      console.log('Raw AI response:', aiResponse);
+      console.log('Extracted JSON string:', jsonString);
+      throw new Error('AI response is not valid JSON. Please try again.');
+    }
+    
+    console.log('Parsed story data:', storyData);
+    
+    // Validate and structure the response
+    const validatedData = validateAndStructureStoryData(storyData, options);
+    console.log('Validated story data:', validatedData);
+    
+    return validatedData;
+    
+  } catch (error) {
+    console.error('OpenAI API error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
+    // Show user-friendly error message based on error type
+    let errorMessage = `OpenAI API Error: ${error.message}\n\n`;
+    
+    if (error.message.includes('quota') || error.message.includes('insufficient_quota')) {
+      errorMessage += `❌ QUOTA EXCEEDED\n\nYour OpenAI account has run out of credits.\nPlease:\n1. Go to https://platform.openai.com/\n2. Add payment method or increase quota\n3. Check your billing details\n\nFalling back to pattern-based extraction.`;
+    } else if (error.message.includes('API key')) {
+      errorMessage += `❌ INVALID API KEY\n\nPlease check your API key in Settings > AI Integration.\n\nFalling back to pattern-based extraction.`;
+    } else if (error.message.includes('CORS') || error.message.includes('network')) {
+      errorMessage += `❌ NETWORK ISSUE\n\nThis might be a CORS or network connectivity issue.\n\nFalling back to pattern-based extraction.`;
+    } else {
+      errorMessage += `This might be due to:\n- Invalid API key\n- Network connectivity issues\n- CORS restrictions\n\nFalling back to pattern-based extraction.`;
+    }
+    
+    alert(errorMessage);
+    
+    // Fallback to pattern-based extraction if API fails
+    console.log('Falling back to pattern-based extraction');
+    return processContentWithPatterns(content, options);
+  }
+}
+
+function createOpenAIPrompt(content, options) {
+  const storyName = options.storyName;
+  const customGuidelines = options.customGuidelines;
+  const autoGeneratePersonas = options.autoGeneratePersonas;
+  const autoGenerateChapters = options.autoGenerateChapters;
+  
+  let prompt = `Analyze the following demo script and create a structured story for "${storyName}":\n\n`;
+  prompt += `Content:\n${content}\n\n`;
+  
+  prompt += `Please create a JSON response with the following structure:\n`;
+  prompt += `{\n`;
+  prompt += `  "name": "${storyName}",\n`;
+  prompt += `  "personas": [\n`;
+  prompt += `    {\n`;
+  prompt += `      "name": "Persona Name",\n`;
+  prompt += `      "businessTitle": "Job Title",\n`;
+  prompt += `      "description": "Brief description of this persona, you can assume the persona based on the demo content if there is none specifically mentioned",\n`;
+  prompt += `      "chapters": [\n`;
+  prompt += `        {\n`;
+  prompt += `          "title": "Chapter Title, which is one section of the demo",\n`;
+  prompt += `          "valueDrivers": ["Key value proposition 1", "Key value proposition 2"],\n`;
+  prompt += `          "url": null\n`;
+  prompt += `        }\n`;
+  prompt += `      ]\n`;
+  prompt += `    }\n`;
+  prompt += `  ]\n`;
+  prompt += `}\n\n`;
+  
+  if (autoGeneratePersonas) {
+    prompt += `Extract personas from the content. Look for:\n`;
+    prompt += `- Different user types, roles, or buyer personas\n`;
+    prompt += `- Job titles, departments, or user segments\n`;
+    prompt += `- Different pain points or use cases\n`;
+    prompt += `- For the "businessTitle" field, make an educated guess about the business title/role based on the demo content and context\n\n`;
+  }
+  
+  if (autoGenerateChapters) {
+    prompt += `Extract chapters from the content. Look for:\n`;
+    prompt += `- Different sections, phases, or steps in the demo\n`;
+    prompt += `- Feature demonstrations or workflows\n`;
+    prompt += `- Value propositions or benefits, assume some form of business impact such as % time saved or cost reduction, etc.\n\n`;
+  }
+  
+  prompt += `Guidelines:\n`;
+  
+  // Add custom guidelines first (highest priority)
+  if (customGuidelines && customGuidelines.trim().length > 0) {
+    prompt += `${customGuidelines}\n\n`;
+  } else if (options.defaultGuidelines && options.defaultGuidelines.trim().length > 0) {
+    prompt += `${options.defaultGuidelines}\n\n`;
+  }
+  
+  // Add standard guidelines
+  prompt += `- Create 1-3 personas maximum\n`;
+  prompt += `- Create 3-8 chapters maximum\n`;
+  prompt += `- Each chapter should have 1-3 value drivers, assume some if not clearly found\n`;
+  prompt += `- Use clear, concise titles and descriptions\n`;
+  prompt += `- Focus on business value and user benefits\n`;
+  prompt += `- For persona titles, infer appropriate business roles (e.g., "Sales Manager", "IT Director", "Operations Lead") based on the demo content\n`;
+  prompt += `- IMPORTANT: Use the exact story name "${storyName}" in the "name" field\n`;
+  prompt += `- Return only valid JSON, no additional text\n`;
+  
+  return prompt;
+}
+
+function validateAndStructureStoryData(storyData, options) {
+  // Ensure we have the basic structure
+  if (!storyData.personas || !Array.isArray(storyData.personas)) {
+    throw new Error('Invalid story structure from AI');
+  }
+  
+  // Validate and clean personas with their individual chapters
+  const personas = storyData.personas.map(persona => {
+    const personaChapters = [];
+    
+    // Process chapters for this specific persona
+    if (persona.chapters && Array.isArray(persona.chapters)) {
+      persona.chapters.forEach(chapter => {
+        personaChapters.push({
+          title: chapter.title || 'Untitled Chapter',
+          valueDrivers: Array.isArray(chapter.valueDrivers) ? chapter.valueDrivers : ['Generated value driver'],
+          url: chapter.url || null
+        });
+      });
+    }
+    
+    // If no chapters found for this persona, create default ones
+    if (personaChapters.length === 0) {
+      personaChapters.push(
+        {
+          title: 'Introduction',
+          valueDrivers: ['Welcome and overview'],
+          url: null
+        },
+        {
+          title: 'Main Demo',
+          valueDrivers: ['Core functionality demonstration'],
+          url: null
+        },
+        {
+          title: 'Conclusion',
+          valueDrivers: ['Summary and next steps'],
+          url: null
+        }
+      );
+    }
+    
+    return {
+      name: persona.name || 'Demo User',
+      businessTitle: persona.businessTitle || persona.title || 'Business Professional',
+      description: persona.description || 'Generated persona from content',
+      chapters: personaChapters
+    };
+  });
+  
+  return {
+    name: storyData.name || options.storyName,
+    personas: personas
+  };
+}
+
+function processContentWithPatterns(content, options) {
+  // Fallback pattern-based processing (original logic)
+  const personas = [];
+  const chapters = [];
+  
+  if (options.autoGeneratePersonas) {
+    const personaMatches = content.match(/(?:persona|character|role|user|buyer|stakeholder)[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi);
+    if (personaMatches) {
+      personaMatches.forEach((match, index) => {
+        const lines = match.split('\n').filter(line => line.trim());
+        const name = lines[0]?.replace(/^(persona|character|role|user|buyer|stakeholder):?\s*/i, '') || `Persona ${index + 1}`;
+        const title = lines[1] || 'Business Professional';
+        const description = lines.slice(2).join(' ').trim() || 'Generated persona from content';
+        
+        personas.push({
+          name: name.trim(),
+          title: title.trim(),
+          description: description,
+          chapters: []
+        });
+      });
+    }
+    
+    if (personas.length === 0) {
+      personas.push({
+        name: 'Demo User',
+        title: 'Business Professional',
+        description: 'Generated persona from content',
+        chapters: []
+      });
+    }
+  }
+  
+  if (options.autoGenerateChapters) {
+    const chapterMatches = content.match(/(?:chapter|section|step|phase|part)[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi);
+    if (chapterMatches) {
+      chapterMatches.forEach((match, index) => {
+        const lines = match.split('\n').filter(line => line.trim());
+        const title = lines[0]?.replace(/^(chapter|section|step|phase|part):?\s*/i, '') || `Chapter ${index + 1}`;
+        const description = lines.slice(1).join(' ').trim() || 'Generated chapter from content';
+        
+        chapters.push({
+          title: title.trim(),
+          valueDrivers: [description],
+          url: null
+        });
+      });
+    }
+    
+    if (chapters.length === 0) {
+      chapters.push(
+        {
+          title: 'Introduction',
+          valueDrivers: ['Welcome and overview'],
+          url: null
+        },
+        {
+          title: 'Main Demo',
+          valueDrivers: ['Core functionality demonstration'],
+          url: null
+        },
+        {
+          title: 'Conclusion',
+          valueDrivers: ['Summary and next steps'],
+          url: null
+        }
+      );
+    }
+  }
+  
+  personas.forEach(persona => {
+    persona.chapters = [...chapters];
+  });
+  
+  return {
+    name: options.storyName,
+    personas: personas
+  };
+}
+
+async function getOpenAISettings() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['openaiApiKey', 'openaiModel', 'openaiMaxTokens', 'defaultGuidelines'], (result) => {
+      resolve({
+        apiKey: result.openaiApiKey || '',
+        model: result.openaiModel || 'gpt-4',
+        maxTokens: result.openaiMaxTokens || 2000,
+        defaultGuidelines: result.defaultGuidelines || ''
+      });
+    });
+  });
+}
+
+async function saveGenAIStory(storyData) {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(["stories"], (result) => {
+      const stories = result.stories || [];
+      
+      // Check if story name already exists
+      const existingStory = stories.find(s => s.name === storyData.name);
+      if (existingStory) {
+        const overwrite = confirm(`A story named "${storyData.name}" already exists. Do you want to replace it?`);
+        if (!overwrite) {
+          reject(new Error('Story name already exists'));
+          return;
+        }
+        
+        // Replace existing story
+        const index = stories.findIndex(s => s.name === storyData.name);
+        stories[index] = storyData;
+      } else {
+        // Add new story
+        stories.push(storyData);
+      }
+      
+      chrome.storage.local.set({ stories }, () => {
+        resolve();
+        
+        // Show donation popup for new story creation with 2-second delay
+        if (!existingStory) {
+          setTimeout(() => {
+            showDonationPopup();
+          }, 2000);
+        }
+      });
+    });
+  });
+}
+
+// Donation popup functions
+let donationTimer = null;
+let donationTimerInterval = null;
+
+function showDonationPopup() {
+  const modal = document.getElementById('donation-modal');
+  if (modal) {
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    
+    // Start auto-close timer (5 seconds)
+    startDonationTimer();
+  }
+}
+
+function hideDonationPopup() {
+  const modal = document.getElementById('donation-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
+    
+    // Clear any running timers
+    clearDonationTimer();
+  }
+}
+
+function startDonationTimer() {
+  let timeLeft = 5; // 5 seconds
+  const progressBar = document.getElementById('timer-progress');
+  const timerText = document.getElementById('timer-text');
+  
+  // Update timer display immediately
+  updateTimerDisplay(timeLeft, progressBar, timerText);
+  
+  // Update every 100ms for smooth progress bar
+  donationTimerInterval = setInterval(() => {
+    timeLeft -= 0.1;
+    updateTimerDisplay(timeLeft, progressBar, timerText);
+    
+    if (timeLeft <= 0) {
+      clearDonationTimer();
+      hideDonationPopup();
+    }
+  }, 100);
+}
+
+function updateTimerDisplay(timeLeft, progressBar, timerText) {
+  const percentage = (timeLeft / 5) * 100;
+  progressBar.style.width = percentage + '%';
+  
+  if (timeLeft > 1) {
+    timerText.textContent = `Spellbound in ${Math.ceil(timeLeft)} seconds...`;
+  } else {
+    timerText.textContent = 'Support demo magicians!';
+  }
+}
+
+function clearDonationTimer() {
+  if (donationTimerInterval) {
+    clearInterval(donationTimerInterval);
+    donationTimerInterval = null;
+  }
+  if (donationTimer) {
+    clearTimeout(donationTimer);
+    donationTimer = null;
+  }
+}
+
 // Initialize
 addEventListeners();
 initDarkMode();
+initGenAI();
 render();
