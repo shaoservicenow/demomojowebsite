@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
   if (logo && chrome.runtime) {
     logo.src = chrome.runtime.getURL('icons/long-logo.png');
   }
+
+  // Listen for storage changes to update shortcuts display
+  chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace === 'local' && changes.customShortcuts) {
+      // Refresh shortcuts display when custom shortcuts change
+      updateShortcutsDisplay(changes.customShortcuts.newValue);
+    }
+  });
 });
 
 function populateDropdowns(stories) {
@@ -68,6 +76,12 @@ function populateDropdowns(stories) {
     chrome.tabs.create({ url: chrome.runtime.getURL('setup.html') });
   });
 
+  // Settings button event listener
+  document.getElementById("settings-btn").addEventListener("click", (e) => {
+    e.preventDefault();
+    chrome.tabs.create({ url: chrome.runtime.getURL('settings.html') });
+  });
+
   // Size and position toggle logic
   let currentSize = 'small';
   let currentPosition = 'bottom-right';
@@ -76,13 +90,19 @@ function populateDropdowns(stories) {
   const positionOptions = ['bottom-right', 'bottom-left'];
   
   // Load saved settings
-  chrome.storage.local.get(['overlaySize', 'overlayPosition', 'shortcutsEnabled'], (result) => {
+  chrome.storage.local.get(['overlaySize', 'overlayPosition', 'shortcutsEnabled', 'customShortcuts'], (result) => {
     if (result.overlaySize) {
       currentSize = result.overlaySize;
       updateSizeDisplay();
     }
     if (result.overlayPosition) {
-      currentPosition = result.overlayPosition;
+      // Only use the saved position if it's one of the popup options
+      if (positionOptions.includes(result.overlayPosition)) {
+        currentPosition = result.overlayPosition;
+      } else {
+        // If saved position is fullscreen or pinned-content, default to bottom-right
+        currentPosition = 'bottom-right';
+      }
       updatePositionDisplay();
     }
     if (result.shortcutsEnabled !== undefined) {
@@ -95,6 +115,9 @@ function populateDropdowns(stories) {
       if (result.shortcutsEnabled) {
         shortcutInstructions.style.display = 'block';
         buttonInstructions.style.display = 'none';
+        
+        // Update shortcuts display with custom shortcuts if available
+        updateShortcutsDisplay(result.customShortcuts);
       } else {
         shortcutInstructions.style.display = 'none';
         buttonInstructions.style.display = 'block';
@@ -130,6 +153,7 @@ function populateDropdowns(stories) {
     const sizeToggle = document.getElementById('size-toggle');
     const positionToggle = document.getElementById('position-toggle');
     
+    // Only disable controls when actually in fullscreen mode
     if (isFullscreen) {
       sizeToggle.disabled = true;
       positionToggle.disabled = true;
@@ -166,6 +190,11 @@ function populateDropdowns(stories) {
     if (enabled) {
       shortcutInstructions.style.display = 'block';
       buttonInstructions.style.display = 'none';
+      
+      // Load and display custom shortcuts if available
+      chrome.storage.local.get(['customShortcuts'], (result) => {
+        updateShortcutsDisplay(result.customShortcuts);
+      });
     } else {
       shortcutInstructions.style.display = 'none';
       buttonInstructions.style.display = 'block';
@@ -195,9 +224,21 @@ function populateDropdowns(stories) {
 
   function updatePositionDisplay() {
     const positionText = document.getElementById('position-text');
-    const displayText = currentPosition.split('-').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    let displayText;
+    
+    switch(currentPosition) {
+      case 'bottom-right':
+        displayText = 'Bottom Right';
+        break;
+      case 'bottom-left':
+        displayText = 'Bottom Left';
+        break;
+      default:
+        // Fallback to bottom-right if position is not in popup options
+        displayText = 'Bottom Right';
+        currentPosition = 'bottom-right';
+    }
+    
     positionText.textContent = displayText;
   }
 
@@ -213,6 +254,9 @@ function populateDropdowns(stories) {
     updateSizeDisplay();
     chrome.storage.local.set({ overlaySize: currentSize });
     
+    // Update button states based on current overlay state
+    checkOverlayState();
+    
     // Immediately update overlay if it exists
     await updateOverlaySettings();
   });
@@ -223,11 +267,15 @@ function populateDropdowns(stories) {
       return;
     }
     
+    // Cycle through all position options
     const currentIndex = positionOptions.indexOf(currentPosition);
     const nextIndex = (currentIndex + 1) % positionOptions.length;
     currentPosition = positionOptions[nextIndex];
     updatePositionDisplay();
     chrome.storage.local.set({ overlayPosition: currentPosition });
+    
+    // Update button states based on current overlay state
+    checkOverlayState();
     
     // Immediately update overlay if it exists
     await updateOverlaySettings();
@@ -242,10 +290,13 @@ function populateDropdowns(stories) {
         func: (size, position) => {
           const overlay = document.getElementById('demoOverlay');
           if (overlay) {
-            overlay.className = `size-${size} position-${position}`;
-            // Update stored variables for persistence
-            if (typeof currentOverlaySize !== 'undefined') currentOverlaySize = size;
-            if (typeof currentOverlayPosition !== 'undefined') currentOverlayPosition = position;
+            // Only update size and position if not in fullscreen mode
+            if (!overlay.classList.contains('fullscreen')) {
+              overlay.className = `size-${size} position-${position}`;
+              // Update stored variables for persistence
+              if (typeof currentOverlaySize !== 'undefined') currentOverlaySize = size;
+              if (typeof currentOverlayPosition !== 'undefined') currentOverlayPosition = position;
+            }
           }
         },
         args: [currentSize, currentPosition]
@@ -257,7 +308,7 @@ function populateDropdowns(stories) {
   
   document.getElementById("apply").addEventListener("click", async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    chrome.storage.local.get(["stories"], (result) => {
+    chrome.storage.local.get(["stories", "overlayPosition"], (result) => {
       const stories = result.stories || [];
       const storyIdx = document.getElementById("story").value;
       const personaIdx = document.getElementById("persona").value;
@@ -275,8 +326,9 @@ function populateDropdowns(stories) {
           // Reset completed chapters when applying new overlay
           if (typeof completedChapters !== 'undefined') {
             completedChapters.clear();
-            localStorage.removeItem('completedChapters');
-            console.log('Reset completed chapters on overlay apply');
+            chrome.storage.local.remove(['completedChapters'], () => {
+              console.log('Reset completed chapters on overlay apply');
+            });
           }
           
           document.dispatchEvent(new CustomEvent("overlayUpdate", {
@@ -296,7 +348,7 @@ function populateDropdowns(stories) {
             }
           }));
         },
-        args: [persona, chapter, story, parseInt(personaIdx), parseInt(chapterIdx), story.personas[personaIdx].chapters, story.personas, currentSize, currentPosition]
+        args: [persona, chapter, story, parseInt(personaIdx), parseInt(chapterIdx), story.personas[personaIdx].chapters, story.personas, currentSize, result.overlayPosition || 'bottom-right']
       });
       
       // Close the popup after applying overlay
@@ -313,4 +365,46 @@ function populateDropdowns(stories) {
       }
     });
   });
+
+  // Function to update shortcuts display with custom shortcuts
+  function updateShortcutsDisplay(customShortcuts) {
+    const defaultShortcuts = {
+      'toggle-overlay': 'Shift + H',
+      'toggle-fullscreen': 'Shift + O',
+      'next-chapter': 'Shift + →',
+      'prev-chapter': 'Shift + ←',
+      'next-persona': 'Shift + ↓',
+      'prev-persona': 'Shift + ↑',
+      'save-url': 'Shift + S',
+      'toggle-shift': 'Shift + P'
+    };
+
+    // Update each shortcut item with custom or default values
+    Object.keys(defaultShortcuts).forEach(action => {
+      const customShortcut = customShortcuts && customShortcuts[action];
+      const shortcutToUse = customShortcut || defaultShortcuts[action];
+      
+      // Get the shortcut item element by ID
+      const shortcutItem = document.getElementById(`shortcut-${action}`);
+      if (shortcutItem) {
+        const keyElement = shortcutItem.querySelector('.shortcut-key');
+        if (keyElement) {
+          // Format the shortcut for display (replace + with space and +)
+          const displayShortcut = shortcutToUse.replace(/\+/g, ' + ');
+          keyElement.textContent = displayShortcut;
+          
+          // Add a visual indicator if it's a custom shortcut
+          if (customShortcut) {
+            keyElement.style.backgroundColor = 'rgba(99, 223, 78, 0.2)';
+            keyElement.style.border = '1px solid rgba(99, 223, 78, 0.4)';
+            keyElement.title = 'Custom shortcut';
+          } else {
+            keyElement.style.backgroundColor = 'rgba(99, 223, 78, 0.1)';
+            keyElement.style.border = 'none';
+            keyElement.title = 'Default shortcut';
+          }
+        }
+      }
+    });
+  }
   

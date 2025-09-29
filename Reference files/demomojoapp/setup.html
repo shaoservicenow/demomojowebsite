@@ -78,9 +78,38 @@
       margin-bottom: 4px;
     }
 
+    .credit-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
     .credit {
       font-size: 14px;
       color: var(--text-muted);
+    }
+
+    .donation-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #ff6b35;
+      text-decoration: none;
+      padding: 4px 10px;
+      border: 1px solid #ff6b35;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+      background: rgba(255, 107, 53, 0.1);
+      white-space: nowrap;
+    }
+
+    .donation-link a:hover {
+      background: #ff6b35;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
     }
 
     .header-actions {
@@ -108,6 +137,29 @@
     .theme-toggle svg {
       width: 16px;
       height: 16px;
+    }
+
+    .settings-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      opacity: 0.4;
+      border-radius: 50%;
+      padding: 4px;
+    }
+
+    .settings-toggle:hover {
+      opacity: 1;
+      background: var(--bg-tertiary);
+    }
+
+    .settings-toggle svg {
+      width: 20px;
+      height: 20px;
     }
 
     .story-selector-container {
@@ -379,6 +431,19 @@
       background: #dc2626;
     }
 
+    .btn-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      transform: translateY(-1px);
+    }
+
     .add-story-btn {
       background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       color: white;
@@ -424,11 +489,13 @@
 
     .modal-content {
       background: var(--bg-primary);
-      margin: 5% auto;
+      margin: 3% auto;
       padding: 0;
       border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
+      width: 95%;
+      max-width: 800px;
+      max-height: 95vh;
+      overflow-y: auto;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
       animation: modalSlideIn 0.3s ease-out;
       position: relative;
@@ -863,25 +930,570 @@
           opacity: 0;
         }
       }
+
+      /* MojoAI Modal Styles */
+      .genai-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 24px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 12px 16px;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .tab-btn:hover {
+        color: var(--text-primary);
+        background: var(--bg-tertiary);
+      }
+
+      .tab-btn.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .upload-area {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 24px 16px;
+        text-align: center;
+        background: var(--bg-primary);
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .upload-area:hover {
+        border-color: var(--primary-color);
+        background: var(--bg-secondary);
+      }
+
+      .upload-area.dragover {
+        border-color: var(--primary-color);
+        background: var(--bg-secondary);
+        transform: scale(1.02);
+      }
+
+      .upload-icon {
+        color: var(--text-muted);
+        margin-bottom: 16px;
+      }
+
+      .upload-area h3 {
+        margin: 0 0 8px 0;
+        color: var(--text-primary);
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .upload-area p {
+        margin: 0 0 24px 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+
+      .upload-limit {
+        margin: 4px 0 !important;
+        color: var(--text-muted) !important;
+        font-size: 12px !important;
+        font-style: italic;
+      }
+
+      .file-info {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+
+      .file-details {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .file-name {
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .file-size {
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .remove-file {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+      }
+
+      .remove-file:hover {
+        color: var(--danger-color);
+        background: var(--bg-tertiary);
+      }
+
+      .upload-progress {
+        margin-top: 16px;
+        padding: 16px;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 8px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--primary-color);
+        border-radius: 4px;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        font-size: 14px;
+        color: var(--text-primary);
+        text-align: center;
+      }
+
+      .genai-options {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .genai-options .form-group {
+        margin-bottom: 20px;
+      }
+
+      .genai-options textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--bg-primary);
+        font-size: 14px;
+        color: var(--text-primary);
+        resize: vertical;
+        min-height: 60px;
+        font-family: inherit;
+      }
+
+      .genai-options textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      .toggle-group {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        justify-content: space-between;
+      }
+
+      .toggle-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 24px;
+        transition: all 0.2s ease;
+        flex: 1;
+      }
+
+      .toggle-item:hover {
+        background: var(--bg-secondary);
+        border-color: var(--border-light);
+      }
+
+      .toggle-item.active {
+        border-color: #10b981;
+        background: rgba(16, 185, 129, 0.05);
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e5e7eb;
+        transition: .3s;
+        border-radius: 28px;
+        border: 2px solid transparent;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle-switch input:checked + .toggle-slider {
+        background-color: #10b981;
+        border-color: #10b981;
+      }
+
+      .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+      }
+
+      .toggle-info {
+        flex: 1;
+        text-align: left;
+      }
+
+      .toggle-label {
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+        font-size: 13px;
+      }
+
+      .toggle-description {
+        color: var(--text-secondary);
+        font-size: 11px;
+        line-height: 1.3;
+      }
+
+      .form-help {
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .btn-loading {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .spinner {
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* Donation Modal Styles */
+      .donation-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+      }
+
+      .donation-modal-content {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 10% auto;
+        padding: 0;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        animation: modalSlideIn 0.3s ease-out;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .donation-modal-header {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 24px;
+        border-radius: 16px 16px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .donation-modal-header h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .donation-modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #7f8c8d;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .donation-modal-close:hover {
+        background: #ecf0f1;
+        color: #2c3e50;
+      }
+
+      .donation-modal-body {
+        padding: 24px;
+        color: white;
+      }
+
+      .donation-modal-body p {
+        margin: 0 0 16px 0;
+        line-height: 1.6;
+        font-size: 16px;
+      }
+
+      .donation-modal-body p:last-of-type {
+        margin-bottom: 24px;
+      }
+
+      .donation-modal-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .donation-modal-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #ff6b35;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        min-width: 180px;
+      }
+
+      .donation-modal-btn:hover {
+        background: #e55a2b;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+      }
+
+      .donation-modal-btn-secondary {
+        flex: 1;
+        padding: 12px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 120px;
+      }
+
+      .donation-modal-btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .donation-modal-body a:hover {
+        color: #fff !important;
+        border-bottom-color: #fff !important;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        transform: scale(1.05);
+      }
+
+      /* Timer Bar Styles */
+      .timer-container {
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .timer-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 8px;
+      }
+
+      .timer-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #ff6b35, #ffd700);
+        width: 100%;
+        border-radius: 2px;
+        transition: width 0.1s linear;
+        animation: timerGlow 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes timerGlow {
+        from {
+          box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+        }
+        to {
+          box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+        }
+      }
+
+      .timer-text {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+      }
+
+      @media (max-width: 600px) {
+        .donation-modal-content {
+          margin: 5% auto;
+          width: 95%;
+        }
+        
+        .donation-modal-actions {
+          flex-direction: column;
+        }
+        
+        .donation-modal-btn,
+        .donation-modal-btn-secondary {
+          min-width: auto;
+        }
+      }
   </style>
-</head>
-<body>
-  <div class="container">
+  </head>
+  <body>
+    <!-- Donation Popup Modal -->
+    <div class="donation-modal" id="donation-modal">
+      <div class="donation-modal-content">
+        <div class="donation-modal-header">
+          <h3>Thank you for using DemoMojo</h3>
+          <button class="donation-modal-close" id="donation-modal-close">&times;</button>
+        </div>
+        <div class="donation-modal-body">
+            <p><strong>🎉 Congratulations on creating your story!</strong></p>
+            <p>This project is maintained by <strong><a href="https://www.linkedin.com/in/tanshaowei/" target="_blank" rel="noopener noreferrer" style="color: #ffd700; text-decoration: none; border-bottom: 1px dotted #ffd700; cursor: pointer; transition: all 0.3s ease;">Shao</a></strong> as a free tool to help with demo storytelling.</p>
+            <p>If DemoMojo has been helpful to you, please consider supporting its development:</p>
+            
+            <!-- Auto-close timer bar -->
+            <div class="timer-container">
+              <div class="timer-bar">
+                <div class="timer-progress" id="timer-progress"></div>
+              </div>
+              <div class="timer-text" id="timer-text">Auto-closing in 5 seconds...</div>
+            </div>
+            
+          <div class="donation-modal-actions">
+            <a href="https://buymeacoffee.com/demomojo" target="_blank" rel="noopener noreferrer" class="donation-modal-btn">
+              ☕ Buy me a coffee!
+            </a>
+            <button class="donation-modal-btn-secondary" id="donation-modal-later">
+              Maybe later
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
     <div class="header">
       <div class="header-title">
         <img id="header-logo" alt="DemoMojo" class="header-logo">
         <div class="header-text">
           <h1>DemoMojo Setup</h1>
-          <div class="credit">v1.0 created by Shao</div>
+          <div class="credit-container">
+            <span class="credit">v1.1.0 created by Shao</span>
+            <div class="donation-link">
+              <a href="https://buymeacoffee.com/demomojo" target="_blank" rel="noopener noreferrer">
+                ☕ Consider Supporting DemoMojo: Buy Me a Coffee!
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="header-actions">
-        <button id="addStory" class="add-story-btn">
+        <button id="refreshStories" class="btn btn-secondary" title="Refresh Stories">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
           </svg>
-          Add Story
         </button>
         <div class="theme-toggle" id="darkModeToggle">
           <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -897,6 +1509,12 @@
           </svg>
           <span id="themeText">Light</span>
         </div>
+        <div class="settings-toggle" id="settingsBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </div>
       </div>
     </div>
     <!-- Story Selection Controls -->
@@ -906,14 +1524,36 @@
         <select id="storySelect" class="story-dropdown">
           <option value="all">View All Stories</option>
         </select>
-        <button id="refreshStories" class="btn btn-secondary" title="Refresh Stories">
+        <button id="addStory" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-            <path d="M21 3v5h-5"/>
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
-            <path d="M3 21v-5h5"/>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
+          Add Story
         </button>
+        <button id="createWithGenAI" class="btn btn-gradient" title="Create Story with MojoAI">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          Create with MojoAI
+        </button>
+        <button id="exportStory" class="btn btn-secondary" title="Export Selected Story" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7,10 12,15 17,10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export
+        </button>
+        <button id="importStory" class="btn btn-secondary" title="Import Story from File">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17,8 12,3 7,8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Import
+        </button>
+        <input type="file" id="importFileInput" accept=".json" style="display: none;">
       </div>
     </div>
 
@@ -954,6 +1594,114 @@
           <button type="submit" class="btn btn-primary">Save Persona</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MojoAI Story Creation Modal -->
+  <div id="genaiModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create Story with MojoAI</h2>
+        <button class="close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="genai-tabs">
+          <button class="tab-btn active" data-tab="script">Demo Script</button>
+          <button class="tab-btn" data-tab="upload">Upload PDF</button>
+        </div>
+        
+        <!-- Demo Script Tab -->
+        <div id="scriptTab" class="tab-content active">
+          <div class="form-group">
+            <label for="storyName">Story Name</label>
+            <input type="text" id="storyName" placeholder="Enter a descriptive story name (e.g., 'Sales Demo for Enterprise Customers')" required>
+          </div>
+          <div class="form-group">
+            <label for="demoScript">Demo Script</label>
+            <textarea id="demoScript" rows="10" placeholder="Paste your demo script here..." style="width: 100%;"></textarea>
+            <small class="form-help">Include personas, chapters, and value drivers in your script</small>
+          </div>
+        </div>
+        
+        <!-- Upload PDF Tab -->
+        <div id="uploadTab" class="tab-content">
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17,8 12,3 7,8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <h3>Upload Your PDF</h3>
+            <p>Drop your PDF file here, or click to browse</p>
+            <p class="upload-limit" id="uploadLimitText">Maximum file size: 500KB • PDF files only</p>
+            <input type="file" id="documentUpload" accept=".pdf" style="display: none;">
+            <button type="button" class="btn btn-primary" id="chooseFileBtn">
+              Choose File
+            </button>
+          </div>
+          <div id="fileInfo" class="file-info" style="display: none;">
+            <div class="file-details">
+              <span class="file-name"></span>
+              <span class="file-size"></span>
+              <button type="button" class="remove-file">&times;</button>
+            </div>
+          </div>
+          
+          <div class="upload-progress" id="uploadProgress" style="display: none;">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Uploading file...</div>
+          </div>
+        </div>
+        
+        <div class="genai-options">
+          <div class="form-group">
+            <label for="customGuidelines">Additional Guidelines (Optional)</label>
+            <textarea id="customGuidelines" rows="3" placeholder="Add any specific instructions for the AI...&#10;&#10;Examples:&#10;-  Enter a customer name&#10;- Emphasize security features&#10;- Include ROI calculations&#10;- Use technical terminology"></textarea>
+            <small class="form-help">Provide specific instructions to guide the AI generation process</small>
+          </div>
+          
+          <div class="toggle-group">
+            <div class="toggle-item">
+              <label class="toggle-switch">
+                <input type="checkbox" id="autoGeneratePersonas" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="toggle-info">
+                <div class="toggle-label">Auto-generate Personas</div>
+                <div class="toggle-description">Extract personas from content automatically</div>
+              </div>
+            </div>
+            
+            <div class="toggle-item">
+              <label class="toggle-switch">
+                <input type="checkbox" id="autoGenerateChapters" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="toggle-info">
+                <div class="toggle-label">Auto-generate Chapters</div>
+                <div class="toggle-description">Extract chapters from content automatically</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="cancelGenAI">Cancel</button>
+        <button type="button" class="btn btn-primary" id="processWithGenAI" disabled>
+          <span class="btn-text">Create Story</span>
+          <span class="btn-loading" style="display: none;">
+            <svg class="spinner" width="16" height="16" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+              <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            Processing...
+          </span>
+        </button>
+      </div>
     </div>
   </div>
 

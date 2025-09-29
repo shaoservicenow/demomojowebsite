@@ -162,6 +162,10 @@
       font-size: 1em;
       cursor: pointer;
       backdrop-filter: blur(10px);
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
     
     .docs-nav-mobile select:focus {
@@ -198,9 +202,15 @@
       margin: 1.5em 0 1em 0;
     }
     
+    .docs-section h4 {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.2em;
+      margin: 1em 0 0.5em 0;
+    }
+    
     .docs-section p {
       color: rgba(255, 255, 255, 0.8);
-      line-height: 1.8;
+      line-height: 1.4;
       margin-bottom: 1em;
     }
     
@@ -212,7 +222,7 @@
     
     .docs-section li {
       margin-bottom: 0.5em;
-      line-height: 1.6;
+      line-height: 1.4;
     }
     
     .feature-grid {
@@ -359,6 +369,202 @@
       box-shadow: 0 12px 40px rgba(99, 223, 78, 0.3);
     }
     
+    /* Return to Top Button */
+    .return-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(99, 223, 78, 0.3);
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .return-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .return-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(99, 223, 78, 0.4);
+    }
+    
+    /* Password Modal Styles */
+    .password-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+    }
+    
+    .password-modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      margin: 15% auto;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .password-modal-header {
+      background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .password-modal-header h3 {
+      margin: 0;
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+    
+    .close {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+    
+    .close:hover {
+      opacity: 0.7;
+    }
+    
+    .password-modal-body {
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .password-modal-body p {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 1em;
+    }
+    
+    .password-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    .password-input:focus {
+      outline: none;
+      border-color: #63DF4E;
+      box-shadow: 0 0 0 3px rgba(99, 223, 78, 0.1);
+    }
+    
+    .password-error {
+      color: #e74c3c;
+      font-size: 0.9em;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+    
+    .password-modal-footer {
+      padding: 20px 30px 30px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    
+    .password-modal-footer .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #63DF4E 0%, #52B8FF 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 223, 78, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+    
+    /* Donate Link Styling */
+    .donate-link {
+      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%) !important;
+      color: white !important;
+      padding: 8px 16px !important;
+      border-radius: 20px !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
+      transition: all 0.3s ease !important;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3) !important;
+      margin-left: auto !important;
+    }
+    
+    .donate-link:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4) !important;
+      background: linear-gradient(135deg, #ff5722 0%, #ff9800 100%) !important;
+    }
+    
+    /* Navigation styling to support donate link positioning */
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+    }
+    
     /* Fix flickering issues */
     .magic-dust-canvas {
       will-change: transform;
@@ -409,6 +615,28 @@
 <body>
   <!-- Magic Dust Canvas -->
   <canvas id="magic-dust" class="magic-dust-canvas"></canvas>
+  
+  <!-- Return to Top Button -->
+  <button class="return-to-top" id="returnToTop" title="Return to Top">↑</button>
+
+  <!-- Password Modal -->
+  <div id="passwordModal" class="password-modal">
+    <div class="password-modal-content">
+      <div class="password-modal-header">
+        <h3>Download Access Required</h3>
+        <span class="close" onclick="closePasswordModal()">&times;</span>
+      </div>
+      <div class="password-modal-body">
+        <p>Please enter the download password to access the DemoMojo extension:</p>
+        <input type="password" id="downloadPassword" placeholder="Enter password..." class="password-input">
+        <div id="passwordError" class="password-error"></div>
+      </div>
+      <div class="password-modal-footer">
+        <button onclick="closePasswordModal()" class="btn btn-secondary">Cancel</button>
+        <button onclick="verifyDownloadPassword()" class="btn btn-primary">Download</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Header -->
   <header>
@@ -421,9 +649,9 @@
     </a>
     <nav role="navigation" aria-label="Main navigation">
       <a href="index.html#features">Features</a>
-      <a href="index.html#pricing">Pricing</a>
       <a href="index.html#install">Install</a>
       <a href="docs.html">Docs</a>
+      <a href="https://buymeacoffee.com/demomojo" target="_blank" rel="noopener noreferrer" class="donate-link">Donate</a>
     </nav>
   </header>
 
@@ -439,8 +667,10 @@
           <li><a href="#getting-started">Getting Started</a></li>
           <li><a href="#installation">Installation</a></li>
           <li><a href="#creating-stories">Creating Stories</a></li>
+          <li><a href="#mojoai">MojoAI Integration</a></li>
           <li><a href="#using-overlays">Using Overlays</a></li>
           <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+          <li><a href="#settings">Settings & Customization</a></li>
           <li><a href="#troubleshooting">Troubleshooting</a></li>
         </ul>
       </div>
@@ -451,8 +681,10 @@
           <option value="getting-started">Getting Started</option>
           <option value="installation">Installation</option>
           <option value="creating-stories">Creating Stories</option>
+          <option value="mojoai">MojoAI Integration</option>
           <option value="using-overlays">Using Overlays</option>
           <option value="keyboard-shortcuts">Keyboard Shortcuts</option>
+          <option value="settings">Settings & Customization</option>
           <option value="troubleshooting">Troubleshooting</option>
         </select>
       </div>
@@ -480,7 +712,7 @@
         <li><strong>Download the Extension</strong>
           <p>Download the DemoMojo extension files:</p>
           <div class="download-section">
-            <a href="demomojov1.zip" download="demomojov1.zip" class="btn">Download DemoMojo v1.0</a>
+            <button onclick="requestDownloadPassword()" class="btn">Download DemoMojo v1.1.0</button>
             <p class="download-note">Extract the zip file to a folder on your computer</p>
           </div>
         </li>
@@ -518,7 +750,7 @@
              class="docs-screenshot small">
       </div>
       
-      <h3>Creating a New Story</h3>
+      <h3>Creating a New Story Manually</h3>
       <ol>
         <li><strong>Add Story</strong>
           <p>Enter a name and description for your story. This helps you identify different demo scenarios.</p>
@@ -542,6 +774,98 @@
       
       <h3>Managing Existing Stories</h3>
       <p>You can edit, duplicate, or delete existing stories from the story management page. This allows you to maintain multiple demo scenarios for different audiences or use cases.</p>
+    </section>
+
+    <section id="mojoai" class="docs-section">
+      <h2>Creating Demo Stories with MojoAI</h2>
+      <p>MojoAI uses artificial intelligence to automatically create structured demo stories from your existing content. You can input demo scripts or upload PDF documents to generate personas, chapters, and value drivers automatically.</p>
+      
+      <h3>Setting Up MojoAI</h3>
+      <ol>
+        <li><strong>Configure API Key</strong>
+          <p>Go to Settings and add your OpenAI API key in the MojoAI section. Your API key is stored locally and never shared.</p>
+        </li>
+        <li><strong>Choose AI Model</strong>
+          <p>Select from GPT-3.5 Turbo (faster, lower cost), GPT-4 (higher quality), or GPT-4 Turbo (latest) based on your needs.</p>
+        </li>
+        <li><strong>Test Configuration</strong>
+          <p>Use the "Test Story Generation" button to verify your setup works correctly.</p>
+        </li>
+      </ol>
+
+      <h3>Creating Stories with Demo Scripts</h3>
+      <ol>
+        <li><strong>Open MojoAI Modal</strong>
+          <p>Click "Create with MojoAI" in the story management page to open the AI creation interface.</p>
+        </li>
+        <li><strong>Enter Demo Script</strong>
+          <p>Paste your demo script in the "Demo Script" tab. Include personas, chapters, and value drivers in your script for best results.</p>
+        </li>
+        <li><strong>Configure Generation Options</strong>
+          <p>Use the additional options to customize the AI generation process:</p>
+          <ul>
+            <li><strong>Additional Guidelines</strong> - Add specific instructions for the AI (e.g., "Emphasize security features", "Include ROI calculations")</li>
+            <li><strong>Auto-generate Personas</strong> - Toggle to automatically extract personas from your content</li>
+            <li><strong>Auto-generate Chapters</strong> - Toggle to automatically extract chapters from your content</li>
+          </ul>
+        </li>
+        <li><strong>Generate Story</strong>
+          <p>Click "Generate Story" and MojoAI will analyze your script to create structured personas and chapters based on your selected options.</p>
+        </li>
+      </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-demo-script.png" 
+             alt="MojoAI Demo Script Tab showing text input interface" 
+             class="docs-screenshot">
+      </div>
+
+      <h3>Creating Stories from PDFs (GPT-4 Turbo required)</h3>
+      <ol>
+        <li><strong>Upload PDF</strong>
+          <p>Switch to the "Upload PDF" tab and drag & drop or select a PDF file containing your demo content.</p>
+        </li>
+        <li><strong>Configure Generation Options</strong>
+          <p>Use the same additional options available for demo scripts:</p>
+          <ul>
+            <li><strong>Additional Guidelines</strong> - Add specific instructions for the AI (e.g., "Emphasize security features", "Include ROI calculations")</li>
+            <li><strong>Auto-generate Personas</strong> - Toggle to automatically extract personas from your PDF content</li>
+            <li><strong>Auto-generate Chapters</strong> - Toggle to automatically extract chapters from your PDF content</li>
+          </ul>
+        </li>
+        <li><strong>Configure File Size</strong>
+          <p>Adjust the PDF file size limit in settings if needed (default: 500 KB). Larger files may take longer to process.</p>
+        </li>
+        <li><strong>Process Document</strong>
+          <p>Click "Generate Story" and MojoAI will extract text from your PDF and generate a structured story with personas and chapters based on your selected options.</p>
+        </li>
+      </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-pdf-upload.png" 
+             alt="MojoAI PDF Upload Tab showing drag & drop interface" 
+             class="docs-screenshot">
+      </div>
+
+      <h3>Best Practices for MojoAI</h3>
+      <ul>
+        <li>Include clear persona descriptions with names and job titles</li>
+        <li>Structure your demo script with clear chapter headings</li>
+        <li>Include value propositions and business benefits</li>
+        <li>Use consistent formatting for better AI understanding</li>
+        <li><strong>Use Additional Guidelines</strong> - Add specific instructions like "Emphasize security features" or "Include ROI calculations" to guide the AI</li>
+        <li><strong>Auto-generate Options</strong> - Enable both toggles for automatic extraction, or disable them if you prefer manual control</li>
+        <li><strong>Default Guidelines</strong> - Set up default guidelines in Settings to apply to all story generations</li>
+        <li>Review and refine generated content as needed</li>
+      </ul>
+
+      <h3>Troubleshooting MojoAI</h3>
+      <ul>
+        <li><strong>API Key Issues</strong> - Verify your OpenAI API key is valid and has sufficient credits</li>
+        <li><strong>PDF Processing</strong> - Ensure PDF files are readable and within size limits</li>
+        <li><strong>Generation Errors</strong> - Check your demo script formatting and try simplifying the content</li>
+        <li><strong>Model Selection</strong> - Try different AI models if generation quality is poor</li>
+      </ul>
     </section>
 
     <section id="using-overlays" class="docs-section">
@@ -617,7 +941,7 @@
 
     <section id="keyboard-shortcuts" class="docs-section">
       <h2>Keyboard Shortcuts</h2>
-      <p>DemoMojo provides powerful keyboard shortcuts for quick navigation and control during your presentations. These shortcuts can be enabled or disabled in the extension popup.</p>
+      <p>DemoMojo provides powerful keyboard shortcuts for quick navigation and control during your presentations. All shortcuts can be customized in the Settings page, and shortcuts can be enabled or disabled in the extension popup.</p>
       
       <h3>Navigation Shortcuts</h3>
       <div class="keyboard-shortcuts">
@@ -659,6 +983,18 @@
         </div>
       </div>
       
+      <h3>Customizing Shortcuts</h3>
+      <p>All keyboard shortcuts can be customized in the Settings page. You can create up to 3-key combinations and override the default shortcuts to match your preferences.</p>
+      
+      <h4>How to Customize Shortcuts:</h4>
+      <ol>
+        <li>Go to Settings from the extension popup or setup page</li>
+        <li>Click "Customize" in the Keyboard Shortcuts section</li>
+        <li>Click on any shortcut input field to start recording</li>
+        <li>Press your desired key combination (up to 3 keys)</li>
+        <li>Click "Save Shortcuts" to apply changes</li>
+      </ol>
+
       <h3>Enabling/Disabling Shortcuts</h3>
       <p>You can toggle keyboard shortcuts on or off using the switch in the DemoMojo popup. When disabled, you can still use the overlay buttons for navigation.</p>
       
@@ -667,6 +1003,46 @@
              alt="Keyboard shortcuts toggle in popup" 
              class="docs-screenshot small">
       </div>
+    </section>
+
+    <section id="settings" class="docs-section">
+      <h2>Settings & Customization</h2>
+      <p>DemoMojo offers comprehensive customization options through its Settings page. Access settings via the settings button in the extension popup or directly from the setup page.</p>
+      
+      <h3>Overlay Settings</h3>
+      <ul>
+        <li><strong>Default Size</strong> - Choose small or large overlay as default</li>
+        <li><strong>Default Position</strong> - Set bottom-right, bottom-left, full-screen, or pinned content</li>
+        <li><strong>Keyboard Shortcuts</strong> - Enable/disable and customize all shortcuts</li>
+      </ul>
+
+      <h3>Appearance Settings</h3>
+      <ul>
+        <li><strong>Overlay Opacity</strong> - Control background transparency (10-100%)</li>
+        <li><strong>Color Scheme</strong> - Choose from default, purple, orange, or dark themes</li>
+      </ul>
+
+      <h3>Behavior Settings</h3>
+      <ul>
+        <li><strong>Auto-highlight Chapter</strong> - Automatically highlight chapters when page URL matches</li>
+        <li><strong>Progress Indicators</strong> - Show chapter completion status (e.g., 2/5)</li>
+        <li><strong>Cross-Tab Sync</strong> - Synchronize chapter completion and highlighting across browser tabs</li>
+      </ul>
+
+      <h3>Data Management</h3>
+      <ul>
+        <li><strong>Export Data</strong> - Download backup of all stories and settings</li>
+        <li><strong>Import Data</strong> - Restore from backup file</li>
+        <li><strong>Reset Data</strong> - Clear all data and start fresh</li>
+      </ul>
+
+      <h3>MojoAI Settings</h3>
+      <ul>
+        <li><strong>OpenAI API Key</strong> - Configure API access for AI features</li>
+        <li><strong>AI Model Selection</strong> - Choose GPT-3.5 Turbo, GPT-4, or GPT-4 Turbo</li>
+        <li><strong>Max Tokens</strong> - Control response length and detail</li>
+        <li><strong>PDF File Size Limit</strong> - Configure maximum upload size (100-10000 KB)</li>
+      </ul>
     </section>
 
     <section id="troubleshooting" class="docs-section">
@@ -716,6 +1092,7 @@
     </section>
 
     <div class="back-to-home">
+      <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="margin-right: 20px;">↑ Return to Top</a>
       <a href="index.html">← Back to Home</a>
     </div>
   </div>
@@ -858,6 +1235,81 @@
             }
           }
         }
+        
+        // Return to Top Button functionality
+        const returnToTopBtn = document.getElementById('returnToTop');
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+          if (window.pageYOffset > 300) {
+            returnToTopBtn.classList.add('visible');
+          } else {
+            returnToTopBtn.classList.remove('visible');
+          }
+        });
+        
+        // Scroll to top when button is clicked
+        returnToTopBtn.addEventListener('click', function() {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+
+        // Password protection functions
+        const DOWNLOAD_PASSWORD = "demomojomojo2025"; // Change this to your desired password
+
+        function requestDownloadPassword() {
+          document.getElementById('passwordModal').style.display = 'block';
+          document.getElementById('downloadPassword').focus();
+          document.getElementById('passwordError').textContent = '';
+        }
+
+        function closePasswordModal() {
+          document.getElementById('passwordModal').style.display = 'none';
+          document.getElementById('downloadPassword').value = '';
+          document.getElementById('passwordError').textContent = '';
+        }
+
+        function verifyDownloadPassword() {
+          const enteredPassword = document.getElementById('downloadPassword').value;
+          const errorDiv = document.getElementById('passwordError');
+          
+          if (enteredPassword === DOWNLOAD_PASSWORD) {
+            // Password correct - initiate download
+            closePasswordModal();
+            
+            // Create a temporary link and trigger download
+            const link = document.createElement('a');
+            link.href = 'demomojov1.1.0.zip';
+            link.download = 'demomojov1.1.0.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            // Password incorrect - show error
+            errorDiv.textContent = 'Incorrect password. Please try again.';
+            document.getElementById('downloadPassword').value = '';
+            document.getElementById('downloadPassword').focus();
+          }
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+          const modal = document.getElementById('passwordModal');
+          if (event.target === modal) {
+            closePasswordModal();
+          }
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter' && document.getElementById('passwordModal').style.display === 'block') {
+            verifyDownloadPassword();
+          } else if (event.key === 'Escape' && document.getElementById('passwordModal').style.display === 'block') {
+            closePasswordModal();
+          }
+        });
   </script>
 </body>
 </html>
