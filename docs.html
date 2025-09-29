@@ -678,6 +678,7 @@
           <li><a href="#mojoai">MojoAI Integration</a></li>
           <li><a href="#using-overlays">Using Overlays</a></li>
           <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+          <li><a href="#url-management">URL Management</a></li>
           <li><a href="#settings">Settings & Customization</a></li>
           <li><a href="#troubleshooting">Troubleshooting</a></li>
         </ul>
@@ -692,6 +693,7 @@
           <option value="mojoai">MojoAI Integration</option>
           <option value="using-overlays">Using Overlays</option>
           <option value="keyboard-shortcuts">Keyboard Shortcuts</option>
+          <option value="url-management">URL Management</option>
           <option value="settings">Settings & Customization</option>
           <option value="troubleshooting">Troubleshooting</option>
         </select>
@@ -1011,6 +1013,51 @@
              alt="Keyboard shortcuts toggle in popup" 
              class="docs-screenshot small">
       </div>
+    </section>
+
+    <section id="url-management" class="docs-section">
+      <h2>URL Management & Auto-Highlight</h2>
+      <p>DemoMojo allows you to save URLs to chapters and automatically highlights relevant content when you visit those pages. This powerful feature creates seamless integration between your demo stories and the actual applications or websites you're demonstrating.</p>
+      
+      <h3>How to Save URLs to Chapters</h3>
+      <ul>
+        <li><strong>Using Keyboard Shortcut:</strong> Press <code>Shift + S</code> while on any webpage to save the current page URL to your active chapter</li>
+        <li><strong>In Setup Interface:</strong> Double-click on any chapter's URL field in the story management interface to add or edit URLs</li>
+        <li><strong>Automatic URL Formatting:</strong> DemoMojo automatically adds "https://" prefix if you don't include a protocol</li>
+        <li><strong>Visual Indicators:</strong> Chapters with saved URLs show the URL text, while chapters without URLs display a placeholder "No URL set (double-click to add)"</li>
+      </ul>
+      
+      <h3>Auto-Highlight Feature</h3>
+      <p>When you visit a page that matches a saved chapter URL, DemoMojo automatically highlights that chapter in the overlay:</p>
+      <ul>
+        <li><strong>Automatic Detection:</strong> Works with both exact URL matches and partial matches (when the current URL contains the saved URL)</li>
+        <li><strong>Real-time Updates:</strong> Automatically detects URL changes in single-page applications (SPAs) and updates highlighting accordingly</li>
+        <li><strong>Cross-Tab Sync:</strong> URL-based highlighting works across browser tabs and persists your location</li>
+        <li><strong>Smart Navigation:</strong> Automatically switches to the matching chapter when you navigate to a saved URL</li>
+      </ul>
+      
+      <h3>URL Navigation</h3>
+      <ul>
+        <li><strong>Click to Navigate:</strong> Click on any saved URL in the overlay to open that page in a new tab</li>
+        <li><strong>Context Awareness:</strong> URLs are contextually linked to their respective chapters and personas</li>
+        <li><strong>Keyboard Shortcut:</strong> Use <code>Shift + S</code> to quickly save the current page URL to your active chapter</li>
+      </ul>
+      
+      <h3>Best Practices for URL Management</h3>
+      <ul>
+        <li><strong>Use Full URLs:</strong> Include the complete URL including the domain for best matching results</li>
+        <li><strong>Keep URLs Updated:</strong> If page URLs change, update them in the setup interface to maintain auto-highlight functionality</li>
+        <li><strong>Organize by Persona:</strong> Save URLs to the most relevant persona's chapters for better organization</li>
+        <li><strong>Test Auto-Highlight:</strong> After saving URLs, navigate to those pages to verify the auto-highlight feature works correctly</li>
+        <li><strong>Use for Demos:</strong> Save URLs for each step of your demo flow to create seamless transitions between your story and the actual application</li>
+      </ul>
+      
+      <h3>Auto-Highlight Settings</h3>
+      <p>You can enable or disable the auto-highlight feature in the Settings page:</p>
+      <ul>
+        <li><strong>Enable Auto-Highlight:</strong> Automatically highlight chapters when visiting saved URLs</li>
+        <li><strong>Disable Auto-Highlight:</strong> Turn off automatic chapter highlighting (URLs are still saved and clickable)</li>
+      </ul>
     </section>
 
     <section id="settings" class="docs-section">
