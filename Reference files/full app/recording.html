@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recording - DemoMojo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      min-height: 120vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 350px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .recording-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .pulsing-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #dc2626;
+      margin-right: 8px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+      }
+    }
+
+    .timer {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #374151;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-text {
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-pause {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .btn-pause:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-resume {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-resume:hover {
+      background: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-stop {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-stop:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+    }
+
+    .paused-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #f59e0b;
+      margin-right: 8px;
+      opacity: 0.6;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .downloading {
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="recordingState">
+      <div class="recording-indicator" id="statusIndicator">
+        <div class="pulsing-dot"></div>
+        <span style="font-weight: 600; color: #dc2626;">Recording</span>
+      </div>
+      <div class="timer" id="timer">00:00:00</div>
+      <div class="status-text" id="statusText">Your screen is being recorded</div>
+      <div class="button-group">
+        <button class="btn-pause" id="pauseBtn">Pause</button>
+        <button class="btn-stop" id="stopBtn">Stop & Save</button>
+      </div>
+    </div>
+
+    <div class="hidden" id="downloadingState">
+      <div class="downloading">
+        <p style="font-size: 48px; margin-bottom: 16px;">📥</p>
+        <p style="font-weight: 600; margin-bottom: 8px;">Downloading...</p>
+        <p style="font-size: 13px;">Your video will download shortly</p>
+      </div>
+    </div>
+
+    <div class="hidden" id="errorState">
+      <div class="error" id="errorMessage"></div>
+    </div>
+  </div>
+
+  <script src="recording.js"></script>
+</body>
+</html>
+

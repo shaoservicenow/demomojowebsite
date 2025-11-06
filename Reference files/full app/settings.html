@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Persona Overlay - Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    .header-text h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .header-text p {
+      color: #7f8c8d;
+      font-size: 16px;
+    }
+
+    .settings-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-icon {
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-weight: 500;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .setting-description {
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+
+    .setting-control {
+      margin-left: 20px;
+    }
+
+    /* Toggle Switch Styles */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #bdc3c7;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+      background-color: #3498db;
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+
+    /* Select Styles */
+    .setting-select {
+      padding: 8px 12px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+      color: #2c3e50;
+      min-width: 120px;
+    }
+
+    .setting-select:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    /* Input Styles */
+    .setting-input {
+      padding: 8px 12px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+      color: #2c3e50;
+      min-width: 120px;
+    }
+
+    .setting-input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #3498db;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2980b9;
+    }
+
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .status-message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .status-success {
+      background: #d5f4e6;
+      color: #27ae60;
+      border: 1px solid #2ecc71;
+    }
+
+    .status-error {
+      background: #fadbd8;
+      color: #e74c3c;
+      border: 1px solid #e74c3c;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #f0f0f0;
+    }
+
+    .back-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Logo Upload Styles */
+    .logo-upload-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-preview-wrapper {
+      width: 64px;
+      height: 64px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      overflow: hidden;
+    }
+
+    .logo-preview {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .logo-upload-actions {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    .logo-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #3498db;
+      color: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .logo-upload-btn:hover {
+      background: #2980b9;
+    }
+
+    .logo-upload-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .logo-reset-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #95a5a6;
+      color: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .logo-reset-btn:hover {
+      background: #7f8c8d;
+    }
+
+    .logo-reset-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Shortcuts Configuration Styles */
+    .shortcuts-list {
+      margin-top: 20px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .shortcut-item:last-child {
+      border-bottom: none;
+    }
+
+    .shortcut-info {
+      flex: 1;
+    }
+
+    .shortcut-label {
+      font-weight: 500;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .shortcut-description {
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+
+    .shortcut-input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 20px;
+    }
+
+    .shortcut-input {
+      padding: 8px 12px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+      color: #2c3e50;
+      min-width: 150px;
+      text-align: center;
+      font-family: monospace;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+
+    .shortcut-input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    .shortcut-input.recording {
+      border-color: #e74c3c;
+      background: #fdf2f2;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .shortcut-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: flex-end;
+    }
+
+    .shortcut-error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* Floating Save Button */
+    .floating-save-button {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 35px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 180px;
+      justify-content: center;
+      letter-spacing: 0.5px;
+    }
+
+    .floating-save-button.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .floating-save-button:hover {
+      background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+      transform: translateX(-50%) translateY(-3px);
+      box-shadow: 0 15px 40px rgba(39, 174, 96, 0.5);
+    }
+
+    .floating-save-button:active {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .floating-save-button .save-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Custom Color Picker Styles */
+    .theme-control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-control-group .setting-select {
+      flex: 1;
+      margin: 0;
+    }
+
+    .customize-btn {
+      background: none;
+      border: none;
+      border-radius: 8px;
+      color: #667eea;
+      cursor: pointer;
+      padding: 8px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .customize-btn:hover {
+      background: rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .customize-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .delete-theme-btn {
+      background: none;
+      border: none;
+      border-radius: 8px;
+      color: #dc3545;
+      cursor: pointer;
+      padding: 8px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .delete-theme-btn:hover {
+      background: rgba(220, 53, 69, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .delete-theme-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .custom-color-panel {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .color-section {
+      margin-bottom: 24px;
+    }
+
+    .color-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .color-section-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: #667eea;
+      border-radius: 2px;
+    }
+
+    .color-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .color-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .color-item label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .color-picker {
+      width: 100%;
+      height: 40px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+      background: none;
+      padding: 0;
+    }
+
+    .color-picker:hover {
+      border-color: #667eea;
+    }
+
+    .color-picker::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-picker::-webkit-color-swatch {
+      border: none;
+      border-radius: 6px;
+    }
+
+
+    .color-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-action-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .action-btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+    }
+
+    .action-btn svg {
+      flex-shrink: 0;
+    }
+
+    .export-btn {
+      color: #0066cc;
+      border-color: #0066cc;
+    }
+
+    .export-btn:hover {
+      background: #0066cc;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .import-btn {
+      color: #28a745;
+      border-color: #28a745;
+    }
+
+    .import-btn:hover {
+      background: #28a745;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .save-theme-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .theme-name-input {
+      padding: 10px 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+      min-width: 200px;
+    }
+
+    .theme-name-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .theme-name-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .reset-btn, .save-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .reset-btn {
+      background: #f8f9fa;
+      color: #6c757d;
+      border: 1px solid #dee2e6;
+    }
+
+    .reset-btn:hover {
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    .save-btn {
+      background: #667eea;
+      color: white;
+    }
+
+    .save-btn:hover {
+      background: #5a6fd8;
+      transform: translateY(-1px);
+    }
+
+    .save-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Preview Mockup Styles */
+    .preview-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+
+    .preview-mockup {
+      background: linear-gradient(135deg, rgba(3, 45, 66, 0.75) 0%, rgba(118, 97, 255, 0.75) 100%);
+      border-radius: 12px;
+      padding: 16px;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 300px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .preview-mockup.persona-highlighted {
+      border: 2px solid #63df4e;
+      box-shadow: 0 0 20px rgba(99, 223, 78, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .preview-headshot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .preview-persona-info {
+      flex: 1;
+    }
+
+    .preview-persona-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .preview-persona-title {
+      font-size: 11px;
+      color: #52B8FF;
+      font-style: italic;
+    }
+
+    .preview-chapter-item {
+      margin-bottom: 12px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 2px solid transparent;
+    }
+
+    .preview-chapter-item.current {
+      background: rgba(255, 193, 7, 0.3);
+      border-color: rgba(255, 193, 7, 0.8);
+      box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.4);
+    }
+
+    .preview-chapter-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .preview-checkbox {
+      margin-right: 8px;
+      accent-color: #52B8FF;
+    }
+
+    .preview-chapter-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #FFC107;
+    }
+
+    .preview-chapter-item:not(.current) .preview-chapter-title {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .preview-drivers {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .preview-driver {
+      background: rgba(99, 223, 78, 0.2);
+      padding: 4px 8px;
+      margin: 3px 0;
+      border-radius: 4px;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.95);
+      border-left: 2px solid rgba(99, 223, 78, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      .color-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .color-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .theme-action-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .action-btn {
+        flex: 1;
+        min-width: 120px;
+      }
+
+      .save-theme-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .theme-name-input {
+        min-width: auto;
+        width: 100%;
+      }
+
+      .preview-container {
+        padding: 15px;
+      }
+
+      .preview-mockup {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Floating Save Button -->
+  <button class="floating-save-button" id="floating-save-button">
+    <svg class="save-icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+    </svg>
+    Save Changes
+  </button>
+
+  <div class="container">
+    <a href="setup.html" class="back-link">
+      <svg class="back-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Back to Setup
+    </a>
+
+    <div class="header">
+      <div class="header-content">
+        <img src="icons/logo-solo.png" alt="Logo" class="logo">
+        <div class="header-text">
+          <h1>Settings</h1>
+          <p>Customize your Demo Persona Overlay experience</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="status-message"></div>
+
+    <!-- Overlay Settings -->
+    <div class="settings-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          Overlay Settings
+        </h2>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Enable Keyboard Shortcuts</div>
+          <div class="setting-description">Allow keyboard shortcuts for navigation and control</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="shortcuts-enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Default Overlay Size</div>
+          <div class="setting-description">Choose the default size for new overlays</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="default-overlay-size">
+            <option value="small">Small</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Default Overlay Position</div>
+          <div class="setting-description">Choose the default position for new overlays</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="default-overlay-position">
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="fullscreen">Full Screen</option>
+            <option value="pinned-content">Pinned Content</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Ultra Slim Pinned Panel</div>
+          <div class="setting-description">Reduce padding and margins to minimize pinned panel width</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="minimal-padding-pinned">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Collapse Persona Chapters</div>
+          <div class="setting-description">Show collapse button to hide/show chapters for each persona in side panel</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="collapse-button-enabled" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance Settings -->
+    <div class="settings-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        Appearance
+      </h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Overlay Opacity</div>
+          <div class="setting-description">Control the transparency of the overlay background</div>
+        </div>
+        <div class="setting-control">
+          <input type="range" class="setting-input" id="overlay-opacity" min="0.1" max="1" step="0.1" value="0.75">
+          <span id="opacity-value">75%</span>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Color Scheme</div>
+          <div class="setting-description">Choose the visual theme for the overlay</div>
+        </div>
+        <div class="setting-control">
+          <div class="theme-control-group">
+            <select class="setting-select" id="color-scheme">
+              <option value="default" selected>Default (Blue/Purple)</option>
+              <option value="blue-green">Blue/Green Theme</option>
+              <option value="purple">Purple Theme</option>
+              <option value="orange">Orange Theme</option>
+              <option value="dark">Dark Theme</option>
+              <option value="rogers">Rogers</option>
+            </select>
+            <button id="customize-colors-btn" class="customize-btn" title="Customize Colors">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </button>
+            <button id="delete-custom-theme-btn" class="delete-theme-btn" title="Delete Custom Theme" style="display: none;">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Logo Upload -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Custom Logo</div>
+          <div class="setting-description">Upload your own logo to replace the DemoMojo logo in the side panel</div>
+        </div>
+        <div class="setting-control">
+          <div class="logo-upload-container">
+            <div class="logo-preview-wrapper">
+              <img id="logo-preview" class="logo-preview" src="icons/logo-solo.png" alt="Logo Preview">
+            </div>
+            <div class="logo-upload-actions">
+              <label for="logo-upload-input" class="logo-upload-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6-.67l2.59 2.58L17 12.5l-5-5-5 5 1.41 1.41L11 11.33V21h2z"/>
+                </svg>
+                Upload Logo
+              </label>
+              <input type="file" id="logo-upload-input" accept="image/png,image/jpeg,image/jpg,image/svg+xml" style="display: none;">
+              <button id="reset-logo-btn" class="logo-reset-btn" title="Reset to default logo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Color Picker Panel -->
+      <div id="custom-color-panel" class="custom-color-panel" style="display: none;">
+        <div class="color-section">
+          <h3 class="color-section-title">Background Colors</h3>
+          <div class="color-row">
+            <div class="color-item">
+              <label for="primary-bg-color">Primary Background</label>
+              <input type="color" id="primary-bg-color" value="#032d42" class="color-picker">
+            </div>
+            <div class="color-item">
+              <label for="secondary-bg-color">Secondary Background</label>
+              <input type="color" id="secondary-bg-color" value="#7661ff" class="color-picker">
+            </div>
+          </div>
+        </div>
+
+        <div class="color-section">
+          <h3 class="color-section-title">Accent Colors</h3>
+          <div class="color-row">
+            <div class="color-item">
+              <label for="accent-color">Accent Color</label>
+              <input type="color" id="accent-color" value="#52b8ff" class="color-picker">
+            </div>
+          </div>
+        </div>
+
+        <div class="color-section">
+          <h3 class="color-section-title">Text Colors</h3>
+          <div class="color-row">
+            <div class="color-item">
+              <label for="primary-text-color">Primary Text</label>
+              <input type="color" id="primary-text-color" value="#ffffff" class="color-picker">
+            </div>
+            <div class="color-item">
+              <label for="secondary-text-color">Secondary Text</label>
+              <input type="color" id="secondary-text-color" value="#52b8ff" class="color-picker">
+            </div>
+          </div>
+        </div>
+
+        <div class="color-section">
+          <h3 class="color-section-title">Selection Highlights</h3>
+          <div class="color-row">
+            <div class="color-item">
+              <label for="persona-highlight-color">Persona Highlight</label>
+              <input type="color" id="persona-highlight-color" value="#63df4e" class="color-picker">
+            </div>
+            <div class="color-item">
+              <label for="chapter-highlight-color">Chapter Highlight</label>
+              <input type="color" id="chapter-highlight-color" value="#ffc107" class="color-picker">
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Preview Section -->
+        <div class="color-section">
+          <h3 class="color-section-title">Live Preview</h3>
+          <div class="preview-container">
+            <div id="color-preview-mockup" class="preview-mockup persona-highlighted">
+              <div class="preview-header">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23ccc'/%3E%3Ctext x='20' y='26' text-anchor='middle' font-size='14' fill='%23666'%3EJD%3C/text%3E%3C/svg%3E" class="preview-headshot" alt="Preview">
+                <div class="preview-persona-info">
+                  <div class="preview-persona-name">John Doe</div>
+                  <div class="preview-persona-title">Senior Marketing Manager</div>
+                </div>
+              </div>
+              <div class="preview-chapters">
+                <div class="preview-chapter-item current">
+                  <div class="preview-chapter-header">
+                    <input type="checkbox" checked class="preview-checkbox">
+                    <span class="preview-chapter-title">Chapter 1: Initial Discovery</span>
+                  </div>
+                  <ul class="preview-drivers">
+                    <li class="preview-driver">Value Driver 1</li>
+                    <li class="preview-driver">Value Driver 2</li>
+                  </ul>
+                </div>
+                <div class="preview-chapter-item">
+                  <div class="preview-chapter-header">
+                    <input type="checkbox" class="preview-checkbox">
+                    <span class="preview-chapter-title">Chapter 2: Implementation</span>
+                  </div>
+                  <ul class="preview-drivers">
+                    <li class="preview-driver">Value Driver 3</li>
+                    <li class="preview-driver">Value Driver 4</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="color-actions">
+          <div class="theme-action-buttons">
+            <button id="export-custom-theme" class="action-btn export-btn" style="display: none;" title="Export this theme">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/>
+              </svg>
+              Export
+            </button>
+            <button id="import-custom-theme" class="action-btn import-btn" style="display: none;" title="Import and replace this theme">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6-.67l2.59 2.58L17 12.5l-5-5-5 5 1.41 1.41L11 11.33V21h2z"/>
+              </svg>
+              Import
+            </button>
+            <input type="file" id="import-theme-file" accept=".json" style="display: none;">
+          </div>
+          <div class="save-theme-group">
+            <input type="text" id="custom-theme-name" class="theme-name-input" placeholder="Enter theme name..." maxlength="30">
+            <button id="save-custom-colors" class="save-btn">Save Theme</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Settings -->
+    <div class="settings-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Keyboard Shortcuts
+      </h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Customize Shortcuts</div>
+          <div class="setting-description">Override default keyboard shortcuts with your preferred combinations (maximum 3 keys)</div>
+        </div>
+        <div class="setting-control">
+          <button class="btn btn-primary" id="customize-shortcuts">Customize</button>
+        </div>
+      </div>
+
+      <div id="shortcuts-config" style="display: none;">
+        <div class="shortcuts-list">
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Toggle Overlay</div>
+              <div class="shortcut-description">Show/hide the persona overlay</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-toggle-overlay" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-toggle-overlay">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Toggle Fullscreen</div>
+              <div class="shortcut-description">Switch between overlay and fullscreen modes</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-toggle-fullscreen" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-toggle-fullscreen">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Next Chapter</div>
+              <div class="shortcut-description">Navigate to the next chapter</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-next-chapter" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-next-chapter">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Previous Chapter</div>
+              <div class="shortcut-description">Navigate to the previous chapter</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-prev-chapter" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-prev-chapter">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Next Persona</div>
+              <div class="shortcut-description">Switch to the next persona</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-next-persona" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-next-persona">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Previous Persona</div>
+              <div class="shortcut-description">Switch to the previous persona</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-prev-persona" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-prev-persona">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Save URL to Chapter</div>
+              <div class="shortcut-description">Save current page URL to the current chapter</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-save-url" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-save-url">Reset</button>
+            </div>
+          </div>
+
+          <div class="shortcut-item">
+            <div class="shortcut-info">
+              <div class="shortcut-label">Toggle Content Shift</div>
+              <div class="shortcut-description">Shift page content to make room for overlay (fullscreen only)</div>
+            </div>
+            <div class="shortcut-input-container">
+              <input type="text" class="shortcut-input" id="shortcut-toggle-shift" readonly>
+              <button class="btn btn-secondary btn-small" id="reset-toggle-shift">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="shortcut-actions">
+          <button class="btn btn-secondary" id="reset-all-shortcuts" style="display: none;">Reset All to Defaults</button>
+          <button class="btn btn-primary" id="save-shortcuts" style="display: none;">Save Shortcuts</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Behavior Settings -->
+    <div class="settings-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Behavior
+      </h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Auto-highlight Chapter</div>
+          <div class="setting-description">Automatically highlight chapter when current page URL matches chapter URL</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-highlight-chapter">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Show Progress Indicators</div>
+          <div class="setting-description">Display chapter progress (e.g., 2/5) in the overlay</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="show-progress-indicators" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Cross-Tab Chapter Sync</div>
+          <div class="setting-description">Sync chapter completion status across multiple tabs and browser instances</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="cross-tab-chapter-sync" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Cross-Tab Highlighting Sync</div>
+          <div class="setting-description">Sync highlighted/selected chapters across multiple tabs and browser instances</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="cross-tab-highlighting-sync" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Close Overlay Across All Tabs</div>
+          <div class="setting-description">When pressing Esc or clicking the close button, close the overlay on all tabs instead of just the current tab</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="close-overlay-all-tabs" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Cross-Persona Chapter Navigation</div>
+          <div class="setting-description">Allow chapter navigation to continue to the next persona when reaching the end of current persona</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="cross-persona-navigation">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Data Management -->
+    <div class="settings-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>
+        Data Management
+      </h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Export Data</div>
+          <div class="setting-description">Download your stories and settings as a backup file</div>
+        </div>
+        <div class="setting-control">
+          <button class="btn btn-secondary" id="export-data">Export</button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Import Data</div>
+          <div class="setting-description">Restore stories and settings from a backup file</div>
+        </div>
+        <div class="setting-control">
+          <input type="file" id="import-file" accept=".json" style="display: none;">
+          <button class="btn btn-secondary" id="import-data">Import</button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Reset All Data</div>
+          <div class="setting-description">Clear all stories, settings, and start fresh</div>
+        </div>
+        <div class="setting-control">
+          <button class="btn btn-danger" id="reset-data">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MojoAI Settings -->
+    <div class="settings-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        MojoAI
+      </h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">OpenAI API Key</div>
+          <div class="setting-description">Required for MojoAI story creation. Your API key is stored locally and never shared.</div>
+        </div>
+        <div class="setting-control">
+          <input type="password" class="setting-input" id="openai-api-key" placeholder="sk-..." style="min-width: 300px;">
+          <button class="btn btn-secondary" id="test-openai-key" style="margin-left: 10px;">Test</button>
+          <button class="btn btn-primary" id="test-story-generation" style="margin-left: 10px;">Test Story Generation</button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Show API Key</div>
+          <div class="setting-description">Toggle visibility of the API key for verification</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="show-api-key">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">AI Model</div>
+          <div class="setting-description">Choose the OpenAI model for story generation</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="openai-model">
+            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Faster, Lower Cost)</option>
+            <option value="gpt-4" selected>GPT-4 (Higher Quality)</option>
+            <option value="gpt-4-turbo">GPT-4 Turbo (Latest)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Max Tokens</div>
+          <div class="setting-description">Maximum tokens for AI responses (higher = more detailed)</div>
+        </div>
+        <div class="setting-control">
+          <input type="number" class="setting-input" id="openai-max-tokens" min="100" max="4000" value="2000" style="min-width: 100px;">
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Default Guidelines</div>
+          <div class="setting-description">Default guidelines to include in all MojoAI story generation (optional)</div>
+        </div>
+        <div class="setting-control">
+          <textarea class="setting-input" id="default-guidelines" rows="3" placeholder="Enter default guidelines..."></textarea>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">PDF File Size Limit</div>
+          <div class="setting-description">Maximum file size for PDF uploads (in KB)</div>
+        </div>
+        <div class="setting-control">
+          <input type="number" class="setting-input" id="pdf-file-size-limit" min="100" max="10000" value="500" style="min-width: 100px;">
+          <span style="margin-left: 8px; color: var(--text-muted);">KB</span>
+        </div>
+      </div>
+
+      <div id="openai-status" class="status-message" style="display: none;"></div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn btn-secondary" id="reset-to-defaults">Reset to Defaults</button>
+      <button class="btn btn-primary" id="test-notification" style="background: #e74c3c;">Test Notification</button>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

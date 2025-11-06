@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Headshot Cropper</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-area:hover {
+      border-color: #6366f1;
+      background: #f8f9ff;
+    }
+    
+    .upload-area.dragover {
+      border-color: #6366f1;
+      background: #f0f4ff;
+    }
+    
+    .preview {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .preview img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #6366f1;
+    }
+    
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+    }
+    
+    .result img {
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0369a1;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Headshot Cropper Test</h1>
+    <p>Upload an image to test the 1:1 face-centered cropping feature.</p>
+    
+    <div class="upload-area" id="uploadArea">
+      <p>Click to upload an image or drag and drop</p>
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
+    </div>
+    
+    <div class="preview" id="preview" style="display: none;">
+      <h3>Original Image:</h3>
+      <img id="originalImage" alt="Original">
+    </div>
+    
+    <div class="result" id="result" style="display: none;">
+      <h3>Cropped Result:</h3>
+      <img id="croppedImage" alt="Cropped">
+    </div>
+  </div>
+
+  <script>
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const originalImage = document.getElementById('originalImage');
+    const result = document.getElementById('result');
+    const croppedImage = document.getElementById('croppedImage');
+    
+    let cropperModal = null;
+    
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+    
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFile(files[0]);
+      }
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+    
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+      
+      // Show original image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        originalImage.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+      
+      // Open cropper
+      openCropper(file);
+    }
+    
+    function openCropper(imageFile) {
+      // Create modal if it doesn't exist
+      if (!cropperModal) {
+        createCropperModal();
+      }
+      
+      // Show modal
+      cropperModal.style.display = 'flex';
+      
+      // Send image file to cropper
+      const cropperIframe = document.getElementById('cropperIframe');
+      cropperIframe.onload = () => {
+        cropperIframe.contentWindow.postMessage({
+          type: 'loadImage',
+          imageFile: imageFile
+        }, '*');
+      };
+    }
+    
+    function createCropperModal() {
+      // Create modal overlay
+      cropperModal = document.createElement('div');
+      cropperModal.id = 'cropperModal';
+      cropperModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      `;
+      
+      // Create iframe for cropper
+      const iframe = document.createElement('iframe');
+      iframe.id = 'cropperIframe';
+      iframe.src = 'headshot-cropper.html';
+      iframe.style.cssText = `
+        width: 90vw;
+        height: 90vh;
+        max-width: 800px;
+        max-height: 600px;
+        border: none;
+        border-radius: 16px;
+        background: white;
+      `;
+      
+      cropperModal.appendChild(iframe);
+      document.body.appendChild(cropperModal);
+      
+      // Listen for messages from cropper
+      window.addEventListener('message', handleCropperMessage);
+      
+      // Close modal when clicking outside
+      cropperModal.addEventListener('click', (e) => {
+        if (e.target === cropperModal) {
+          closeCropperModal();
+        }
+      });
+    }
+    
+    function handleCropperMessage(event) {
+      if (event.data.type === 'headshotCropped') {
+        // Handle cropped image
+        const imageData = event.data.imageData;
+        
+        // Show cropped result
+        croppedImage.src = imageData;
+        result.style.display = 'block';
+        
+        closeCropperModal();
+      } else if (event.data.type === 'headshotCropperClosed') {
+        closeCropperModal();
+      }
+    }
+    
+    function closeCropperModal() {
+      if (cropperModal) {
+        cropperModal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
