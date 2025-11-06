@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Editor - DemoMojo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .title { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+    .panel { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .grid { display: block; }
+    video { width: 100%; max-height: 70vh; background: #000; border-radius: 8px; }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; display: block; }
+    input[type="range"], select, input[type="number"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0b1220; color: #e2e8f0; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .actions { display: flex; gap: 10px; }
+    button { padding: 10px 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .btn { background: #334155; color: #e2e8f0; }
+    .btn:hover { background: #475569; }
+    .btn.selected { background: #2563eb; color: white; border: 2px solid #1d4ed8; }
+    .btn.selected:hover { background: #1d4ed8; }
+    .cut-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; margin: 4px 0; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; font-size: 13px; }
+    .cut-item button { padding: 4px 8px; font-size: 12px; }
+    .video-preview-container { position: relative; }
+    .timeline-container { margin-top: 12px; padding: 12px; background: rgba(15, 23, 42, 0.8); border-radius: 8px; }
+    .timeline-bar { position: relative; width: 100%; height: 40px; background: rgba(30, 41, 59, 0.8); border-radius: 6px; cursor: pointer; overflow: hidden; }
+    .timeline-track { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, rgba(37, 99, 235, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%); }
+    .timeline-cut { position: absolute; top: 0; height: 100%; background: rgba(220, 38, 38, 0.6); border: 1px solid rgba(220, 38, 38, 0.8); cursor: grab; }
+    .timeline-cut:active { cursor: grabbing; }
+    .timeline-cut:hover { background: rgba(220, 38, 38, 0.7); }
+    .cut-resize-handle { position: absolute; top: 0; width: 8px; height: 100%; background: rgba(220, 38, 38, 0.9); cursor: ew-resize; z-index: 15; }
+    .cut-resize-handle.left { left: -4px; }
+    .cut-resize-handle.right { right: -4px; }
+    .cut-resize-handle:hover { background: rgba(239, 68, 68, 1); width: 10px; }
+    .timeline-marker { position: absolute; top: 0; width: 6px; height: 100%; background: #3b82f6; z-index: 10; cursor: ew-resize; border-radius: 2px; }
+    .timeline-marker.trim-start { background: #3b82f6; margin-left: -3px; }
+    .timeline-marker.trim-end { background: #3b82f6; margin-left: -3px; }
+    .timeline-marker:hover { background: #60a5fa; width: 8px; }
+    .timeline-playhead { position: absolute; top: 0; width: 8px; height: 100%; background: #fbbf24; z-index: 20; box-shadow: 0 0 4px rgba(251, 191, 36, 0.8); cursor: ew-resize; margin-left: -4px; border-radius: 2px; }
+    .timeline-playhead:hover { background: #fcd34d; width: 10px; }
+    .timeline-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px; color: #94a3b8; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; background: #0b1220; border: 1px solid #334155; border-radius: 999px; padding: 8px 12px; font-size: 12px; color: #cbd5e1; }
+    .status { font-size: 12px; color: #94a3b8; margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title"><img id="logoImg" src="" style="width:20px;height:20px;vertical-align:middle;" alt="DemoMojo"> Video Editor</div>
+      <div class="pill" id="loadStatus">Waiting for video...</div>
+    </div>
+
+    <div class="grid">
+      <div class="panel" style="margin-bottom: 12px;">
+        <div class="video-preview-container">
+          <video id="preview" controls></video>
+          <div class="status" id="videoInfo"></div>
+          <div class="timeline-container">
+            <div class="timeline-bar" id="timelineBar">
+              <div class="timeline-track" id="timelineTrack"></div>
+              <div class="timeline-playhead" id="timelinePlayhead"></div>
+              <div id="timelineMarkers"></div>
+              <div id="timelineCuts"></div>
+            </div>
+            <div class="timeline-labels">
+              <span id="timelineStart">0.00s</span>
+              <span id="timelineEnd">0.00s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <div>
+            <label>Trim Start (seconds)</label>
+            <input type="number" id="trimStart" min="0" step="0.1" value="0">
+          </div>
+          <div>
+            <label>Trim End (seconds)</label>
+            <input type="number" id="trimEnd" min="0" step="0.1" value="0">
+          </div>
+          <div class="row">
+            <button class="btn" id="removeAudio">Remove Audio</button>
+            <button class="btn" id="cleanAudio">Clean Up Audio</button>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label>Cut Segments (within trimmed video)</label>
+            <div id="cutsContainer" style="margin-bottom: 8px;"></div>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="cutStart" placeholder="Start (s)" min="0" step="0.1" style="flex: 1;">
+              <input type="number" id="cutEnd" placeholder="End (s)" min="0" step="0.1" style="flex: 1;">
+              <button class="btn" id="addCutBtn">Add Cut</button>
+            </div>
+          </div>
+          <div class="actions">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="margin: 0; font-size: 13px; color: #cbd5e1;">Quality:</label>
+              <select id="qualitySelect" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; background: #0b1220; color: #e2e8f0; font-size: 14px;">
+                <option value="original" selected>Original</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <button class="btn-primary" id="exportFullBtn">Export Full Video</button>
+            <button class="btn-primary" id="exportEditedBtn" style="display: none;">Export Edited Video</button>
+            <button class="btn" id="resetBtn">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="status" id="log"></div>
+    </div>
+  </div>
+
+  <script src="video-editor.js"></script>
+</body>
+</html>

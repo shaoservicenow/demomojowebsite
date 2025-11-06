@@ -47,15 +47,251 @@
 
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Hide main header on docs page */
+    body > header {
+      display: none;
+    }
+    
+    /* Top Navigation Bar */
+    .docs-top-nav {
+      position: fixed;
+      top: 0;
+      left: 280px;
+      right: 0;
+      height: 80px;
+      background: transparent;
+      backdrop-filter: blur(20px);
+      border: none;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 3em;
+      z-index: 99;
+      transition: left 0.3s ease;
+    }
+    
+    .docs-top-nav nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+    }
+    
+    .docs-top-nav a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
+    }
+    
+    .docs-top-nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 1);
+    }
+    
+    .docs-top-nav .donate-link {
+      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%) !important;
+      color: white !important;
+      padding: 8px 16px !important;
+      border-radius: 20px !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
+      transition: all 0.3s ease !important;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3) !important;
+    }
+    
+    .docs-top-nav .donate-link:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4) !important;
+      background: linear-gradient(135deg, #ff5722 0%, #ff9800 100%) !important;
+    }
+    
+    /* Main layout with sidebar */
+    .docs-wrapper {
+      display: flex;
+      min-height: 100vh;
+      margin-top: 0;
+    }
+    
+    /* Sidebar Navigation */
+    .docs-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 100;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .docs-sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .docs-sidebar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .docs-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+    
+    .docs-sidebar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Sidebar Logo */
+    .docs-sidebar-logo {
+      padding: 1.5em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      z-index: 10;
+    }
+    
+    .docs-sidebar-logo a {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    .docs-sidebar-logo a:hover {
+      transform: translateY(-2px);
+    }
+    
+    .docs-sidebar-logo img {
+      height: 40px;
+      width: auto;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      transition: all 0.3s ease;
+    }
+    
+    .docs-sidebar-logo a:hover img {
+      transform: scale(1.05) rotate(3deg);
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+    }
+    
+    .docs-sidebar-logo .logo-text h1 {
+      font-size: 1.5em;
+      margin: 0;
+      color: white;
+    }
+    
+    .docs-sidebar-logo .logo-text p {
+      font-size: 0.8em;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .docs-nav {
+      padding: 1.5em;
+      flex: 1;
+    }
+    
+    .docs-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .docs-nav li {
+      margin-bottom: 0.5em;
+    }
+    
+    .docs-nav .nav-section-header {
+      color: rgba(99, 223, 78, 0.9);
+      font-size: 0.85em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 1em 1em 0.5em 1em;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+      border-bottom: 1px solid rgba(99, 223, 78, 0.2);
+    }
+    
+    .docs-nav .nav-section-header:first-child {
+      margin-top: 0;
+    }
+    
+    .docs-nav a {
+      display: block;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      padding: 0.75em 1em;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
+      border-left: 3px solid transparent;
+    }
+    
+    .docs-nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 1);
+      border-left-color: rgba(99, 223, 78, 0.5);
+      padding-left: 1.2em;
+    }
+    
+    .docs-nav a.active {
+      background: rgba(99, 223, 78, 0.2);
+      color: #63DF4E;
+      border-left-color: #63DF4E;
+      font-weight: 600;
+    }
+    
+    /* Mobile sidebar toggle */
+    .docs-sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      background: rgba(99, 223, 78, 0.9);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75em 1em;
+      cursor: pointer;
+      font-size: 1em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .docs-sidebar-toggle:hover {
+      background: rgba(99, 223, 78, 1);
+      transform: translateY(-2px);
+    }
+    
+    /* Main content area */
     .docs-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2em;
+      flex: 1;
+      margin-left: 280px;
+      margin-top: 80px;
+      max-width: calc(100% - 280px);
+      padding: 1.5em 3em;
+      transition: margin-left 0.3s ease;
     }
     
     .docs-header {
       text-align: center;
-      margin-bottom: 3em;
+      margin-bottom: 2em;
+      padding-top: 0.5em;
     }
     
     .docs-header p {
@@ -111,45 +347,9 @@
       color: rgba(255, 255, 255, 0.7);
     }
     
-    .docs-nav {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 2em;
-      margin-bottom: 3em;
-    }
-    
-    .docs-nav-desktop {
-      display: block;
-    }
-    
+    /* Mobile navigation dropdown (fallback) */
     .docs-nav-mobile {
       display: none;
-    }
-    
-    .docs-nav ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1em;
-      justify-content: center;
-    }
-    
-    .docs-nav a {
-      color: rgba(255, 255, 255, 0.9);
-      text-decoration: none;
-      padding: 0.5em 1em;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .docs-nav a:hover {
-      background: rgba(99, 223, 78, 0.3);
-      border-color: rgba(99, 223, 78, 0.5);
-      transform: translateY(-2px);
     }
     
     .docs-nav-mobile select {
@@ -584,30 +784,41 @@
     }
     
     @media (max-width: 768px) {
+      .docs-top-nav {
+        left: 0;
+        padding: 0 1em;
+      }
+      
+      .docs-top-nav nav {
+        gap: 0.75em;
+      }
+      
+      .docs-top-nav a {
+        font-size: 0.85em;
+        padding: 0.4em 0.8em;
+      }
+      
+      .docs-sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .docs-sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .docs-sidebar-toggle {
+        display: block;
+      }
+      
       .docs-container {
+        margin-left: 0;
+        margin-top: 80px;
+        max-width: 100%;
         padding: 1em;
       }
       
       .docs-header h1 {
         font-size: 2em;
-      }
-      
-      .docs-nav {
-        padding: 1em;
-      }
-      
-      .docs-nav-desktop {
-        display: none;
-      }
-      
-      .docs-nav-mobile {
-        display: block;
-        width: 100%;
-      }
-      
-      .docs-nav-mobile select {
-        width: 100%;
-        max-width: none;
       }
       
       .feature-grid {
@@ -616,6 +827,22 @@
       
       .keyboard-shortcuts {
         grid-template-columns: 1fr;
+      }
+      
+      /* Overlay for mobile sidebar */
+      .docs-sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+      }
+      
+      .docs-sidebar-overlay.open {
+        display: block;
       }
     }
   </style>
@@ -663,42 +890,70 @@
     </nav>
   </header>
 
-  <div class="docs-container">
-    <div class="docs-header">
-      <h1>DemoMojo Documentation</h1>
-      <p>Complete guide to mastering demo storytelling with DemoMojo</p>
-    </div>
-
-    <nav class="docs-nav">
-      <div class="docs-nav-desktop">
-        <ul>
-          <li><a href="#getting-started">Getting Started</a></li>
-          <li><a href="#installation">Installation</a></li>
-          <li><a href="#creating-stories">Creating Stories</a></li>
-          <li><a href="#mojoai">MojoAI Integration</a></li>
-          <li><a href="#using-overlays">Using Overlays</a></li>
-          <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
-          <li><a href="#url-management">URL Management</a></li>
-          <li><a href="#settings">Settings & Customization</a></li>
-          <li><a href="#troubleshooting">Troubleshooting</a></li>
-        </ul>
-      </div>
-      
-      <div class="docs-nav-mobile">
-        <select id="docs-dropdown" onchange="scrollToSection(this.value)">
-          <option value="">Select a section...</option>
-          <option value="getting-started">Getting Started</option>
-          <option value="installation">Installation</option>
-          <option value="creating-stories">Creating Stories</option>
-          <option value="mojoai">MojoAI Integration</option>
-          <option value="using-overlays">Using Overlays</option>
-          <option value="keyboard-shortcuts">Keyboard Shortcuts</option>
-          <option value="url-management">URL Management</option>
-          <option value="settings">Settings & Customization</option>
-          <option value="troubleshooting">Troubleshooting</option>
-        </select>
-      </div>
+  <!-- Top Navigation Bar -->
+  <div class="docs-top-nav">
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#install">Install</a>
+      <a href="docs.html">Docs</a>
+      <a href="https://buymeacoffee.com/demomojo" target="_blank" rel="noopener noreferrer" class="donate-link">Donate</a>
     </nav>
+  </div>
+
+  <!-- Sidebar Toggle Button (Mobile) -->
+  <button class="docs-sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">☰ Menu</button>
+  
+  <!-- Sidebar Overlay (Mobile) -->
+  <div class="docs-sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <div class="docs-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="docs-sidebar" id="docsSidebar">
+      <div class="docs-sidebar-logo">
+        <a href="index.html" class="logo">
+          <img src="assets/logo.png" alt="DemoMojo Logo">
+          <div class="logo-text">
+            <h1 class="brand-title">DemoMojo</h1>
+            <p class="brand-attribution">created by shao</p>
+          </div>
+        </a>
+      </div>
+      <nav class="docs-nav">
+        <ul>
+          <li class="nav-section-header">Getting Started</li>
+          <li><a href="#getting-started" data-section="getting-started">Getting Started</a></li>
+          <li><a href="#installation" data-section="installation">Installation</a></li>
+          
+          <li class="nav-section-header">Story Creation</li>
+          <li><a href="#creating-stories" data-section="creating-stories">Creating Stories</a></li>
+          <li><a href="#headshot-cropping" data-section="headshot-cropping">Headshot Cropping</a></li>
+          <li><a href="#mojoai" data-section="mojoai">MojoAI Integration</a></li>
+          
+          <li class="nav-section-header">Presentation</li>
+          <li><a href="#using-overlays" data-section="using-overlays">Using Overlays</a></li>
+          <li><a href="#session-notes" data-section="session-notes">Session Notes</a></li>
+          
+          <li class="nav-section-header">Media & Export</li>
+          <li><a href="#screen-capture" data-section="screen-capture">Screen Capture</a></li>
+          <li><a href="#screen-recording" data-section="screen-recording">Screen Recording</a></li>
+          <li><a href="#video-editor" data-section="video-editor">Video Editor</a></li>
+          <li><a href="#powerpoint-export" data-section="powerpoint-export">PowerPoint Export</a></li>
+          <li><a href="#keyboard-shortcuts" data-section="keyboard-shortcuts">Keyboard Shortcuts</a></li>
+          <li><a href="#url-management" data-section="url-management">URL Management</a></li>
+          
+          <li class="nav-section-header">Configuration</li>
+          <li><a href="#settings" data-section="settings">Settings & Customization</a></li>
+          <li><a href="#troubleshooting" data-section="troubleshooting">Troubleshooting</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="docs-container">
+      <div class="docs-header">
+        <h1>DemoMojo Documentation</h1>
+        <p>Complete guide to mastering demo storytelling with DemoMojo</p>
+      </div>
 
     <section id="getting-started" class="docs-section">
       <h2>Getting Started</h2>
@@ -719,21 +974,12 @@
       <p>Follow these steps to install DemoMojo on your Chrome browser:</p>
       
       <ol>
-        <li><strong>Download the Extension</strong>
-          <p>Download the DemoMojo extension files:</p>
+        <li><strong>Install from Chrome Web Store</strong>
+          <p>Visit the Chrome Web Store to install DemoMojo:</p>
           <div class="download-section">
-            <button onclick="requestDownloadPassword()" class="btn">Download DemoMojo v1.3.5</button>
-            <p class="download-note">Extract the zip file to a folder on your computer</p>
+            <a href="https://chromewebstore.google.com/detail/loddneplbglknodpcgigjljmneapmnnk?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer" class="btn">Get DemoMojo from Chrome Web Store</a>
+            <p class="download-note">Click "Add to Chrome" to install the extension</p>
           </div>
-        </li>
-        <li><strong>Open Chrome Extensions</strong>
-          <p>Navigate to <code>chrome://extensions/</code> in your Chrome browser.</p>
-        </li>
-        <li><strong>Enable Developer Mode</strong>
-          <p>Toggle the "Developer mode" switch in the top-right corner of the extensions page.</p>
-        </li>
-        <li><strong>Load the Extension</strong>
-          <p>Click "Load unpacked" and select the DemoMojo extension folder that you unpacked</p>
         </li>
         <li><strong>Verify Installation</strong>
           <p>The DemoMojo icon should appear in your Chrome extension toolbar.</p>
@@ -786,6 +1032,50 @@
       <p>You can edit, duplicate, or delete existing stories from the story management page. This allows you to maintain multiple demo scenarios for different audiences or use cases.</p>
     </section>
 
+    <section id="headshot-cropping" class="docs-section">
+      <h2>Headshot Cropping</h2>
+      <p>DemoMojo includes a built-in headshot cropper that ensures all persona images are displayed in a perfect 1:1 aspect ratio. This creates a consistent, professional appearance across all personas in your stories.</p>
+      
+      <h3>How It Works</h3>
+      <ol>
+        <li><strong>Upload Image</strong>
+          <p>When you upload a headshot image for a persona, the cropper automatically appears in the persona modal.</p>
+        </li>
+        <li><strong>Crop to 1:1 Ratio</strong>
+          <p>Use the interactive crop box to select the area you want to use. The crop box maintains a 1:1 aspect ratio automatically.</p>
+        </li>
+        <li><strong>Adjust Position</strong>
+          <p>Drag the crop box to reposition it, or use the corner handles to resize while maintaining the square aspect ratio.</p>
+        </li>
+        <li><strong>Save Persona</strong>
+          <p>Once you've cropped the image, you can save the persona. The cropped image will be used throughout the extension.</p>
+        </li>
+      </ol>
+      
+      <h3>Features</h3>
+      <ul>
+        <li><strong>Automatic 1:1 Aspect Ratio</strong> - Crop box automatically maintains square dimensions</li>
+        <li><strong>Drag to Reposition</strong> - Click and drag the crop box to move it around the image</li>
+        <li><strong>Corner Handles</strong> - Resize the crop box using corner handles while maintaining aspect ratio</li>
+        <li><strong>High-Quality Processing</strong> - Uses HTML5 Canvas API for high-quality image processing</li>
+        <li><strong>Required Step</strong> - Cropping is required before saving personas to ensure consistency</li>
+      </ul>
+      
+      <h3>Best Practices</h3>
+      <ul>
+        <li>Upload high-resolution images for best cropping results</li>
+        <li>Position the face in the center of the crop box for optimal display</li>
+        <li>Ensure good lighting and clear visibility of the person</li>
+        <li>Use professional headshots when possible for a polished look</li>
+      </ul>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-headshot-cropper.png" 
+             alt="Headshot cropper interface showing the crop box with corner handles on an uploaded image" 
+             class="docs-screenshot">
+      </div>
+    </section>
+
     <section id="mojoai" class="docs-section">
       <h2>Creating Demo Stories with MojoAI</h2>
       <p>MojoAI uses artificial intelligence to automatically create structured demo stories from your existing content. You can input demo scripts or upload PDF documents to generate personas, chapters, and value drivers automatically.</p>
@@ -802,6 +1092,12 @@
           <p>Use the "Test Story Generation" button to verify your setup works correctly.</p>
         </li>
       </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-mojoai-settings.png" 
+             alt="Settings page showing MojoAI configuration section with API key field and model selection" 
+             class="docs-screenshot">
+      </div>
 
       <h3>Creating Stories with Demo Scripts</h3>
       <ol>
@@ -829,6 +1125,7 @@
              alt="MojoAI Demo Script Tab showing text input interface" 
              class="docs-screenshot">
       </div>
+      
 
       <h3>Creating Stories from PDFs (GPT-4 Turbo required)</h3>
       <ol>
@@ -947,6 +1244,333 @@
              alt="Overlay positioning options in settings" 
              class="docs-screenshot">
       </div>
+      
+      <h3>Collapse Persona Chapters</h3>
+      <p>In the fullscreen and pinned content views, you can collapse individual persona cards to show or hide their chapters. This helps you focus on specific personas during your presentation.</p>
+      <ul>
+        <li><strong>Enable Collapse Feature</strong> - Toggle "Collapse Persona Chapters" in Settings to enable this feature</li>
+        <li><strong>Collapse Button</strong> - Click the collapse icon in the top-left corner of any persona card</li>
+        <li><strong>Persistent State</strong> - Collapse state is maintained during navigation and page reloads</li>
+        <li><strong>Individual Control</strong> - Each persona can be independently collapsed or expanded</li>
+      </ul>
+      
+    </section>
+
+    <section id="session-notes" class="docs-section">
+      <h2>Session Notes</h2>
+      <p>Session Notes allow you to take checkable notes during your demo presentations at the story level. Notes are persistent, saved per story, and help you track important points, reminders, and action items during your demos.</p>
+      
+      <h3>Accessing Session Notes</h3>
+      <p>Session notes can be accessed in two ways:</p>
+      <ol>
+        <li><strong>From Fullscreen Overlay</strong>
+          <p>When the overlay is in fullscreen mode, click the 📝 button in the top-right corner of the overlay header to open the session notes modal.</p>
+        </li>
+        <li><strong>From Setup Page</strong>
+          <p>Session notes are displayed directly in the story management page below each story header. You can view and manage notes without opening the overlay.</p>
+        </li>
+      </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-session-notes-modal.png" 
+             alt="Session notes modal open in fullscreen overlay showing notes list with checkboxes and Clear All button" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>Adding Notes</h3>
+      <ol>
+        <li>Open the session notes modal (from fullscreen overlay) or view notes in the setup page</li>
+        <li>Type your note in the input field</li>
+        <li>Press Enter or click "Add Note"</li>
+        <li>The note appears immediately in the list</li>
+      </ol>
+      
+      <h3>Managing Notes</h3>
+      <ul>
+        <li><strong>Check/Uncheck Notes</strong> - Click the checkbox next to any note to mark it as complete. Checked notes appear with reduced opacity and strikethrough text.</li>
+        <li><strong>Delete Individual Notes</strong> - Click the × button on any note to remove it permanently</li>
+        <li><strong>Clear All Notes</strong> - Use the "Clear All" button to delete all notes for a story at once (with confirmation)</li>
+        <li><strong>Live Sync</strong> - Notes are automatically synced across all open tabs. Changes made in the overlay are immediately visible in the setup page.</li>
+      </ul>
+      
+      <h3>Features</h3>
+      <ul>
+        <li><strong>Story-Level Organization</strong> - Each story has its own separate notes list</li>
+        <li><strong>Persistent Storage</strong> - Notes are saved in Chrome storage and persist across browser sessions</li>
+        <li><strong>Checkable Items</strong> - Mark notes as complete/incomplete during your demo</li>
+        <li><strong>Quick Entry</strong> - Press Enter to quickly add notes without clicking buttons</li>
+        <li><strong>Privacy Protection</strong> - Session notes are never exported or imported with stories</li>
+        <li><strong>Visual Feedback</strong> - Checked notes are visually distinct with strikethrough and reduced opacity</li>
+      </ul>
+      
+      <h3>Best Practices</h3>
+      <ul>
+        <li>Use notes to track key talking points during your demo</li>
+        <li>Check off items as you complete them to track progress</li>
+        <li>Clear notes after each demo session to start fresh</li>
+        <li>Review notes in the setup page before starting your next demo</li>
+      </ul>
+    </section>
+
+    <section id="screen-capture" class="docs-section">
+      <h2>Screen Capture</h2>
+      <p>The Screen Capture feature allows you to take screenshots of the current page and associate them with specific chapters in your demo stories. Screenshots are automatically compressed and can be previewed directly in the setup page.</p>
+      
+      <h3>Enabling Screenshot Mode</h3>
+      <ol>
+        <li>Open the DemoMojo popup</li>
+        <li>Enable the "Screenshot Mode" toggle (camera icon)</li>
+        <li>Select your story, persona, and chapter</li>
+        <li>Click "Apply Overlay"</li>
+        <li>A purple "Capture Screenshot" button will appear in the overlay</li>
+      </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-capture-button-overlay.png" 
+             alt="Overlay on webpage showing the purple Capture Screenshot button visible in the overlay" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>Capturing Screenshots</h3>
+      <ol>
+        <li>Navigate to the page you want to capture</li>
+        <li>Ensure the overlay is applied with Screenshot Mode enabled</li>
+        <li>Click the "Capture Screenshot" button in the overlay</li>
+        <li>The overlay automatically hides during capture to avoid appearing in the screenshot</li>
+        <li>A success notification confirms the capture</li>
+        <li>The screenshot is automatically saved to the current chapter</li>
+      </ol>
+      
+      <h3>Viewing Screenshots</h3>
+      <ul>
+        <li><strong>In Setup Page</strong> - Screenshots appear as thumbnails below each chapter with view and delete buttons</li>
+        <li><strong>Full-Size View</strong> - Click the thumbnail or "View" button to see the full-size screenshot in a modal</li>
+        <li><strong>Timestamp Display</strong> - Each screenshot shows when it was captured</li>
+      </ul>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-screenshot-preview.png" 
+             alt="Setup page showing screenshot thumbnail preview below a chapter with View and Delete buttons" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>Managing Screenshots</h3>
+      <ul>
+        <li><strong>Automatic Replacement</strong> - New screenshots automatically replace old ones for the same chapter</li>
+        <li><strong>Delete Screenshots</strong> - Use the delete button in the setup page to remove screenshots</li>
+        <li><strong>Compression</strong> - Screenshots are automatically compressed to JPEG (80% quality, max 800x600px) for optimal storage</li>
+      </ul>
+      
+      <h3>Technical Details</h3>
+      <ul>
+        <li><strong>Format</strong> - JPEG format for better compression</li>
+        <li><strong>Quality</strong> - 80% quality balance between file size and image quality</li>
+        <li><strong>Max Dimensions</strong> - 800x600 pixels (maintains aspect ratio)</li>
+        <li><strong>Storage</strong> - Screenshots are stored in Chrome local storage with story data</li>
+        <li><strong>PowerPoint Integration</strong> - Screenshots are automatically included when exporting stories to PowerPoint</li>
+      </ul>
+    </section>
+
+    <section id="screen-recording" class="docs-section">
+      <h2>Screen Recording</h2>
+      <p>DemoMojo includes a powerful standalone screen recording feature that allows you to record your screen, Chrome window, or individual tabs. Recordings can be customized with various quality settings, audio options, and window sizes.</p>
+      
+      <h3>Starting a Recording</h3>
+      <ol>
+        <li>Click "Start Recording" in the DemoMojo popup</li>
+        <li>The recording setup page opens where you can configure your recording</li>
+        <li>Select your capture type, window size, audio, and quality options</li>
+        <li>Click "Start Recording" to begin</li>
+      </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-start-recording-popup.png" 
+             alt="DemoMojo popup showing Start Recording button" 
+             class="docs-screenshot small">
+      </div>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-recording-setup.png" 
+             alt="Recording setup page showing capture type selection, window size options, audio toggle, and quality settings" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>Capture Types</h3>
+      <ul>
+        <li><strong>Tab Only</strong> - Records just the active tab content (no browser UI). Perfect for clean demo recordings.</li>
+        <li><strong>Chrome Window</strong> - Records the entire Chrome window including browser UI, omnibox, toolbars, and overlays.</li>
+        <li><strong>Full Screen</strong> - Records the entire desktop screen (all monitors, all windows).</li>
+      </ul>
+      
+      <h3>Window Sizing Options</h3>
+      <p>For Tab and Chrome Window capture, you can choose from:</p>
+      <ul>
+        <li><strong>Current Size</strong> - Keeps window as-is, no resize</li>
+        <li><strong>Preset Aspect Ratios</strong> - 16:9, 4:3, 21:9, 16:10, 1:1, 9:16</li>
+        <li><strong>Device Presets</strong> - iPhone 15 Pro, iPhone SE, Pixel 7, Galaxy S23, iPad Pro, Surface Duo, and more</li>
+        <li><strong>Custom Dimensions</strong> - Specify exact width and height (320-3840 width, 240-2160 height)</li>
+      </ul>
+      
+      <h3>Audio Options</h3>
+      <ul>
+        <li><strong>Microphone Audio</strong> - Toggle to enable/disable microphone recording (enabled by default)</li>
+        <li>Chrome will prompt for microphone permission if needed</li>
+        <li>Recording gracefully falls back if permission is denied</li>
+      </ul>
+      
+      <h3>Quality Options</h3>
+      <ul>
+        <li><strong>Framerate</strong> - Choose from 15, 24, 30 (default), or 60 fps</li>
+        <li><strong>Video Bitrate</strong> - 1.5 Mbps (low), 2.5 Mbps (medium/default), 5 Mbps (high), or 8 Mbps (very high)</li>
+        <li><strong>Codec</strong> - Auto (default), VP8, or VP9</li>
+      </ul>
+      
+      <h3>Recording Controls</h3>
+      <p>During recording, a control window appears with:</p>
+      <ul>
+        <li><strong>Timer</strong> - Displays elapsed time in HH:MM:SS format</li>
+        <li><strong>Pause/Resume</strong> - Pause recording and timer, then resume from where you left off</li>
+        <li><strong>Stop & Save</strong> - Stops recording and downloads the video as a .webm file</li>
+        <li><strong>Status Indicator</strong> - Visual indicator shows recording (pulsing red dot) or paused (static orange dot) state</li>
+      </ul>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-recording-controls.png" 
+             alt="Recording controls window showing timer, Pause button, and Stop & Save button with recording status indicator" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>Downloading Recordings</h3>
+      <ul>
+        <li>Videos are automatically downloaded when you click "Stop & Save"</li>
+        <li>Filename format: `demomoj-recording-[timestamp].webm`</li>
+        <li>Recording window auto-closes after download</li>
+        <li>Videos are saved in WebM format for wide compatibility</li>
+      </ul>
+      
+      <h3>Best Practices</h3>
+      <ul>
+        <li>Use "Tab Only" for clean demo recordings without browser UI</li>
+        <li>Select device presets when recording mobile app demos</li>
+        <li>Enable microphone for voice-over narration</li>
+        <li>Use 30 fps for standard recordings, 60 fps for high-quality demos</li>
+        <li>Pause recording when you need to take breaks or prepare next steps</li>
+        <li>Test your audio setup before starting important recordings</li>
+      </ul>
+    </section>
+
+    <section id="video-editor" class="docs-section">
+      <h2>Video Editor</h2>
+      <p>After recording your screen, DemoMojo's built-in video editor allows you to trim, cut segments, adjust audio, and export your edited video. The editor provides professional editing capabilities directly in your browser.</p>
+      
+      <h3>Opening the Video Editor</h3>
+      <p>The video editor automatically opens after you stop a recording, or you can access it from the recording controls window.</p>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-video-editor.png" 
+             alt="Video editor interface showing video timeline, trim controls, cut segments, audio options, and export buttons" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>Editing Features</h3>
+      <ul>
+        <li><strong>Trim Video</strong> - Set start and end points to trim unwanted portions</li>
+        <li><strong>Cut Segments</strong> - Remove specific segments from the middle of your video</li>
+        <li><strong>Audio Controls</strong> - Remove audio or apply audio denoising</li>
+        <li><strong>Quality Settings</strong> - Adjust export quality for file size optimization</li>
+        <li><strong>Visual Timeline</strong> - See your video timeline with trim points and cut segments marked</li>
+      </ul>
+      
+      <h3>Export Options</h3>
+      <ul>
+        <li><strong>Export Full Video</strong> - Export the complete original recording without any edits</li>
+        <li><strong>Export Edited Video</strong> - Export with all your edits applied (trims, cuts, audio changes)</li>
+        <li><strong>Progress Tracking</strong> - Real-time progress bar during export</li>
+        <li><strong>File Format</strong> - Exports as WebM format for wide compatibility</li>
+      </ul>
+      
+      <h3>Workflow</h3>
+      <ol>
+        <li>Record your screen using the Screen Recording feature</li>
+        <li>Video editor opens automatically</li>
+        <li>Set trim points to remove beginning/end portions</li>
+        <li>Add cut segments to remove unwanted middle sections</li>
+        <li>Adjust audio settings (remove or denoise)</li>
+        <li>Preview your edits</li>
+        <li>Export the edited video</li>
+      </ol>
+      
+      <h3>Tips</h3>
+      <ul>
+        <li>Use trim points to remove setup time at the beginning and cleanup at the end</li>
+        <li>Cut segments are useful for removing mistakes or pauses</li>
+        <li>Audio denoising can improve voice clarity in recordings</li>
+        <li>Lower quality settings reduce file size for easier sharing</li>
+        <li>Always export edited videos before closing the editor</li>
+      </ul>
+    </section>
+
+    <section id="powerpoint-export" class="docs-section">
+      <h2>PowerPoint Export</h2>
+      <p>Export your complete demo stories to professional PowerPoint presentations (.pptx files). PowerPoint exports include all personas, chapters, value drivers, and screenshots with theme integration.</p>
+      
+      <h3>Exporting to PowerPoint</h3>
+      <ol>
+        <li>Open the story management page (Setup)</li>
+        <li>Find the story you want to export</li>
+        <li>Click the "Export to PPT" button in the story actions</li>
+        <li>Wait for the PowerPoint generation to complete</li>
+        <li>The .pptx file will automatically download</li>
+      </ol>
+      
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-ppt-export-button.png" 
+             alt="Setup page showing story actions with Export to PPT button visible" 
+             class="docs-screenshot">
+      </div>
+      
+      <h3>What's Included</h3>
+      <ul>
+        <li><strong>Title Slide</strong> - Story name with "Created with DemoMojo" branding</li>
+        <li><strong>Overview Slide</strong> - Hierarchical listing of all personas and their chapters</li>
+        <li><strong>Persona Introduction Slides</strong> - Individual slides for each persona with headshots and business titles</li>
+        <li><strong>Chapter Detail Slides</strong> - Comprehensive slides for each chapter including:
+          <ul>
+            <li>Chapter title and description</li>
+            <li>All value drivers</li>
+            <li>Screenshots (if captured) with proper proportional scaling</li>
+          </ul>
+        </li>
+      </ul>
+      
+      <h3>Theme Integration</h3>
+      <p>PowerPoint colors automatically follow your extension theme settings:</p>
+      <ul>
+        <li><strong>Default Theme</strong> - Uses the default DemoMojo color scheme</li>
+        <li><strong>Predefined Themes</strong> - Purple, Orange, or Dark themes are applied</li>
+        <li><strong>Custom Themes</strong> - Your custom color themes are automatically used</li>
+      </ul>
+      
+      <h3>Professional Layout</h3>
+      <ul>
+        <li>Clean, centered slide designs</li>
+        <li>Proper spacing and typography</li>
+        <li>Screenshots maintain original aspect ratio</li>
+        <li>Text boxes sized to prevent overflow</li>
+        <li>Consistent styling throughout the presentation</li>
+      </ul>
+      
+      <h3>Best Practices</h3>
+      <ul>
+        <li>Capture screenshots for chapters before exporting for best results</li>
+        <li>Review your story content in the setup page before exporting</li>
+        <li>Customize your theme colors in Settings to match your brand</li>
+        <li>Use the exported PowerPoint as a backup or for offline presentations</li>
+        <li>Share PowerPoint files with team members who don't have the extension</li>
+      </ul>
+      
+      <h3>File Naming</h3>
+      <p>PowerPoint files are automatically named using the story name, with special characters sanitized for file system compatibility.</p>
     </section>
 
     <section id="keyboard-shortcuts" class="docs-section">
@@ -996,6 +1620,12 @@
       <h3>Customizing Shortcuts</h3>
       <p>All keyboard shortcuts can be customized in the Settings page. You can create up to 3-key combinations and override the default shortcuts to match your preferences.</p>
       
+      <div class="screenshot-container">
+        <img src="doc-screenshots/docs-keyboard-shortcuts-customize.png" 
+             alt="Settings page showing Keyboard Shortcuts section with Customize button and shortcut customization interface" 
+             class="docs-screenshot">
+      </div>
+      
       <h4>How to Customize Shortcuts:</h4>
       <ol>
         <li>Go to Settings from the extension popup or setup page</li>
@@ -1036,6 +1666,7 @@
         <li><strong>Smart Navigation:</strong> Automatically switches to the matching chapter when you navigate to a saved URL</li>
       </ul>
       
+      
       <h3>URL Navigation</h3>
       <ul>
         <li><strong>Click to Navigate:</strong> Click on any saved URL in the overlay to open that page in a new tab</li>
@@ -1070,6 +1701,7 @@
         <li><strong>Default Position</strong> - Set bottom-right, bottom-left, full-screen, or pinned content</li>
         <li><strong>Keyboard Shortcuts</strong> - Enable/disable and customize all shortcuts</li>
       </ul>
+      
 
       <h3>Appearance Settings</h3>
       <ul>
@@ -1090,6 +1722,7 @@
         <li><strong>Import Data</strong> - Restore from backup file</li>
         <li><strong>Reset Data</strong> - Clear all data and start fresh</li>
       </ul>
+      
 
       <h3>MojoAI Settings</h3>
       <ul>
@@ -1097,6 +1730,30 @@
         <li><strong>AI Model Selection</strong> - Choose GPT-3.5 Turbo, GPT-4, or GPT-4 Turbo</li>
         <li><strong>Max Tokens</strong> - Control response length and detail</li>
         <li><strong>PDF File Size Limit</strong> - Configure maximum upload size (100-10000 KB)</li>
+        <li><strong>Default Guidelines</strong> - Set default instructions for all story generations</li>
+      </ul>
+      
+      <h3>Display Preferences</h3>
+      <ul>
+        <li><strong>Collapse Persona Chapters</strong> - Enable/disable collapse button functionality in side panel view</li>
+        <li><strong>Minimal Padding Mode</strong> - Reduce overlay width in pinned content view (25% smaller)</li>
+      </ul>
+      
+      <h3>Export/Import</h3>
+      <ul>
+        <li><strong>Export Data</strong> - Download complete backup of all stories, settings, and custom themes</li>
+        <li><strong>Import Data</strong> - Restore from backup file (includes version checking)</li>
+        <li><strong>Export Custom Theme</strong> - Export individual custom color themes</li>
+        <li><strong>Import Custom Theme</strong> - Import custom color themes from files</li>
+        <li><strong>Reset Data</strong> - Clear all data and start fresh</li>
+      </ul>
+      
+      <h3>Advanced Settings</h3>
+      <ul>
+        <li><strong>URL-Based Overlay Limiting</strong> - Limit overlays to tabs with the same parent URL (enabled by default)</li>
+        <li><strong>Cross-Tab Sync</strong> - Synchronize chapter completion and highlighting across browser tabs</li>
+        <li><strong>Floating Save Button</strong> - Save button appears only when changes are detected</li>
+        <li><strong>Change Detection</strong> - Real-time monitoring of all settings changes</li>
       </ul>
     </section>
 
@@ -1146,9 +1803,10 @@
       </ul>
     </section>
 
-    <div class="back-to-home">
-      <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="margin-right: 20px;">↑ Return to Top</a>
-      <a href="index.html">← Back to Home</a>
+      <div class="back-to-home">
+        <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="margin-right: 20px;">↑ Return to Top</a>
+        <a href="index.html">← Back to Home</a>
+      </div>
     </div>
   </div>
 
@@ -1276,16 +1934,101 @@
         // Initialize magic dust when page loads
         document.addEventListener('DOMContentLoaded', () => {
           new MagicDust();
+          
+          // Sidebar toggle functionality
+          const sidebarToggle = document.getElementById('sidebarToggle');
+          const docsSidebar = document.getElementById('docsSidebar');
+          const sidebarOverlay = document.getElementById('sidebarOverlay');
+          
+          function toggleSidebar() {
+            docsSidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('open');
+          }
+          
+          function closeSidebar() {
+            docsSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+          }
+          
+          if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', toggleSidebar);
+          }
+          
+          if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+          }
+          
+          // Active section highlighting
+          const navLinks = document.querySelectorAll('.docs-nav a[data-section]');
+          const sections = document.querySelectorAll('.docs-section');
+          
+          function updateActiveSection() {
+            let current = '';
+            
+            sections.forEach(section => {
+              const sectionTop = section.offsetTop;
+              const sectionHeight = section.clientHeight;
+              if (window.pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+              }
+            });
+            
+            navLinks.forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('data-section') === current) {
+                link.classList.add('active');
+              }
+            });
+          }
+          
+          // Smooth scroll for section headers (no-op, just for consistency)
+          document.querySelectorAll('.nav-section-header').forEach(header => {
+            header.style.cursor = 'default';
+            header.style.pointerEvents = 'none';
+          });
+          
+          // Smooth scroll for navigation links
+          navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              const targetId = link.getAttribute('href').substring(1);
+              const targetElement = document.getElementById(targetId);
+              
+              if (targetElement) {
+                const headerOffset = 100;
+                const elementPosition = targetElement.offsetTop;
+                const offsetPosition = elementPosition - headerOffset;
+                
+                window.scrollTo({
+                  top: offsetPosition,
+                  behavior: 'smooth'
+                });
+                
+                // Close sidebar on mobile after clicking
+                if (window.innerWidth <= 768) {
+                  closeSidebar();
+                }
+              }
+            });
+          });
+          
+          // Update active section on scroll
+          window.addEventListener('scroll', updateActiveSection);
+          window.addEventListener('load', updateActiveSection);
         });
         
-        // Function to scroll to section when dropdown option is selected
+        // Function to scroll to section when dropdown option is selected (for mobile fallback)
         function scrollToSection(sectionId) {
           if (sectionId) {
             const element = document.getElementById(sectionId);
             if (element) {
-              element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
+              const headerOffset = 100;
+              const elementPosition = element.offsetTop;
+              const offsetPosition = elementPosition - headerOffset;
+              
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
               });
             }
           }
