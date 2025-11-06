@@ -136,7 +136,7 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   position: relative;
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), auto;
+  cursor: auto;
 }
   
   .magic-dust-canvas {
@@ -259,7 +259,7 @@ body {
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     position: relative;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), pointer;
+    cursor: pointer;
   }
   
   header nav a:hover {
@@ -377,7 +377,7 @@ body {
     animation: slideInUp 1s ease-out;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     overflow: hidden;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text y="48" font-size="48" transform="scale(-1, 1) translate(-64, 0)">🪄</text></svg>'), pointer;
+    cursor: pointer;
   }
   
   .btn::before {
